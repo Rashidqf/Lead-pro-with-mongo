@@ -16,7 +16,14 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedBoardRouteImport } from './routes/_authenticated/board'
 import { Route as AuthenticatedContactsRouteImport } from './routes/_authenticated/contacts'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedFinanceRouteRouteImport } from './routes/_authenticated/finance/route'
+import { Route as AuthenticatedProjectsRouteImport } from './routes/_authenticated/projects'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
+import { Route as AuthenticatedFinanceIndexRouteImport } from './routes/_authenticated/finance/index'
+import { Route as AuthenticatedFinanceExpensesRouteImport } from './routes/_authenticated/finance/expenses'
+import { Route as AuthenticatedFinanceIncomeRouteImport } from './routes/_authenticated/finance/income'
+import { Route as AuthenticatedFinanceOutstandingRouteImport } from './routes/_authenticated/finance/outstanding'
+import { Route as AuthenticatedFinanceTransactionsRouteImport } from './routes/_authenticated/finance/transactions'
 import { Route as ApiCompanionCallStatusRouteImport } from './routes/api/companion/call-status'
 import { Route as ApiCompanionLoginRouteImport } from './routes/api/companion/login'
 import { Route as ApiCompanionNextCallRouteImport } from './routes/api/companion/next-call'
@@ -55,11 +62,52 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFinanceRouteRoute =
+  AuthenticatedFinanceRouteRouteImport.update({
+    id: '/finance',
+    path: '/finance',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsRoute = AuthenticatedProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   id: '/users',
   path: '/users',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFinanceIndexRoute =
+  AuthenticatedFinanceIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedFinanceRouteRoute,
+  } as any)
+const AuthenticatedFinanceExpensesRoute =
+  AuthenticatedFinanceExpensesRouteImport.update({
+    id: '/expenses',
+    path: '/expenses',
+    getParentRoute: () => AuthenticatedFinanceRouteRoute,
+  } as any)
+const AuthenticatedFinanceIncomeRoute =
+  AuthenticatedFinanceIncomeRouteImport.update({
+    id: '/income',
+    path: '/income',
+    getParentRoute: () => AuthenticatedFinanceRouteRoute,
+  } as any)
+const AuthenticatedFinanceOutstandingRoute =
+  AuthenticatedFinanceOutstandingRouteImport.update({
+    id: '/outstanding',
+    path: '/outstanding',
+    getParentRoute: () => AuthenticatedFinanceRouteRoute,
+  } as any)
+const AuthenticatedFinanceTransactionsRoute =
+  AuthenticatedFinanceTransactionsRouteImport.update({
+    id: '/transactions',
+    path: '/transactions',
+    getParentRoute: () => AuthenticatedFinanceRouteRoute,
+  } as any)
 const ApiCompanionCallStatusRoute = ApiCompanionCallStatusRouteImport.update({
   id: '/api/companion/call-status',
   path: '/api/companion/call-status',
@@ -80,13 +128,20 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/finance': typeof AuthenticatedFinanceRouteRouteWithChildren
   '/board': typeof AuthenticatedBoardRoute
   '/contacts': typeof AuthenticatedContactsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/projects': typeof AuthenticatedProjectsRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/finance/expenses': typeof AuthenticatedFinanceExpensesRoute
+  '/finance/income': typeof AuthenticatedFinanceIncomeRoute
+  '/finance/outstanding': typeof AuthenticatedFinanceOutstandingRoute
+  '/finance/transactions': typeof AuthenticatedFinanceTransactionsRoute
   '/api/companion/call-status': typeof ApiCompanionCallStatusRoute
   '/api/companion/login': typeof ApiCompanionLoginRoute
   '/api/companion/next-call': typeof ApiCompanionNextCallRoute
+  '/finance/': typeof AuthenticatedFinanceIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -95,10 +150,16 @@ export interface FileRoutesByTo {
   '/board': typeof AuthenticatedBoardRoute
   '/contacts': typeof AuthenticatedContactsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/projects': typeof AuthenticatedProjectsRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/finance/expenses': typeof AuthenticatedFinanceExpensesRoute
+  '/finance/income': typeof AuthenticatedFinanceIncomeRoute
+  '/finance/outstanding': typeof AuthenticatedFinanceOutstandingRoute
+  '/finance/transactions': typeof AuthenticatedFinanceTransactionsRoute
   '/api/companion/call-status': typeof ApiCompanionCallStatusRoute
   '/api/companion/login': typeof ApiCompanionLoginRoute
   '/api/companion/next-call': typeof ApiCompanionNextCallRoute
+  '/finance': typeof AuthenticatedFinanceIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -106,13 +167,20 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/_authenticated/finance': typeof AuthenticatedFinanceRouteRouteWithChildren
   '/_authenticated/board': typeof AuthenticatedBoardRoute
   '/_authenticated/contacts': typeof AuthenticatedContactsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/projects': typeof AuthenticatedProjectsRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/_authenticated/finance/expenses': typeof AuthenticatedFinanceExpensesRoute
+  '/_authenticated/finance/income': typeof AuthenticatedFinanceIncomeRoute
+  '/_authenticated/finance/outstanding': typeof AuthenticatedFinanceOutstandingRoute
+  '/_authenticated/finance/transactions': typeof AuthenticatedFinanceTransactionsRoute
   '/api/companion/call-status': typeof ApiCompanionCallStatusRoute
   '/api/companion/login': typeof ApiCompanionLoginRoute
   '/api/companion/next-call': typeof ApiCompanionNextCallRoute
+  '/_authenticated/finance/': typeof AuthenticatedFinanceIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,13 +188,20 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/sitemap.xml'
+    | '/finance'
     | '/board'
     | '/contacts'
     | '/dashboard'
+    | '/projects'
     | '/users'
+    | '/finance/expenses'
+    | '/finance/income'
+    | '/finance/outstanding'
+    | '/finance/transactions'
     | '/api/companion/call-status'
     | '/api/companion/login'
     | '/api/companion/next-call'
+    | '/finance/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -135,23 +210,36 @@ export interface FileRouteTypes {
     | '/board'
     | '/contacts'
     | '/dashboard'
+    | '/projects'
     | '/users'
+    | '/finance/expenses'
+    | '/finance/income'
+    | '/finance/outstanding'
+    | '/finance/transactions'
     | '/api/companion/call-status'
     | '/api/companion/login'
     | '/api/companion/next-call'
+    | '/finance'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/sitemap.xml'
+    | '/_authenticated/finance'
     | '/_authenticated/board'
     | '/_authenticated/contacts'
     | '/_authenticated/dashboard'
+    | '/_authenticated/projects'
     | '/_authenticated/users'
+    | '/_authenticated/finance/expenses'
+    | '/_authenticated/finance/income'
+    | '/_authenticated/finance/outstanding'
+    | '/_authenticated/finance/transactions'
     | '/api/companion/call-status'
     | '/api/companion/login'
     | '/api/companion/next-call'
+    | '/_authenticated/finance/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -215,12 +303,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/finance': {
+      id: '/_authenticated/finance'
+      path: '/finance'
+      fullPath: '/finance'
+      preLoaderRoute: typeof AuthenticatedFinanceRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects': {
+      id: '/_authenticated/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof AuthenticatedProjectsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/users': {
       id: '/_authenticated/users'
       path: '/users'
       fullPath: '/users'
       preLoaderRoute: typeof AuthenticatedUsersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/finance/': {
+      id: '/_authenticated/finance/'
+      path: '/'
+      fullPath: '/finance/'
+      preLoaderRoute: typeof AuthenticatedFinanceIndexRouteImport
+      parentRoute: typeof AuthenticatedFinanceRouteRoute
+    }
+    '/_authenticated/finance/expenses': {
+      id: '/_authenticated/finance/expenses'
+      path: '/expenses'
+      fullPath: '/finance/expenses'
+      preLoaderRoute: typeof AuthenticatedFinanceExpensesRouteImport
+      parentRoute: typeof AuthenticatedFinanceRouteRoute
+    }
+    '/_authenticated/finance/income': {
+      id: '/_authenticated/finance/income'
+      path: '/income'
+      fullPath: '/finance/income'
+      preLoaderRoute: typeof AuthenticatedFinanceIncomeRouteImport
+      parentRoute: typeof AuthenticatedFinanceRouteRoute
+    }
+    '/_authenticated/finance/outstanding': {
+      id: '/_authenticated/finance/outstanding'
+      path: '/outstanding'
+      fullPath: '/finance/outstanding'
+      preLoaderRoute: typeof AuthenticatedFinanceOutstandingRouteImport
+      parentRoute: typeof AuthenticatedFinanceRouteRoute
+    }
+    '/_authenticated/finance/transactions': {
+      id: '/_authenticated/finance/transactions'
+      path: '/transactions'
+      fullPath: '/finance/transactions'
+      preLoaderRoute: typeof AuthenticatedFinanceTransactionsRouteImport
+      parentRoute: typeof AuthenticatedFinanceRouteRoute
     }
     '/api/companion/call-status': {
       id: '/api/companion/call-status'
@@ -246,17 +383,44 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedFinanceRouteRouteChildren {
+  AuthenticatedFinanceExpensesRoute: typeof AuthenticatedFinanceExpensesRoute
+  AuthenticatedFinanceIncomeRoute: typeof AuthenticatedFinanceIncomeRoute
+  AuthenticatedFinanceOutstandingRoute: typeof AuthenticatedFinanceOutstandingRoute
+  AuthenticatedFinanceTransactionsRoute: typeof AuthenticatedFinanceTransactionsRoute
+  AuthenticatedFinanceIndexRoute: typeof AuthenticatedFinanceIndexRoute
+}
+
+const AuthenticatedFinanceRouteRouteChildren: AuthenticatedFinanceRouteRouteChildren =
+  {
+    AuthenticatedFinanceExpensesRoute: AuthenticatedFinanceExpensesRoute,
+    AuthenticatedFinanceIncomeRoute: AuthenticatedFinanceIncomeRoute,
+    AuthenticatedFinanceOutstandingRoute: AuthenticatedFinanceOutstandingRoute,
+    AuthenticatedFinanceTransactionsRoute:
+      AuthenticatedFinanceTransactionsRoute,
+    AuthenticatedFinanceIndexRoute: AuthenticatedFinanceIndexRoute,
+  }
+
+const AuthenticatedFinanceRouteRouteWithChildren =
+  AuthenticatedFinanceRouteRoute._addFileChildren(
+    AuthenticatedFinanceRouteRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedFinanceRouteRoute: typeof AuthenticatedFinanceRouteRouteWithChildren
   AuthenticatedBoardRoute: typeof AuthenticatedBoardRoute
   AuthenticatedContactsRoute: typeof AuthenticatedContactsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedProjectsRoute: typeof AuthenticatedProjectsRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedFinanceRouteRoute: AuthenticatedFinanceRouteRouteWithChildren,
   AuthenticatedBoardRoute: AuthenticatedBoardRoute,
   AuthenticatedContactsRoute: AuthenticatedContactsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedProjectsRoute: AuthenticatedProjectsRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,
 }
 

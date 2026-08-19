@@ -1,6 +1,8 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
+  Briefcase,
+  CircleDollarSign,
   KanbanSquare,
   LayoutDashboard,
   LogOut,
@@ -22,6 +24,8 @@ const links = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, adminOnly: false },
   { to: "/board", label: "Board", icon: KanbanSquare, adminOnly: false },
   { to: "/contacts", label: "Contacts", icon: ContactIcon, adminOnly: false },
+  { to: "/projects", label: "Projects", icon: Briefcase, adminOnly: false },
+  { to: "/finance", label: "Finance", icon: CircleDollarSign, adminOnly: false },
   { to: "/users", label: "Team", icon: Users, adminOnly: true },
 ] as const;
 

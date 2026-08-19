@@ -28,6 +28,7 @@ import { type BoardColumn, type Contact, type Profile } from "@/lib/crm";
 import { normalizePhone } from "@/lib/phone";
 import { AssignUserSelect } from "./AssignUserSelect";
 import { CallLeadButton } from "./CallLeadButton";
+import { ContactFinancePanel } from "@/components/finance/ContactFinancePanel";
 
 type Form = {
   name: string;
@@ -205,6 +206,8 @@ export function ContactDialog({
             </Field>
           )}
         </div>
+
+        <ContactFinancePanel contact={contact} />
 
         <DialogFooter className="gap-2 sm:justify-between">
           {isAdmin ? (

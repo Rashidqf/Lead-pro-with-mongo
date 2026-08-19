@@ -41,6 +41,15 @@ async function connect(): Promise<Db> {
     col(db, "activities").createIndex({ created_at: -1 }),
     col(db, "call_jobs").createIndex({ user_id: 1, status: 1, created_at: 1 }),
     col(db, "call_devices").createIndex({ user_id: 1, last_seen: -1 }),
+    col(db, "projects").createIndex({ contact_id: 1 }),
+    col(db, "projects").createIndex({ contact_phone: 1 }),
+    col(db, "payments").createIndex({ contact_id: 1, date: -1 }),
+    col(db, "payments").createIndex({ project_id: 1 }),
+    col(db, "payments").createIndex({ date: -1 }),
+    col(db, "expenses").createIndex({ date: -1 }),
+    col(db, "expenses").createIndex({ type: 1, date: -1 }),
+    col(db, "expenses").createIndex({ project_id: 1 }),
+    col(db, "contacts").createIndex({ converted_at: -1 }),
     ensureUniqueContactPhones(db),
   ]);
   return db;
@@ -48,16 +57,12 @@ async function connect(): Promise<Db> {
 
 export async function ensureUniqueContactPhones(db: Db) {
   const contacts = col(db, "contacts");
-  const dirty = contacts.find({ phone: { $regex: /\s/ } });
-  for await (const doc of dirty) {
+  const allWithPhone = contacts.find({ phone: { $type: "string" } });
+  for await (const doc of allWithPhone) {
     const phone = normalizePhone(String(doc.phone));
-    const taken =
-      phone &&
-      (await contacts.findOne({ phone, _id: { $ne: doc._id } }));
-    await contacts.updateOne(
-      { _id: doc._id },
-      { $set: { phone: taken ? null : phone } },
-    );
+    if (phone === doc.phone) continue;
+    const taken = phone && (await contacts.findOne({ phone, _id: { $ne: doc._id } }));
+    await contacts.updateOne({ _id: doc._id }, { $set: { phone: taken ? null : phone } });
   }
 
   const dupGroups = await contacts
@@ -96,4 +101,3 @@ export function toIso(value: unknown): string {
   if (typeof value === "string") return new Date(value).toISOString();
   return new Date().toISOString();
 }
-
