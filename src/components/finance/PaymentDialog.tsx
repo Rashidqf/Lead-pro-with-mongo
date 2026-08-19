@@ -1,131 +1,178 @@
-import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
 
+import { CustomerSelect, ProjectSelect } from "@/components/finance/FinanceShared";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import type { Contact } from "@/lib/crm";
-import type { Payment, Project } from "@/lib/finance";
-import { getPayments } from "@/lib/finance.functions";
+import { PAYMENT_METHODS, type Payment, type Project } from "@/lib/finance";
+import { createPayment, deletePayment, updatePayment } from "@/lib/finance.functions";
 
-export function PaymentsList({
+export function PaymentDialog({
+  open,
+  onOpenChange,
   contacts,
   projects,
+  payment,
+  defaultContactId,
+  defaultProjectId,
 }: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   contacts: Contact[];
   projects: Project[];
+  payment?: Payment | null;
+  defaultContactId?: string;
+  defaultProjectId?: string;
 }) {
-  const [phoneSearch, setPhoneSearch] = useState("");
+  const queryClient = useQueryClient();
+  const today = new Date().toISOString().slice(0, 10);
+  const [contactId, setContactId] = useState(defaultContactId ?? payment?.contact_id ?? "");
+  const [projectId, setProjectId] = useState(
+    defaultProjectId ?? payment?.project_id ?? "none",
+  );
+  const [amount, setAmount] = useState(String(payment?.amount ?? ""));
+  const [date, setDate] = useState(payment?.date.slice(0, 10) ?? today);
+  const [method, setMethod] = useState(payment?.payment_method ?? "Cash");
+  const [description, setDescription] = useState(payment?.description ?? "");
 
-  const { data: payments = [], isLoading } = useQuery({
-    queryKey: ["payments"],
-    queryFn: async () => {
-      const result = await getPayments();
-      return result as Payment[];
+  const save = useMutation({
+    mutationFn: async () => {
+      const payload = {
+        contact_id: contactId,
+        project_id: projectId === "none" ? null : projectId,
+        amount: Number(amount),
+        date,
+        payment_method: method,
+        description: description.trim() || null,
+      };
+      if (payment) {
+        await updatePayment({ data: { id: payment.id, ...payload } });
+      } else {
+        await createPayment({ data: payload });
+      }
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["payments"] });
+      queryClient.invalidateQueries({ queryKey: ["finance-dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["contact-finance"] });
+      toast.success(payment ? "Payment updated" : "Payment recorded");
+      onOpenChange(false);
+    },
+    onError: (e: Error) => toast.error(e.message),
   });
 
-  const contactById = useMemo(() => {
-    const map = new Map<string, Contact>();
-    for (const contact of contacts) {
-      map.set(contact.id, contact);
-    }
-    return map;
-  }, [contacts]);
-
-  const projectById = useMemo(() => {
-    const map = new Map<string, Project>();
-    for (const project of projects) {
-      map.set(project.id, project);
-    }
-    return map;
-  }, [projects]);
-
-  const normalizedSearch = phoneSearch.replace(/\D/g, "");
-
-  const filteredPayments = useMemo(() => {
-    if (!normalizedSearch) {
-      return payments;
-    }
-    return payments.filter((payment) => {
-      const contact = contactById.get(payment.contact_id);
-      const contactPhone = contact?.phone ? contact.phone.replace(/\D/g, "") : "";
-      return contactPhone.includes(normalizedSearch);
-    });
-  }, [payments, contactById, normalizedSearch]);
-
-  const totalAmount = useMemo(
-    () => filteredPayments.reduce((sum, payment) => sum + payment.amount, 0),
-    [filteredPayments],
-  );
+  const remove = useMutation({
+    mutationFn: async () => {
+      if (!payment) return;
+      await deletePayment({ data: { id: payment.id } });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["payments"] });
+      queryClient.invalidateQueries({ queryKey: ["finance-dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      toast.success("Payment deleted");
+      onOpenChange(false);
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
 
   return (
-    <div className="grid gap-4">
-      <div>
-        <Label className="mb-1.5 block text-xs">Search by phone number</Label>
-        <div className="relative">
-          <Search className="pointer-events-none absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="tel"
-            placeholder="e.g. 0300 1234567"
-            value={phoneSearch}
-            onChange={(e) => setPhoneSearch(e.target.value)}
-            className="pl-8"
-          />
-        </div>
-      </div>
-
-      {isLoading ? (
-        <p className="text-sm text-muted-foreground">Loading payments...</p>
-      ) : filteredPayments.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No payments found.</p>
-      ) : (
-        <>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Customer</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Project</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Method</TableHead>
-                <TableHead className="text-right">Amount (Rs.)</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredPayments.map((payment) => {
-                const contact = contactById.get(payment.contact_id);
-                const project = payment.project_id
-                  ? projectById.get(payment.project_id)
-                  : undefined;
-                return (
-                  <TableRow key={payment.id}>
-                    <TableCell>{contact?.name ?? "Unknown"}</TableCell>
-                    <TableCell>{contact?.phone ?? "-"}</TableCell>
-                    <TableCell>{project?.name ?? "-"}</TableCell>
-                    <TableCell>{payment.date.slice(0, 10)}</TableCell>
-                    <TableCell>{payment.payment_method}</TableCell>
-                    <TableCell className="text-right font-medium">
-                      {payment.amount.toLocaleString()}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-          <div className="flex justify-end text-sm font-medium">
-            Total: Rs. {totalAmount.toLocaleString()}
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{payment ? "Edit payment" : "Record payment"}</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4">
+          <div>
+            <Label className="mb-1.5 block text-xs">Customer</Label>
+            <CustomerSelect
+              contacts={contacts}
+              value={contactId}
+              onChange={setContactId}
+            />
           </div>
-        </>
-      )}
-    </div>
+          <div>
+            <Label className="mb-1.5 block text-xs">Project (optional)</Label>
+            <ProjectSelect
+              projects={projects}
+              contactId={contactId}
+              value={projectId}
+              onChange={setProjectId}
+              allowNone
+            />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label className="mb-1.5 block text-xs">Amount (Rs.)</Label>
+              <Input type="number" min={0} value={amount} onChange={(e) => setAmount(e.target.value)} />
+            </div>
+            <div>
+              <Label className="mb-1.5 block text-xs">Date</Label>
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            </div>
+          </div>
+          <div>
+            <Label className="mb-1.5 block text-xs">Payment method</Label>
+            <Select value={method} onValueChange={setMethod}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {PAYMENT_METHODS.map((m) => (
+                  <SelectItem key={m} value={m}>
+                    {m}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label className="mb-1.5 block text-xs">Description</Label>
+            <Textarea
+              rows={2}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Advance payment, final payment, etc."
+            />
+          </div>
+        </div>
+        <DialogFooter className="gap-2 sm:justify-between">
+          {payment ? (
+            <Button variant="destructive" onClick={() => remove.mutate()} disabled={remove.isPending}>
+              Delete
+            </Button>
+          ) : (
+            <span />
+          )}
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button onClick={() => save.mutate()} disabled={!contactId || !amount || save.isPending}>
+              Save
+            </Button>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
