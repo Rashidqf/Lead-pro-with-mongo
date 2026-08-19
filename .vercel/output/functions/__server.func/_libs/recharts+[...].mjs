@@ -8,7 +8,7 @@ import { C as linear, D as implicit, E as point, O as ordinal, S as identity$1, 
 import { t as decimal_default } from "./decimal.js-light.mjs";
 import { t as es6_default } from "./react-smooth.mjs";
 import { t as require_eventemitter3 } from "./eventemitter3.mjs";
-//#region node_modules/recharts/es6/util/DataUtils.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/DataUtils.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_isString = /* @__PURE__ */ __toESM(require_isString());
 var import_isNaN = /* @__PURE__ */ __toESM(require_isNaN());
@@ -107,7 +107,7 @@ var compareValues = function compareValues(a, b) {
 	return String(a).localeCompare(String(b));
 };
 //#endregion
-//#region node_modules/recharts/es6/util/ShallowEqual.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/ShallowEqual.js
 var import_isObject = /* @__PURE__ */ __toESM(require_isObject());
 var import_isFunction = /* @__PURE__ */ __toESM(require_isFunction());
 var import_react_is = require_react_is();
@@ -117,7 +117,7 @@ function shallowEqual(a, b) {
 	return true;
 }
 //#endregion
-//#region node_modules/recharts/es6/util/types.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/types.js
 function _typeof$38(o) {
 	"@babel/helpers - typeof";
 	return _typeof$38 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -680,7 +680,7 @@ var adaptEventsOfChild = function adaptEventsOfChild(props, data, index) {
 	return out;
 };
 //#endregion
-//#region node_modules/recharts/es6/util/ReactUtils.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/ReactUtils.js
 var _excluded$15 = ["children"];
 var _excluded2$5 = ["children"];
 function _objectWithoutProperties$15(source, excluded) {
@@ -954,7 +954,7 @@ var parseChildIndex = function parseChildIndex(child, children) {
 	return toArray(children).indexOf(child);
 };
 //#endregion
-//#region node_modules/recharts/es6/container/Surface.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/container/Surface.js
 /**
 * @fileOverview Surface
 */
@@ -1020,7 +1020,7 @@ function Surface(props) {
 	}), /*#__PURE__*/ import_react.createElement("title", null, title), /*#__PURE__*/ import_react.createElement("desc", null, desc), children);
 }
 //#endregion
-//#region node_modules/recharts/es6/container/Layer.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/container/Layer.js
 var _excluded$13 = ["children", "className"];
 function _extends$24() {
 	_extends$24 = Object.assign ? Object.assign.bind() : function(target) {
@@ -1062,12 +1062,12 @@ var Layer = /*#__PURE__*/ import_react.forwardRef(function(props, ref) {
 	return /*#__PURE__*/ import_react.createElement("g", _extends$24({ className: layerClass }, filterProps(others, true), { ref }), children);
 });
 //#endregion
-//#region node_modules/recharts/es6/util/LogUtils.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/LogUtils.js
 var warn = function warn(condition, format) {
 	for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) args[_key - 2] = arguments[_key];
 };
 //#endregion
-//#region node_modules/recharts/es6/shape/Symbols.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/shape/Symbols.js
 /**
 * @fileOverview Curve
 */
@@ -1221,7 +1221,7 @@ var Symbols = function Symbols(_ref) {
 };
 Symbols.registerSymbol = registerSymbol;
 //#endregion
-//#region node_modules/recharts/es6/component/DefaultLegendContent.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/component/DefaultLegendContent.js
 /**
 * @fileOverview Default Legend Content
 */
@@ -1360,13 +1360,7 @@ var DefaultLegendContent = /*#__PURE__*/ function(_PureComponent) {
 	return _createClass$16(DefaultLegendContent, [
 		{
 			key: "renderIcon",
-			value: 
-			/**
-			* Render the path of icon
-			* @param {Object} data Data of each legend item
-			* @return {String} Path element
-			*/
-			function renderIcon(data) {
+			value: function renderIcon(data) {
 				var inactiveColor = this.props.inactiveColor;
 				var halfSize = SIZE / 2;
 				var sixthSize = SIZE / 6;
@@ -1481,7 +1475,7 @@ _defineProperty$35(DefaultLegendContent, "defaultProps", {
 	inactiveColor: "#ccc"
 });
 //#endregion
-//#region node_modules/recharts/es6/util/payload/getUniqPayload.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/payload/getUniqPayload.js
 var import_uniqBy = /* @__PURE__ */ __toESM(require_uniqBy());
 /**
 * This is configuration option that decides how to filter for unique values only:
@@ -1496,7 +1490,7 @@ function getUniqPayload(payload, option, defaultUniqBy) {
 	return payload;
 }
 //#endregion
-//#region node_modules/recharts/es6/component/Legend.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/component/Legend.js
 /**
 * @fileOverview Legend
 */
@@ -1722,18 +1716,14 @@ var Legend = /*#__PURE__*/ function(_PureComponent) {
 			value: function getDefaultPosition(style) {
 				var _this$props = this.props, layout = _this$props.layout, align = _this$props.align, verticalAlign = _this$props.verticalAlign, margin = _this$props.margin, chartWidth = _this$props.chartWidth, chartHeight = _this$props.chartHeight;
 				var hPos, vPos;
-				if (!style || (style.left === void 0 || style.left === null) && (style.right === void 0 || style.right === null)) {
-					if (align === "center" && layout === "vertical") {
-						var box = this.getBBoxSnapshot();
-						hPos = { left: ((chartWidth || 0) - box.width) / 2 };
-					} else hPos = align === "right" ? { right: margin && margin.right || 0 } : { left: margin && margin.left || 0 };
-				}
-				if (!style || (style.top === void 0 || style.top === null) && (style.bottom === void 0 || style.bottom === null)) {
-					if (verticalAlign === "middle") {
-						var _box = this.getBBoxSnapshot();
-						vPos = { top: ((chartHeight || 0) - _box.height) / 2 };
-					} else vPos = verticalAlign === "bottom" ? { bottom: margin && margin.bottom || 0 } : { top: margin && margin.top || 0 };
-				}
+				if (!style || (style.left === void 0 || style.left === null) && (style.right === void 0 || style.right === null)) if (align === "center" && layout === "vertical") {
+					var box = this.getBBoxSnapshot();
+					hPos = { left: ((chartWidth || 0) - box.width) / 2 };
+				} else hPos = align === "right" ? { right: margin && margin.right || 0 } : { left: margin && margin.left || 0 };
+				if (!style || (style.top === void 0 || style.top === null) && (style.bottom === void 0 || style.bottom === null)) if (verticalAlign === "middle") {
+					var _box = this.getBBoxSnapshot();
+					vPos = { top: ((chartHeight || 0) - _box.height) / 2 };
+				} else vPos = verticalAlign === "bottom" ? { bottom: margin && margin.bottom || 0 } : { top: margin && margin.top || 0 };
 				return _objectSpread$29(_objectSpread$29({}, hPos), vPos);
 			}
 		},
@@ -1774,7 +1764,7 @@ _defineProperty$34(Legend, "defaultProps", {
 	verticalAlign: "bottom"
 });
 //#endregion
-//#region node_modules/recharts/es6/component/DefaultTooltipContent.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/component/DefaultTooltipContent.js
 var import_memoize = /* @__PURE__ */ __toESM(require_memoize());
 /**
 * @fileOverview Default Tooltip Content
@@ -1957,7 +1947,7 @@ var DefaultTooltipContent = function DefaultTooltipContent(props) {
 	}, /*#__PURE__*/ import_react.isValidElement(finalLabel) ? finalLabel : "".concat(finalLabel)), renderContent());
 };
 //#endregion
-//#region node_modules/recharts/es6/util/tooltip/translate.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/tooltip/translate.js
 function _typeof$33(o) {
 	"@babel/helpers - typeof";
 	return _typeof$33 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -2056,7 +2046,7 @@ function getTooltipTranslate(_ref4) {
 	};
 }
 //#endregion
-//#region node_modules/recharts/es6/component/TooltipBoundingBox.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/component/TooltipBoundingBox.js
 function _typeof$32(o) {
 	"@babel/helpers - typeof";
 	return _typeof$32 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -2295,7 +2285,7 @@ var Global = {
 	}
 };
 //#endregion
-//#region node_modules/recharts/es6/component/Tooltip.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/component/Tooltip.js
 /**
 * @fileOverview Tooltip
 */
@@ -2493,7 +2483,7 @@ _defineProperty$30(Tooltip, "defaultProps", {
 	wrapperStyle: {}
 });
 //#endregion
-//#region node_modules/recharts/es6/component/ResponsiveContainer.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/component/ResponsiveContainer.js
 /**
 * @fileOverview Wrapper component to make charts adapt to the size of parent * DOM
 */
@@ -2696,7 +2686,7 @@ var ResponsiveContainer = /*#__PURE__*/ (0, import_react.forwardRef)(function(_r
 	}, chartContent);
 });
 //#endregion
-//#region node_modules/recharts/es6/component/Cell.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/component/Cell.js
 /**
 * @fileOverview Cross
 */
@@ -2705,7 +2695,7 @@ var Cell = function Cell(_props) {
 };
 Cell.displayName = "Cell";
 //#endregion
-//#region node_modules/recharts/es6/util/DOMUtils.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/DOMUtils.js
 function _typeof$29(o) {
 	"@babel/helpers - typeof";
 	return _typeof$29 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -2830,7 +2820,7 @@ var getOffset = function getOffset(rect) {
 	};
 };
 //#endregion
-//#region node_modules/recharts/es6/util/ReduceCSSCalc.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/ReduceCSSCalc.js
 function _typeof$28(o) {
 	"@babel/helpers - typeof";
 	return _typeof$28 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -2922,9 +2912,9 @@ var CONVERSION_RATES = {
 	cm: 96 / 2.54,
 	mm: 96 / 25.4,
 	pt: 96 / 72,
-	pc: 16,
+	pc: 96 / 6,
 	"in": 96,
-	Q: 96 / 101.6,
+	Q: 96 / (2.54 * 40),
 	px: 1
 };
 var FIXED_CSS_LENGTH_UNITS = Object.keys(CONVERSION_RATES);
@@ -3051,7 +3041,7 @@ function reduceCSSCalc(expression) {
 	return result;
 }
 //#endregion
-//#region node_modules/recharts/es6/component/Text.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/component/Text.js
 var _excluded$10 = [
 	"x",
 	"y",
@@ -3151,10 +3141,8 @@ var calculateWordWidths = function calculateWordWidths(_ref) {
 	var children = _ref.children, breakAll = _ref.breakAll, style = _ref.style;
 	try {
 		var words = [];
-		if (!(0, import_isNil.default)(children)) {
-			if (breakAll) words = children.toString().split("");
-			else words = children.toString().split(BREAKING_SPACES);
-		}
+		if (!(0, import_isNil.default)(children)) if (breakAll) words = children.toString().split("");
+		else words = children.toString().split(BREAKING_SPACES);
 		return {
 			wordsWithComputedWidth: words.map(function(word) {
 				return {
@@ -3282,7 +3270,9 @@ var Text = function Text(_ref5) {
 		case "middle":
 			startDy = reduceCSSCalc("calc(".concat((wordsByLines.length - 1) / 2, " * -").concat(lineHeight, " + (").concat(capHeight, " / 2))"));
 			break;
-		default: startDy = reduceCSSCalc("calc(".concat(wordsByLines.length - 1, " * -").concat(lineHeight, ")"));
+		default:
+			startDy = reduceCSSCalc("calc(".concat(wordsByLines.length - 1, " * -").concat(lineHeight, ")"));
+			break;
 	}
 	var transforms = [];
 	if (scaleToFit) {
@@ -3308,7 +3298,7 @@ var Text = function Text(_ref5) {
 	}));
 };
 //#endregion
-//#region node_modules/victory-vendor/es/d3-scale.js
+//#region node_modules/.pnpm/victory-vendor@36.9.2/node_modules/victory-vendor/es/d3-scale.js
 var d3_scale_exports = /* @__PURE__ */ __exportAll({
 	scaleBand: () => band,
 	scaleDiverging: () => diverging,
@@ -3340,7 +3330,7 @@ var d3_scale_exports = /* @__PURE__ */ __exportAll({
 	tickFormat: () => tickFormat
 });
 //#endregion
-//#region node_modules/recharts-scale/es6/util/utils.js
+//#region node_modules/.pnpm/recharts-scale@0.4.5/node_modules/recharts-scale/es6/util/utils.js
 var import_max = /* @__PURE__ */ __toESM(require_max());
 var import_min = /* @__PURE__ */ __toESM(require_min());
 var import_flatMap = /* @__PURE__ */ __toESM(require_flatMap());
@@ -3444,7 +3434,7 @@ var memoize$1 = function memoize(fn) {
 	};
 };
 //#endregion
-//#region node_modules/recharts-scale/es6/util/arithmetic.js
+//#region node_modules/.pnpm/recharts-scale@0.4.5/node_modules/recharts-scale/es6/util/arithmetic.js
 /**
 * @fileOverview 一些公用的运算方法
 * @author xile611
@@ -3504,7 +3494,7 @@ var arithmetic_default = {
 	})
 };
 //#endregion
-//#region node_modules/recharts-scale/es6/getNiceTickValues.js
+//#region node_modules/.pnpm/recharts-scale@0.4.5/node_modules/recharts-scale/es6/getNiceTickValues.js
 /**
 * @fileOverview calculate tick values of scale
 * @author xile611, arcthur
@@ -3713,14 +3703,14 @@ function getTickValuesFixedDomainFn(_ref7, tickCount) {
 var getNiceTickValues = memoize$1(getNiceTickValuesFn);
 var getTickValuesFixedDomain = memoize$1(getTickValuesFixedDomainFn);
 //#endregion
-//#region node_modules/tiny-invariant/dist/esm/tiny-invariant.js
+//#region node_modules/.pnpm/tiny-invariant@1.3.3/node_modules/tiny-invariant/dist/esm/tiny-invariant.js
 var prefix = "Invariant failed";
 function invariant(condition, message) {
 	if (condition) return;
 	throw new Error(prefix);
 }
 //#endregion
-//#region node_modules/recharts/es6/cartesian/ErrorBar.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/cartesian/ErrorBar.js
 /**
 * @fileOverview Render a group of error bar
 */
@@ -4000,7 +3990,7 @@ _defineProperty$27(ErrorBar, "defaultProps", {
 });
 _defineProperty$27(ErrorBar, "displayName", "ErrorBar");
 //#endregion
-//#region node_modules/recharts/es6/util/getLegendProps.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/getLegendProps.js
 function _typeof$26(o) {
 	"@babel/helpers - typeof";
 	return _typeof$26 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -4095,7 +4085,7 @@ var getLegendProps = function getLegendProps(_ref) {
 	});
 };
 //#endregion
-//#region node_modules/recharts/es6/util/ChartUtils.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/ChartUtils.js
 function _typeof$25(o) {
 	"@babel/helpers - typeof";
 	return _typeof$25 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -4272,7 +4262,9 @@ var getMainColorOfGraphicItem = function getMainColorOfGraphicItem(item) {
 		case "Radar":
 			result = stroke && stroke !== "none" ? stroke : fill;
 			break;
-		default: result = fill;
+		default:
+			result = fill;
+			break;
 	}
 	return result;
 };
@@ -4896,7 +4888,7 @@ var getTooltipItem = function getTooltipItem(graphicalItem, payload) {
 	});
 };
 //#endregion
-//#region node_modules/recharts/es6/util/PolarUtils.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/PolarUtils.js
 function _typeof$24(o) {
 	"@babel/helpers - typeof";
 	return _typeof$24 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -5030,7 +5022,7 @@ var inRangeOfSector = function inRangeOfSector(_ref5, sector) {
 	return null;
 };
 //#endregion
-//#region node_modules/recharts/es6/component/Label.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/component/Label.js
 function _typeof$23(o) {
 	"@babel/helpers - typeof";
 	return _typeof$23 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -5444,7 +5436,7 @@ var renderCallByParent$1 = function renderCallByParent(parentProps, viewBox) {
 Label.parseViewBox = parseViewBox;
 Label.renderCallByParent = renderCallByParent$1;
 //#endregion
-//#region node_modules/recharts/es6/component/LabelList.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/component/LabelList.js
 var import_last = /* @__PURE__ */ __toESM(require_last());
 function _typeof$22(o) {
 	"@babel/helpers - typeof";
@@ -5617,7 +5609,7 @@ function renderCallByParent(parentProps, data) {
 }
 LabelList.renderCallByParent = renderCallByParent;
 //#endregion
-//#region node_modules/recharts/es6/shape/Sector.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/shape/Sector.js
 /**
 * @fileOverview Sector
 */
@@ -5823,7 +5815,7 @@ var Sector = function Sector(sectorProps) {
 	}));
 };
 //#endregion
-//#region node_modules/recharts/es6/shape/Curve.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/shape/Curve.js
 /**
 * @fileOverview Curve
 */
@@ -5965,7 +5957,7 @@ var Curve = function Curve(props) {
 	}));
 };
 //#endregion
-//#region node_modules/recharts/es6/shape/Rectangle.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/shape/Rectangle.js
 /**
 * @fileOverview Rectangle
 */
@@ -6184,7 +6176,7 @@ var Rectangle = function Rectangle(rectangleProps) {
 	});
 };
 //#endregion
-//#region node_modules/recharts/es6/shape/Dot.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/shape/Dot.js
 /**
 * @fileOverview Dot
 */
@@ -6210,7 +6202,7 @@ var Dot = function Dot(props) {
 	return null;
 };
 //#endregion
-//#region node_modules/recharts/es6/shape/Cross.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/shape/Cross.js
 /**
 * @fileOverview Cross
 */
@@ -6331,7 +6323,7 @@ var Cross = function Cross(_ref) {
 	}));
 };
 //#endregion
-//#region node_modules/recharts/es6/shape/Trapezoid.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/shape/Trapezoid.js
 var import_isPlainObject = /* @__PURE__ */ __toESM(require_isPlainObject());
 var import_isBoolean = /* @__PURE__ */ __toESM(require_isBoolean());
 /**
@@ -6519,7 +6511,7 @@ var Trapezoid = function Trapezoid(props) {
 	});
 };
 //#endregion
-//#region node_modules/recharts/es6/util/ActiveShapeUtils.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/ActiveShapeUtils.js
 var _excluded$5 = [
 	"option",
 	"shapeType",
@@ -6741,7 +6733,7 @@ function getActiveShapeIndexForTooltip(_ref3) {
 	return itemData.indexOf(activeItemMatches[activeItemMatches.length - 1]);
 }
 //#endregion
-//#region node_modules/recharts/es6/util/CssPrefixUtils.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/CssPrefixUtils.js
 var import_range = /* @__PURE__ */ __toESM(require_range());
 function _typeof$15(o) {
 	"@babel/helpers - typeof";
@@ -6815,7 +6807,7 @@ var generatePrefixStyle = function generatePrefixStyle(name, value) {
 	return result;
 };
 //#endregion
-//#region node_modules/recharts/es6/cartesian/Brush.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/cartesian/Brush.js
 /**
 * @fileOverview Brush
 */
@@ -7400,7 +7392,7 @@ _defineProperty$14(Brush, "defaultProps", {
 	alwaysShowText: false
 });
 //#endregion
-//#region node_modules/recharts/es6/util/IfOverflowMatches.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/IfOverflowMatches.js
 var ifOverflowMatches = function ifOverflowMatches(props, value) {
 	var alwaysShow = props.alwaysShow;
 	var ifOverflow = props.ifOverflow;
@@ -7408,7 +7400,7 @@ var ifOverflowMatches = function ifOverflowMatches(props, value) {
 	return ifOverflow === value;
 };
 //#endregion
-//#region node_modules/recharts/es6/util/BarUtils.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/BarUtils.js
 var import_mapValues = /* @__PURE__ */ __toESM(require_mapValues());
 var import_every = /* @__PURE__ */ __toESM(require_every());
 var _excluded$4 = ["x", "y"];
@@ -7541,7 +7533,7 @@ var minPointSizeCallback = function minPointSizeCallback(minPointSize) {
 	};
 };
 //#endregion
-//#region node_modules/recharts/es6/cartesian/Bar.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/cartesian/Bar.js
 /**
 * @fileOverview Render a group of bar
 */
@@ -8006,7 +7998,7 @@ _defineProperty$12(Bar, "getComposedData", function(_ref2) {
 	}, offset);
 });
 //#endregion
-//#region node_modules/recharts/es6/util/CartesianUtils.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/CartesianUtils.js
 function _typeof$11(o) {
 	"@babel/helpers - typeof";
 	return _typeof$11 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -8296,7 +8288,7 @@ var getAngledRectangleWidth = function getAngledRectangleWidth(_ref6) {
 	return Math.abs(angledWidth);
 };
 //#endregion
-//#region node_modules/recharts/es6/util/calculateViewBox.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/calculateViewBox.js
 var import_find = /* @__PURE__ */ __toESM(require_find());
 /**
 * This is memoized because the viewBox is unlikely to change often
@@ -8325,7 +8317,7 @@ var calculateViewBox = (0, import_memoize.default)(function(offset) {
 	].join("");
 });
 //#endregion
-//#region node_modules/recharts/es6/context/chartLayoutContext.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/context/chartLayoutContext.js
 var XAxisContext = /*#__PURE__*/ (0, import_react.createContext)(void 0);
 var YAxisContext = /*#__PURE__*/ (0, import_react.createContext)(void 0);
 var ViewBoxContext = /*#__PURE__*/ (0, import_react.createContext)(void 0);
@@ -8361,9 +8353,9 @@ var useClipPathId = function useClipPathId() {
 */
 var useXAxisOrThrow = function useXAxisOrThrow(xAxisId) {
 	var xAxisMap = (0, import_react.useContext)(XAxisContext);
-	xAxisMap ?? invariant(false);
+	!(xAxisMap != null) && invariant(false);
 	var xAxis = xAxisMap[xAxisId];
-	xAxis ?? invariant(false);
+	!(xAxis != null) && invariant(false);
 	return xAxis;
 };
 /**
@@ -8400,9 +8392,9 @@ var useYAxisWithFiniteDomainOrRandom = function useYAxisWithFiniteDomainOrRandom
 */
 var useYAxisOrThrow = function useYAxisOrThrow(yAxisId) {
 	var yAxisMap = (0, import_react.useContext)(YAxisContext);
-	yAxisMap ?? invariant(false);
+	!(yAxisMap != null) && invariant(false);
 	var yAxis = yAxisMap[yAxisId];
-	yAxis ?? invariant(false);
+	!(yAxis != null) && invariant(false);
 	return yAxis;
 };
 var useViewBox = function useViewBox() {
@@ -8418,7 +8410,7 @@ var useChartHeight = function useChartHeight() {
 	return (0, import_react.useContext)(ChartHeightContext);
 };
 //#endregion
-//#region node_modules/recharts/es6/cartesian/ReferenceLine.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/cartesian/ReferenceLine.js
 /**
 * @fileOverview Reference Line
 */
@@ -8696,7 +8688,7 @@ _defineProperty$10(ReferenceLine, "defaultProps", {
 	position: "middle"
 });
 //#endregion
-//#region node_modules/recharts/es6/cartesian/ReferenceDot.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/cartesian/ReferenceDot.js
 /**
 * @fileOverview Reference Dot
 */
@@ -8893,7 +8885,7 @@ _defineProperty$9(ReferenceDot, "renderDot", function(option, props) {
 	return dot;
 });
 //#endregion
-//#region node_modules/recharts/es6/cartesian/ReferenceArea.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/cartesian/ReferenceArea.js
 /**
 * @fileOverview Reference Line
 */
@@ -9084,7 +9076,7 @@ _defineProperty$8(ReferenceArea, "renderRect", function(option, props) {
 	return rect;
 });
 //#endregion
-//#region node_modules/recharts/es6/util/getEveryNthWithCondition.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/getEveryNthWithCondition.js
 /**
 * Given an array and a number N, return a new array which contains every nTh
 * element of the input array. For n below 1, an empty array is returned.
@@ -9103,7 +9095,7 @@ function getEveryNthWithCondition(array, n, isValid) {
 	return result;
 }
 //#endregion
-//#region node_modules/recharts/es6/util/TickUtils.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/TickUtils.js
 function getAngledTickWidth(contentSize, unitSize, angle) {
 	return getAngledRectangleWidth({
 		width: contentSize.width + unitSize.width,
@@ -9131,7 +9123,7 @@ function getNumberIntervalTicks(ticks, interval) {
 	return getEveryNthWithCondition(ticks, interval + 1);
 }
 //#endregion
-//#region node_modules/recharts/es6/cartesian/getEquidistantTicks.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/cartesian/getEquidistantTicks.js
 function getEquidistantTicks(sign, boundaries, getTickSize, ticks, minTickGap) {
 	var result = (ticks || []).slice();
 	var initialStart = boundaries.start, end = boundaries.end;
@@ -9166,7 +9158,7 @@ function getEquidistantTicks(sign, boundaries, getTickSize, ticks, minTickGap) {
 	return [];
 }
 //#endregion
-//#region node_modules/recharts/es6/cartesian/getTicks.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/cartesian/getTicks.js
 function _typeof$7(o) {
 	"@babel/helpers - typeof";
 	return _typeof$7 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -9314,7 +9306,7 @@ function getTicks(props, fontSize, letterSpacing) {
 	});
 }
 //#endregion
-//#region node_modules/recharts/es6/cartesian/CartesianAxis.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/cartesian/CartesianAxis.js
 /**
 * @fileOverview Cartesian Axis
 */
@@ -9542,6 +9534,7 @@ var CartesianAxis = /*#__PURE__*/ function(_Component) {
 						y1 = y2 + sign * finalTickSize;
 						ty = y1 + sign * tickMargin;
 						tx = tickCoord;
+						break;
 				}
 				return {
 					line: {
@@ -9569,7 +9562,9 @@ var CartesianAxis = /*#__PURE__*/ function(_Component) {
 					case "right":
 						textAnchor = mirror ? "end" : "start";
 						break;
-					default: textAnchor = "middle";
+					default:
+						textAnchor = "middle";
+						break;
 				}
 				return textAnchor;
 			}
@@ -9587,7 +9582,9 @@ var CartesianAxis = /*#__PURE__*/ function(_Component) {
 					case "top":
 						verticalAnchor = mirror ? "start" : "end";
 						break;
-					default: verticalAnchor = mirror ? "end" : "start";
+					default:
+						verticalAnchor = mirror ? "end" : "start";
+						break;
 				}
 				return verticalAnchor;
 			}
@@ -9619,15 +9616,7 @@ var CartesianAxis = /*#__PURE__*/ function(_Component) {
 		},
 		{
 			key: "renderTicks",
-			value: 
-			/**
-			* render the ticks
-			* @param {Array} ticks The ticks to actually render (overrides what was passed in props)
-			* @param {string} fontSize Fontsize to consider for tick spacing
-			* @param {string} letterSpacing Letterspacing to consider for tick spacing
-			* @return {ReactComponent} renderedTicks
-			*/
-			function renderTicks(ticks, fontSize, letterSpacing) {
+			value: function renderTicks(ticks, fontSize, letterSpacing) {
 				var _this2 = this;
 				var _this$props6 = this.props, tickLine = _this$props6.tickLine, stroke = _this$props6.stroke, tick = _this$props6.tick, tickFormatter = _this$props6.tickFormatter, unit = _this$props6.unit;
 				var finalTicks = getTicks(_objectSpread$3(_objectSpread$3({}, this.props), {}, { ticks }), fontSize, letterSpacing);
@@ -9713,7 +9702,7 @@ _defineProperty$6(CartesianAxis, "defaultProps", {
 	interval: "preserveEnd"
 });
 //#endregion
-//#region node_modules/recharts/es6/cartesian/CartesianGrid.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/cartesian/CartesianGrid.js
 /**
 * @fileOverview Cartesian Grid
 */
@@ -10037,7 +10026,7 @@ function CartesianGrid(props) {
 }
 CartesianGrid.displayName = "CartesianGrid";
 //#endregion
-//#region node_modules/recharts/es6/cartesian/XAxis.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/cartesian/XAxis.js
 /**
 * @fileOverview X Axis
 */
@@ -10199,7 +10188,7 @@ _defineProperty$4(XAxis, "defaultProps", {
 	allowDuplicatedCategory: true
 });
 //#endregion
-//#region node_modules/recharts/es6/cartesian/YAxis.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/cartesian/YAxis.js
 /**
 * @fileOverview Y Axis
 */
@@ -10360,7 +10349,7 @@ _defineProperty$3(YAxis, "defaultProps", {
 	reversed: false
 });
 //#endregion
-//#region node_modules/recharts/es6/util/DetectReferenceElementsDomain.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/DetectReferenceElementsDomain.js
 function _toConsumableArray$1(arr) {
 	return _arrayWithoutHoles$1(arr) || _iterableToArray$1(arr) || _unsupportedIterableToArray$1(arr) || _nonIterableSpread$1();
 }
@@ -10422,7 +10411,7 @@ var detectReferenceElementsDomain = function detectReferenceElementsDomain(child
 var eventCenter = new (/* @__PURE__ */ __toESM(require_eventemitter3())).default();
 var SYNC_EVENT = "recharts.syncMouseEvents";
 //#endregion
-//#region node_modules/recharts/es6/chart/AccessibilityManager.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/chart/AccessibilityManager.js
 function _typeof$2(o) {
 	"@babel/helpers - typeof";
 	return _typeof$2 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -10515,6 +10504,8 @@ var AccessibilityManager = /*#__PURE__*/ function() {
 						if (this.layout !== "horizontal") return;
 						this.activeIndex = Math.max(this.activeIndex - 1, 0);
 						this.spoofMouse();
+						break;
+					default: break;
 				}
 			}
 		},
@@ -10545,7 +10536,7 @@ var AccessibilityManager = /*#__PURE__*/ function() {
 	]);
 }();
 //#endregion
-//#region node_modules/recharts/es6/util/isDomainSpecifiedByUser.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/isDomainSpecifiedByUser.js
 /**
 * Takes a domain and user props to determine whether he provided the domain via props or if we need to calculate it.
 * @param   {AxisDomain}  domain              The potential domain from props
@@ -10562,7 +10553,7 @@ function isDomainSpecifiedByUser(domain, allowDataOverflow, axisType) {
 	return false;
 }
 //#endregion
-//#region node_modules/recharts/es6/util/cursor/getCursorRectangle.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/cursor/getCursorRectangle.js
 function getCursorRectangle(layout, activeCoordinate, offset, tooltipAxisBandSize) {
 	var halfSize = tooltipAxisBandSize / 2;
 	return {
@@ -10575,7 +10566,7 @@ function getCursorRectangle(layout, activeCoordinate, offset, tooltipAxisBandSiz
 	};
 }
 //#endregion
-//#region node_modules/recharts/es6/util/cursor/getRadialCursorPoints.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/cursor/getRadialCursorPoints.js
 /**
 * Only applicable for radial layouts
 * @param {Object} activeCoordinate ChartCoordinate
@@ -10593,7 +10584,7 @@ function getRadialCursorPoints(activeCoordinate) {
 	};
 }
 //#endregion
-//#region node_modules/recharts/es6/util/cursor/getCursorPoints.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/util/cursor/getCursorPoints.js
 function getCursorPoints(layout, activeCoordinate, offset) {
 	var x1, y1, x2, y2;
 	if (layout === "horizontal") {
@@ -10606,17 +10597,15 @@ function getCursorPoints(layout, activeCoordinate, offset) {
 		y2 = y1;
 		x1 = offset.left;
 		x2 = offset.left + offset.width;
-	} else if (activeCoordinate.cx != null && activeCoordinate.cy != null) {
-		if (layout === "centric") {
-			var cx = activeCoordinate.cx, cy = activeCoordinate.cy, innerRadius = activeCoordinate.innerRadius, outerRadius = activeCoordinate.outerRadius, angle = activeCoordinate.angle;
-			var innerPoint = polarToCartesian(cx, cy, innerRadius, angle);
-			var outerPoint = polarToCartesian(cx, cy, outerRadius, angle);
-			x1 = innerPoint.x;
-			y1 = innerPoint.y;
-			x2 = outerPoint.x;
-			y2 = outerPoint.y;
-		} else return getRadialCursorPoints(activeCoordinate);
-	}
+	} else if (activeCoordinate.cx != null && activeCoordinate.cy != null) if (layout === "centric") {
+		var cx = activeCoordinate.cx, cy = activeCoordinate.cy, innerRadius = activeCoordinate.innerRadius, outerRadius = activeCoordinate.outerRadius, angle = activeCoordinate.angle;
+		var innerPoint = polarToCartesian(cx, cy, innerRadius, angle);
+		var outerPoint = polarToCartesian(cx, cy, outerRadius, angle);
+		x1 = innerPoint.x;
+		y1 = innerPoint.y;
+		x2 = outerPoint.x;
+		y2 = outerPoint.y;
+	} else return getRadialCursorPoints(activeCoordinate);
 	return [{
 		x: x1,
 		y: y1
@@ -10626,7 +10615,7 @@ function getCursorPoints(layout, activeCoordinate, offset) {
 	}];
 }
 //#endregion
-//#region node_modules/recharts/es6/component/Cursor.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/component/Cursor.js
 function _typeof$1(o) {
 	"@babel/helpers - typeof";
 	return _typeof$1 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -10720,7 +10709,7 @@ function Cursor(props) {
 	return /*#__PURE__*/ (0, import_react.isValidElement)(elementPropsCursor) ? /*#__PURE__*/ (0, import_react.cloneElement)(elementPropsCursor, cursorProps) : /*#__PURE__*/ (0, import_react.createElement)(cursorComp, cursorProps);
 }
 //#endregion
-//#region node_modules/recharts/es6/chart/generateCategoricalChart.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/chart/generateCategoricalChart.js
 var _excluded = ["item"];
 var _excluded2 = [
 	"children",
@@ -11118,14 +11107,13 @@ var getAxisMapByAxes = function getAxisMapByAxes(props, _ref2) {
 					} else if (!allowDuplicatedCategory) domain = parseDomainOfCategoryAxis(childDomain, domain, child).reduce(function(finalDomain, entry) {
 						return finalDomain.indexOf(entry) >= 0 ? finalDomain : [].concat(_toConsumableArray(finalDomain), [entry]);
 					}, []);
-				} else if (type === "category") {
-					if (!allowDuplicatedCategory) domain = parseDomainOfCategoryAxis(childDomain, domain, child).reduce(function(finalDomain, entry) {
-						return finalDomain.indexOf(entry) >= 0 || entry === "" || (0, import_isNil.default)(entry) ? finalDomain : [].concat(_toConsumableArray(finalDomain), [entry]);
-					}, []);
-					else domain = domain.filter(function(entry) {
-						return entry !== "" && !(0, import_isNil.default)(entry);
-					});
-				} else if (type === "number") {
+				} else if (type === "category") if (!allowDuplicatedCategory) domain = parseDomainOfCategoryAxis(childDomain, domain, child).reduce(function(finalDomain, entry) {
+					return finalDomain.indexOf(entry) >= 0 || entry === "" || (0, import_isNil.default)(entry) ? finalDomain : [].concat(_toConsumableArray(finalDomain), [entry]);
+				}, []);
+				else domain = domain.filter(function(entry) {
+					return entry !== "" && !(0, import_isNil.default)(entry);
+				});
+				else if (type === "number") {
 					var errorBarsDomain = parseErrorBarsOfAxis(displayedData, graphicalItems.filter(function(item) {
 						var _defaultProps2, _defaultProps3;
 						var itemAxisId = axisIdKey in item.props ? item.props[axisIdKey] : (_defaultProps2 = item.type.defaultProps) === null || _defaultProps2 === void 0 ? void 0 : _defaultProps2[axisIdKey];
@@ -11364,7 +11352,7 @@ var getCartesianAxisSize = function getCartesianAxisSize(axisObj, axisName) {
 	if (axisName === "yAxis") return axisObj[axisName].height;
 };
 //#endregion
-//#region node_modules/recharts/es6/chart/BarChart.js
+//#region node_modules/.pnpm/recharts@2.15.4_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/recharts/es6/chart/BarChart.js
 /**
 * @fileOverview Bar Chart
 */
@@ -11780,8 +11768,8 @@ var BarChart = function generateCategoricalChart(_ref6) {
 					legendContent
 				});
 				if (!props) return null;
-				var item = props.item, otherProps = _objectWithoutProperties(props, _excluded);
-				return /*#__PURE__*/ (0, import_react.cloneElement)(item, _objectSpread(_objectSpread({}, otherProps), {}, {
+				var item = props.item;
+				return /*#__PURE__*/ (0, import_react.cloneElement)(item, _objectSpread(_objectSpread({}, _objectWithoutProperties(props, _excluded)), {}, {
 					chartWidth: width,
 					chartHeight: height,
 					margin,
@@ -11892,49 +11880,46 @@ var BarChart = function generateCategoricalChart(_ref6) {
 				function findWithPayload(entry) {
 					return typeof tooltipAxis.dataKey === "function" ? tooltipAxis.dataKey(entry.payload) : null;
 				}
-				if (hasActive) {
-					if (activeTooltipIndex >= 0) {
-						var activePoint, basePoint;
-						if (tooltipAxis.dataKey && !tooltipAxis.allowDuplicatedCategory) {
-							var specifiedKey = typeof tooltipAxis.dataKey === "function" ? findWithPayload : "payload.".concat(tooltipAxis.dataKey.toString());
-							activePoint = findEntryInArray(points, specifiedKey, activeLabel);
-							basePoint = isRange && baseLine && findEntryInArray(baseLine, specifiedKey, activeLabel);
-						} else {
-							activePoint = points === null || points === void 0 ? void 0 : points[activeTooltipIndex];
-							basePoint = isRange && baseLine && baseLine[activeTooltipIndex];
-						}
-						if (activeShape || activeBar) {
-							var activeIndex = element.props.activeIndex !== void 0 ? element.props.activeIndex : activeTooltipIndex;
-							return [
-								/*#__PURE__*/ (0, import_react.cloneElement)(element, _objectSpread(_objectSpread(_objectSpread({}, item.props), itemEvents), {}, { activeIndex })),
-								null,
-								null
-							];
-						}
-						if (!(0, import_isNil.default)(activePoint)) return [graphicalItem].concat(_toConsumableArray(_this.renderActivePoints({
-							item,
-							activePoint,
-							basePoint,
-							childIndex: activeTooltipIndex,
-							isRange
-						})));
+				if (hasActive) if (activeTooltipIndex >= 0) {
+					var activePoint, basePoint;
+					if (tooltipAxis.dataKey && !tooltipAxis.allowDuplicatedCategory) {
+						var specifiedKey = typeof tooltipAxis.dataKey === "function" ? findWithPayload : "payload.".concat(tooltipAxis.dataKey.toString());
+						activePoint = findEntryInArray(points, specifiedKey, activeLabel);
+						basePoint = isRange && baseLine && findEntryInArray(baseLine, specifiedKey, activeLabel);
 					} else {
-						var _this$getItemByXY;
-						/**
-						* We hit this block if consumer uses a Tooltip without XAxis and/or YAxis.
-						* In which case, this.state.activeTooltipIndex never gets set
-						* because the mouse events that trigger that value getting set never get trigged without the axis components.
-						*
-						* An example usage case is a FunnelChart
-						*/
-						var _ref11$graphicalItem = ((_this$getItemByXY = _this.getItemByXY(_this.state.activeCoordinate)) !== null && _this$getItemByXY !== void 0 ? _this$getItemByXY : { graphicalItem }).graphicalItem, _ref11$graphicalItem$ = _ref11$graphicalItem.item, xyItem = _ref11$graphicalItem$ === void 0 ? element : _ref11$graphicalItem$, childIndex = _ref11$graphicalItem.childIndex;
-						var elementProps = _objectSpread(_objectSpread(_objectSpread({}, item.props), itemEvents), {}, { activeIndex: childIndex });
+						activePoint = points === null || points === void 0 ? void 0 : points[activeTooltipIndex];
+						basePoint = isRange && baseLine && baseLine[activeTooltipIndex];
+					}
+					if (activeShape || activeBar) {
+						var activeIndex = element.props.activeIndex !== void 0 ? element.props.activeIndex : activeTooltipIndex;
 						return [
-							/*#__PURE__*/ (0, import_react.cloneElement)(xyItem, elementProps),
+							/*#__PURE__*/ (0, import_react.cloneElement)(element, _objectSpread(_objectSpread(_objectSpread({}, item.props), itemEvents), {}, { activeIndex })),
 							null,
 							null
 						];
 					}
+					if (!(0, import_isNil.default)(activePoint)) return [graphicalItem].concat(_toConsumableArray(_this.renderActivePoints({
+						item,
+						activePoint,
+						basePoint,
+						childIndex: activeTooltipIndex,
+						isRange
+					})));
+				} else {
+					var _this$getItemByXY;
+					/**
+					* We hit this block if consumer uses a Tooltip without XAxis and/or YAxis.
+					* In which case, this.state.activeTooltipIndex never gets set
+					* because the mouse events that trigger that value getting set never get trigged without the axis components.
+					*
+					* An example usage case is a FunnelChart
+					*/
+					var _ref11$graphicalItem = ((_this$getItemByXY = _this.getItemByXY(_this.state.activeCoordinate)) !== null && _this$getItemByXY !== void 0 ? _this$getItemByXY : { graphicalItem }).graphicalItem, _ref11$graphicalItem$ = _ref11$graphicalItem.item, xyItem = _ref11$graphicalItem$ === void 0 ? element : _ref11$graphicalItem$, childIndex = _ref11$graphicalItem.childIndex;
+					return [
+						/*#__PURE__*/ (0, import_react.cloneElement)(xyItem, _objectSpread(_objectSpread(_objectSpread({}, item.props), itemEvents), {}, { activeIndex: childIndex })),
+						null,
+						null
+					];
 				}
 				if (isRange) return [
 					graphicalItem,
@@ -12145,19 +12130,17 @@ var BarChart = function generateCategoricalChart(_ref6) {
 					var tooltipEventType = this.getTooltipEventType();
 					var tooltipItem = findChildByType(children, Tooltip);
 					var tooltipEvents = {};
-					if (tooltipItem && tooltipEventType === "axis") {
-						if (tooltipItem.props.trigger === "click") tooltipEvents = { onClick: this.handleClick };
-						else tooltipEvents = {
-							onMouseEnter: this.handleMouseEnter,
-							onDoubleClick: this.handleDoubleClick,
-							onMouseMove: this.handleMouseMove,
-							onMouseLeave: this.handleMouseLeave,
-							onTouchMove: this.handleTouchMove,
-							onTouchStart: this.handleTouchStart,
-							onTouchEnd: this.handleTouchEnd,
-							onContextMenu: this.handleContextMenu
-						};
-					}
+					if (tooltipItem && tooltipEventType === "axis") if (tooltipItem.props.trigger === "click") tooltipEvents = { onClick: this.handleClick };
+					else tooltipEvents = {
+						onMouseEnter: this.handleMouseEnter,
+						onDoubleClick: this.handleDoubleClick,
+						onMouseMove: this.handleMouseMove,
+						onMouseLeave: this.handleMouseLeave,
+						onTouchMove: this.handleTouchMove,
+						onTouchStart: this.handleTouchStart,
+						onTouchEnd: this.handleTouchEnd,
+						onContextMenu: this.handleContextMenu
+					};
 					return _objectSpread(_objectSpread({}, adaptEventHandlers(this.props, this.handleOuterEvent)), tooltipEvents);
 				}
 			},

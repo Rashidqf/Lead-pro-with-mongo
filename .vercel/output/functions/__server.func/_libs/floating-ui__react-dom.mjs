@@ -2,7 +2,7 @@ import { o as __toESM } from "../_runtime.mjs";
 import { i as require_react } from "./dnd-kit__accessibility+react.mjs";
 import { c as require_react_dom } from "./@dnd-kit/core+[...].mjs";
 import { a as hide$1, c as shift$1, i as flip$1, l as size$1, o as limitShift$1, r as computePosition, s as offset$1, t as arrow$2 } from "./@floating-ui/dom+[...].mjs";
-//#region node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
+//#region node_modules/.pnpm/@floating-ui+react-dom@2.1._735e95704ae5cf22d7cb7c1194888638/node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_react_dom = /* @__PURE__ */ __toESM(require_react_dom(), 1);
 var index = typeof document !== "undefined" ? import_react.useLayoutEffect : function noop() {};

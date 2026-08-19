@@ -1,4 +1,4 @@
-//#region node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
+//#region node_modules/.pnpm/@floating-ui+utils@0.2.12/node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
 /**
 * Custom positioning reference element.
 * @see https://floating-ui.com/docs/virtual-elements
@@ -127,7 +127,7 @@ function rectToClientRect(rect) {
 	};
 }
 //#endregion
-//#region node_modules/@floating-ui/core/dist/floating-ui.core.mjs
+//#region node_modules/.pnpm/@floating-ui+core@1.8.0/node_modules/@floating-ui/core/dist/floating-ui.core.mjs
 function computeCoordsFromPlacement(_ref, placement, rtl) {
 	let { reference, floating } = _ref;
 	const sideAxis = getSideAxis(placement);
@@ -400,7 +400,9 @@ var flip = function(options) {
 						if (placement) resetPlacement = placement;
 						break;
 					}
-					case "initialPlacement": resetPlacement = initialPlacement;
+					case "initialPlacement":
+						resetPlacement = initialPlacement;
+						break;
 				}
 				if (placement !== resetPlacement) return { reset: { placement: resetPlacement } };
 			}
@@ -652,10 +654,8 @@ var size = function(options) {
 			let availableWidth = overflowAvailableWidth;
 			if (shiftData != null && shiftData.enabled.x) availableWidth = maximumClippingWidth;
 			if (shiftData != null && shiftData.enabled.y) availableHeight = maximumClippingHeight;
-			if (noShift && !alignment) {
-				if (isYAxis) availableWidth = width - 2 * max(overflow.left, overflow.right);
-				else availableHeight = height - 2 * max(overflow.top, overflow.bottom);
-			}
+			if (noShift && !alignment) if (isYAxis) availableWidth = width - 2 * max(overflow.left, overflow.right);
+			else availableHeight = height - 2 * max(overflow.top, overflow.bottom);
 			await apply({
 				...state,
 				availableWidth,

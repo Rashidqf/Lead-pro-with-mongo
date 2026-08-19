@@ -1,4 +1,4 @@
-//#region node_modules/@radix-ui/number/dist/index.mjs
+//#region node_modules/.pnpm/@radix-ui+number@1.1.3/node_modules/@radix-ui/number/dist/index.mjs
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", {
 	value,

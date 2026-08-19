@@ -1,1 +1,0 @@
-import{E as e}from"./index-CnRvvPHm.js";var t=e({type:`function`});export{t};

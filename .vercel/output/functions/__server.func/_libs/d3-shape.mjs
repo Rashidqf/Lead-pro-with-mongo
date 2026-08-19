@@ -1,12 +1,12 @@
 import { t as Path } from "./d3-path.mjs";
-//#region node_modules/d3-shape/src/constant.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/constant.js
 function constant_default(x) {
 	return function constant() {
 		return x;
 	};
 }
 //#endregion
-//#region node_modules/d3-shape/src/math.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/math.js
 var cos = Math.cos;
 var sin = Math.sin;
 var sqrt = Math.sqrt;
@@ -14,7 +14,7 @@ var pi = Math.PI;
 pi / 2;
 var tau = 2 * pi;
 //#endregion
-//#region node_modules/d3-shape/src/path.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/path.js
 function withPath(shape) {
 	let digits = 3;
 	shape.digits = function(_) {
@@ -34,7 +34,7 @@ function array_default(x) {
 	return typeof x === "object" && "length" in x ? x : Array.from(x);
 }
 //#endregion
-//#region node_modules/d3-shape/src/curve/linear.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/linear.js
 function Linear(context) {
 	this._context = context;
 }
@@ -60,7 +60,9 @@ Linear.prototype = {
 				this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y);
 				break;
 			case 1: this._point = 2;
-			default: this._context.lineTo(x, y);
+			default:
+				this._context.lineTo(x, y);
+				break;
 		}
 	}
 };
@@ -68,7 +70,7 @@ function linear_default(context) {
 	return new Linear(context);
 }
 //#endregion
-//#region node_modules/d3-shape/src/point.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/point.js
 function x(p) {
 	return p[0];
 }
@@ -76,7 +78,7 @@ function y(p) {
 	return p[1];
 }
 //#endregion
-//#region node_modules/d3-shape/src/line.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/line.js
 function line_default(x$1, y$1) {
 	var defined = constant_default(true), context = null, curve = linear_default, output = null, path = withPath(line);
 	x$1 = typeof x$1 === "function" ? x$1 : x$1 === void 0 ? x : constant_default(x$1);
@@ -85,10 +87,8 @@ function line_default(x$1, y$1) {
 		var i, n = (data = array_default(data)).length, d, defined0 = false, buffer;
 		if (context == null) output = curve(buffer = path());
 		for (i = 0; i <= n; ++i) {
-			if (!(i < n && defined(d = data[i], i, data)) === defined0) {
-				if (defined0 = !defined0) output.lineStart();
-				else output.lineEnd();
-			}
+			if (!(i < n && defined(d = data[i], i, data)) === defined0) if (defined0 = !defined0) output.lineStart();
+			else output.lineEnd();
 			if (defined0) output.point(+x$1(d, i, data), +y$1(d, i, data));
 		}
 		if (buffer) return output = null, buffer + "" || null;
@@ -111,7 +111,7 @@ function line_default(x$1, y$1) {
 	return line;
 }
 //#endregion
-//#region node_modules/d3-shape/src/area.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/area.js
 function area_default(x0, y0, y1) {
 	var x1 = null, defined = constant_default(true), context = null, curve = linear_default, output = null, path = withPath(area);
 	x0 = typeof x0 === "function" ? x0 : x0 === void 0 ? x : constant_default(+x0);
@@ -121,18 +121,16 @@ function area_default(x0, y0, y1) {
 		var i, j, k, n = (data = array_default(data)).length, d, defined0 = false, buffer, x0z = new Array(n), y0z = new Array(n);
 		if (context == null) output = curve(buffer = path());
 		for (i = 0; i <= n; ++i) {
-			if (!(i < n && defined(d = data[i], i, data)) === defined0) {
-				if (defined0 = !defined0) {
-					j = i;
-					output.areaStart();
-					output.lineStart();
-				} else {
-					output.lineEnd();
-					output.lineStart();
-					for (k = i - 1; k >= j; --k) output.point(x0z[k], y0z[k]);
-					output.lineEnd();
-					output.areaEnd();
-				}
+			if (!(i < n && defined(d = data[i], i, data)) === defined0) if (defined0 = !defined0) {
+				j = i;
+				output.areaStart();
+				output.lineStart();
+			} else {
+				output.lineEnd();
+				output.lineStart();
+				for (k = i - 1; k >= j; --k) output.point(x0z[k], y0z[k]);
+				output.lineEnd();
+				output.areaEnd();
 			}
 			if (defined0) {
 				x0z[i] = +x0(d, i, data), y0z[i] = +y0(d, i, data);
@@ -183,7 +181,7 @@ function area_default(x0, y0, y1) {
 	return area;
 }
 //#endregion
-//#region node_modules/d3-shape/src/curve/bump.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/bump.js
 var Bump = class {
 	constructor(context, x) {
 		this._context = context;
@@ -211,8 +209,10 @@ var Bump = class {
 				else this._context.moveTo(x, y);
 				break;
 			case 1: this._point = 2;
-			default: if (this._x) this._context.bezierCurveTo(this._x0 = (this._x0 + x) / 2, this._y0, this._x0, y, x, y);
-			else this._context.bezierCurveTo(this._x0, this._y0 = (this._y0 + y) / 2, x, this._y0, x, y);
+			default:
+				if (this._x) this._context.bezierCurveTo(this._x0 = (this._x0 + x) / 2, this._y0, this._x0, y, x, y);
+				else this._context.bezierCurveTo(this._x0, this._y0 = (this._y0 + y) / 2, x, this._y0, x, y);
+				break;
 		}
 		this._x0 = x, this._y0 = y;
 	}
@@ -224,14 +224,14 @@ function bumpY(context) {
 	return new Bump(context, false);
 }
 //#endregion
-//#region node_modules/d3-shape/src/symbol/circle.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/circle.js
 var circle_default = { draw(context, size) {
 	const r = sqrt(size / pi);
 	context.moveTo(r, 0);
 	context.arc(0, 0, r, 0, tau);
 } };
 //#endregion
-//#region node_modules/d3-shape/src/symbol/cross.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/cross.js
 var cross_default = { draw(context, size) {
 	const r = sqrt(size / 5) / 2;
 	context.moveTo(-3 * r, -r);
@@ -249,7 +249,7 @@ var cross_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region node_modules/d3-shape/src/symbol/diamond.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/diamond.js
 var tan30 = sqrt(1 / 3);
 var tan30_2 = tan30 * 2;
 var diamond_default = { draw(context, size) {
@@ -262,14 +262,14 @@ var diamond_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region node_modules/d3-shape/src/symbol/square.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/square.js
 var square_default = { draw(context, size) {
 	const w = sqrt(size);
 	const x = -w / 2;
 	context.rect(x, x, w, w);
 } };
 //#endregion
-//#region node_modules/d3-shape/src/symbol/star.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/star.js
 var ka = .8908130915292852;
 var kr = sin(pi / 10) / sin(7 * pi / 10);
 var kx = sin(tau / 10) * kr;
@@ -290,7 +290,7 @@ var star_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region node_modules/d3-shape/src/symbol/triangle.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/triangle.js
 var sqrt3 = sqrt(3);
 var triangle_default = { draw(context, size) {
 	const y = -sqrt(size / (sqrt3 * 3));
@@ -300,7 +300,7 @@ var triangle_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region node_modules/d3-shape/src/symbol/wye.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/wye.js
 var c = -.5;
 var s = sqrt(3) / 2;
 var k = 1 / sqrt(12);
@@ -322,7 +322,7 @@ var wye_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region node_modules/d3-shape/src/symbol.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol.js
 function Symbol(type, size) {
 	let context = null, path = withPath(symbol);
 	type = typeof type === "function" ? type : constant_default(type || circle_default);
@@ -345,10 +345,10 @@ function Symbol(type, size) {
 	return symbol;
 }
 //#endregion
-//#region node_modules/d3-shape/src/noop.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/noop.js
 function noop_default() {}
 //#endregion
-//#region node_modules/d3-shape/src/curve/basis.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/basis.js
 function point$1(that, x, y) {
 	that._context.bezierCurveTo((2 * that._x0 + that._x1) / 3, (2 * that._y0 + that._y1) / 3, (that._x0 + 2 * that._x1) / 3, (that._y0 + 2 * that._y1) / 3, (that._x0 + 4 * that._x1 + x) / 6, (that._y0 + 4 * that._y1 + y) / 6);
 }
@@ -369,7 +369,9 @@ Basis.prototype = {
 	lineEnd: function() {
 		switch (this._point) {
 			case 3: point$1(this, this._x1, this._y1);
-			case 2: this._context.lineTo(this._x1, this._y1);
+			case 2:
+				this._context.lineTo(this._x1, this._y1);
+				break;
 		}
 		if (this._line || this._line !== 0 && this._point === 1) this._context.closePath();
 		this._line = 1 - this._line;
@@ -387,7 +389,9 @@ Basis.prototype = {
 			case 2:
 				this._point = 3;
 				this._context.lineTo((5 * this._x0 + this._x1) / 6, (5 * this._y0 + this._y1) / 6);
-			default: point$1(this, x, y);
+			default:
+				point$1(this, x, y);
+				break;
 		}
 		this._x0 = this._x1, this._x1 = x;
 		this._y0 = this._y1, this._y1 = y;
@@ -397,7 +401,7 @@ function basis_default(context) {
 	return new Basis(context);
 }
 //#endregion
-//#region node_modules/d3-shape/src/curve/basisClosed.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/basisClosed.js
 function BasisClosed(context) {
 	this._context = context;
 }
@@ -423,6 +427,7 @@ BasisClosed.prototype = {
 				this.point(this._x2, this._y2);
 				this.point(this._x3, this._y3);
 				this.point(this._x4, this._y4);
+				break;
 		}
 	},
 	point: function(x, y) {
@@ -441,7 +446,9 @@ BasisClosed.prototype = {
 				this._x4 = x, this._y4 = y;
 				this._context.moveTo((this._x0 + 4 * this._x1 + x) / 6, (this._y0 + 4 * this._y1 + y) / 6);
 				break;
-			default: point$1(this, x, y);
+			default:
+				point$1(this, x, y);
+				break;
 		}
 		this._x0 = this._x1, this._x1 = x;
 		this._y0 = this._y1, this._y1 = y;
@@ -451,7 +458,7 @@ function basisClosed_default(context) {
 	return new BasisClosed(context);
 }
 //#endregion
-//#region node_modules/d3-shape/src/curve/basisOpen.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/basisOpen.js
 function BasisOpen(context) {
 	this._context = context;
 }
@@ -485,7 +492,9 @@ BasisOpen.prototype = {
 				this._line ? this._context.lineTo(x0, y0) : this._context.moveTo(x0, y0);
 				break;
 			case 3: this._point = 4;
-			default: point$1(this, x, y);
+			default:
+				point$1(this, x, y);
+				break;
 		}
 		this._x0 = this._x1, this._x1 = x;
 		this._y0 = this._y1, this._y1 = y;
@@ -495,7 +504,7 @@ function basisOpen_default(context) {
 	return new BasisOpen(context);
 }
 //#endregion
-//#region node_modules/d3-shape/src/curve/linearClosed.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/linearClosed.js
 function LinearClosed(context) {
 	this._context = context;
 }
@@ -518,7 +527,7 @@ function linearClosed_default(context) {
 	return new LinearClosed(context);
 }
 //#endregion
-//#region node_modules/d3-shape/src/curve/monotone.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/monotone.js
 function sign(x) {
 	return x < 0 ? -1 : 1;
 }
@@ -553,7 +562,9 @@ MonotoneX.prototype = {
 			case 2:
 				this._context.lineTo(this._x1, this._y1);
 				break;
-			case 3: point(this, this._t0, slope2(this, this._t0));
+			case 3:
+				point(this, this._t0, slope2(this, this._t0));
+				break;
 		}
 		if (this._line || this._line !== 0 && this._point === 1) this._context.closePath();
 		this._line = 1 - this._line;
@@ -574,7 +585,9 @@ MonotoneX.prototype = {
 				this._point = 3;
 				point(this, slope2(this, t1 = slope3(this, x, y)), t1);
 				break;
-			default: point(this, this._t0, t1 = slope3(this, x, y));
+			default:
+				point(this, this._t0, t1 = slope3(this, x, y));
+				break;
 		}
 		this._x0 = this._x1, this._x1 = x;
 		this._y0 = this._y1, this._y1 = y;
@@ -611,7 +624,7 @@ function monotoneY(context) {
 	return new MonotoneY(context);
 }
 //#endregion
-//#region node_modules/d3-shape/src/curve/natural.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/natural.js
 function Natural(context) {
 	this._context = context;
 }
@@ -661,7 +674,7 @@ function natural_default(context) {
 	return new Natural(context);
 }
 //#endregion
-//#region node_modules/d3-shape/src/curve/step.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/step.js
 function Step(context, t) {
 	this._context = context;
 	this._t = t;
@@ -690,14 +703,16 @@ Step.prototype = {
 				this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y);
 				break;
 			case 1: this._point = 2;
-			default: if (this._t <= 0) {
-				this._context.lineTo(this._x, y);
-				this._context.lineTo(x, y);
-			} else {
-				var x1 = this._x * (1 - this._t) + x * this._t;
-				this._context.lineTo(x1, this._y);
-				this._context.lineTo(x1, y);
-			}
+			default:
+				if (this._t <= 0) {
+					this._context.lineTo(this._x, y);
+					this._context.lineTo(x, y);
+				} else {
+					var x1 = this._x * (1 - this._t) + x * this._t;
+					this._context.lineTo(x1, this._y);
+					this._context.lineTo(x1, y);
+				}
+				break;
 		}
 		this._x = x, this._y = y;
 	}
@@ -712,7 +727,7 @@ function stepAfter(context) {
 	return new Step(context, 1);
 }
 //#endregion
-//#region node_modules/d3-shape/src/offset/none.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/offset/none.js
 function none_default$1(series, order) {
 	if (!((n = series.length) > 1)) return;
 	for (var i = 1, j, s0, s1 = series[order[0]], n, m = s1.length; i < n; ++i) {
@@ -721,14 +736,14 @@ function none_default$1(series, order) {
 	}
 }
 //#endregion
-//#region node_modules/d3-shape/src/order/none.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/order/none.js
 function none_default(series) {
 	var n = series.length, o = new Array(n);
 	while (--n >= 0) o[n] = n;
 	return o;
 }
 //#endregion
-//#region node_modules/d3-shape/src/stack.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/stack.js
 function stackValue(d, key) {
 	return d[key];
 }
@@ -761,7 +776,7 @@ function stack_default() {
 	return stack;
 }
 //#endregion
-//#region node_modules/d3-shape/src/offset/expand.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/offset/expand.js
 function expand_default(series, order) {
 	if (!((n = series.length) > 0)) return;
 	for (var i, n, j = 0, m = series[0].length, y; j < m; ++j) {
@@ -771,7 +786,7 @@ function expand_default(series, order) {
 	none_default$1(series, order);
 }
 //#endregion
-//#region node_modules/d3-shape/src/offset/silhouette.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/offset/silhouette.js
 function silhouette_default(series, order) {
 	if (!((n = series.length) > 0)) return;
 	for (var j = 0, s0 = series[order[0]], n, m = s0.length; j < m; ++j) {
@@ -781,7 +796,7 @@ function silhouette_default(series, order) {
 	none_default$1(series, order);
 }
 //#endregion
-//#region node_modules/d3-shape/src/offset/wiggle.js
+//#region node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/offset/wiggle.js
 function wiggle_default(series, order) {
 	if (!((n = series.length) > 0) || !((m = (s0 = series[order[0]]).length) > 0)) return;
 	for (var y = 0, j = 1, s0, m, n; j < m; ++j) {

@@ -1,7 +1,7 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { i as require_react } from "./dnd-kit__accessibility+react.mjs";
 import { s as require_jsx_runtime } from "./@radix-ui/react-collection+[...].mjs";
-//#region node_modules/@radix-ui/react-direction/dist/index.mjs
+//#region node_modules/.pnpm/@radix-ui+react-direction@1_bcddf8dfd27f5556aeb32c84ce520d53/node_modules/@radix-ui/react-direction/dist/index.mjs
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 require_jsx_runtime();
 var __defProp = Object.defineProperty;

@@ -5,7 +5,7 @@ import { b as Primitive, g as useControllableState, h as Presence, v as useId } 
 import { t as composeEventHandlers } from "./radix-ui__primitive.mjs";
 import { t as useDirection } from "./radix-ui__react-direction.mjs";
 import { n as Root, r as createRovingFocusGroupScope, t as Item } from "./@radix-ui/react-roving-focus+[...].mjs";
-//#region node_modules/@radix-ui/react-tabs/dist/index.mjs
+//#region node_modules/.pnpm/@radix-ui+react-tabs@1.1.21_169bb89de0cca18fe51d304cf3ee9a1d/node_modules/@radix-ui/react-tabs/dist/index.mjs
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_jsx_runtime = require_jsx_runtime();
 var __defProp = Object.defineProperty;

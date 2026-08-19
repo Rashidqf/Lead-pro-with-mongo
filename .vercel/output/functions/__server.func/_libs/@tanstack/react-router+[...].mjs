@@ -1,76 +1,80 @@
 import { i as __require, o as __toESM, t as __commonJSMin } from "../../_runtime.mjs";
+import { n as parseHref } from "../tanstack__history.mjs";
 import { i as require_react } from "../dnd-kit__accessibility+react.mjs";
-import { r as parseHref } from "../tanstack__history.mjs";
 import { s as require_jsx_runtime } from "../@radix-ui/react-collection+[...].mjs";
 import { c as require_react_dom } from "../@dnd-kit/core+[...].mjs";
 import { PassThrough, Readable } from "node:stream";
 import { ReadableStream as ReadableStream$1 } from "node:stream/web";
-//#region node_modules/@tanstack/router-core/dist/esm/not-found.js
-/** Determine if a value is a TanStack Router not-found error. */
-function isNotFound(obj) {
-	return obj?.isNotFound === true;
-}
-//#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/root.js
-/** Stable identifier used for the root route in a route tree. */
-var rootRouteId = "__root__";
-//#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/redirect.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/utils.js
+var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 /**
-* Create a redirect Response understood by TanStack Router.
-*
-* Use from route `loader`/`beforeLoad` or server functions to trigger a
-* navigation. If `throw: true` is set, the redirect is thrown instead of
-* returned. When an absolute `href` is supplied and `reloadDocument` is not
-* set, a full-document navigation is inferred.
-*
-* @param opts Options for the redirect. Common fields:
-* - `href`: absolute URL for external redirects; infers `reloadDocument`.
-* - `statusCode`: HTTP status code to use (defaults to 307).
-* - `headers`: additional headers to include on the Response.
-* - Standard navigation options like `to`, `params`, `search`, `replace`,
-*   and `reloadDocument` for internal redirects.
-* @returns A Response augmented with router navigation options.
-* @link https://tanstack.com/router/latest/docs/framework/react/api/router/redirectFunction
+* React.use if available (React 19+), undefined otherwise.
+* Use dynamic lookup to avoid Webpack compilation errors with React 18.
 */
-function redirect(opts) {
-	opts.statusCode = opts.statusCode || opts.code || 307;
-	if (!opts.reloadDocument && typeof opts.href === "string") try {
-		new URL(opts.href);
-		opts.reloadDocument = true;
-	} catch {}
-	const headers = new Headers(opts.headers);
-	if (opts.href && headers.get("Location") === null) headers.set("Location", opts.href);
-	const response = new Response(null, {
-		status: opts.statusCode,
-		headers
-	});
-	response.options = opts;
-	if (opts.throw) throw response;
-	return response;
+var reactUse = import_react.use;
+typeof window !== "undefined" ? import_react.useLayoutEffect : import_react.useEffect;
+/**
+* React hook to wrap `IntersectionObserver`.
+*
+* This hook will create an `IntersectionObserver` and observe the ref passed to it.
+*
+* When the intersection changes, the callback will be called with the `IntersectionObserverEntry`.
+*
+* @param ref - The ref to observe
+* @param intersectionObserverOptions - The options to pass to the IntersectionObserver
+* @param options - The options to pass to the hook
+* @param callback - The callback to call when the intersection changes
+* @returns The IntersectionObserver instance
+* @example
+* ```tsx
+* const MyComponent = () => {
+* const ref = React.useRef<HTMLDivElement>(null)
+* useIntersectionObserver(
+*  ref,
+*  (entry) => { doSomething(entry) },
+*  { rootMargin: '10px' },
+*  { disabled: false }
+* )
+* return <div ref={ref} />
+* ```
+*/
+function useIntersectionObserver(ref, callback, intersectionObserverOptions = {}, options = {}) {
+	import_react.useEffect(() => {
+		if (!ref.current || options.disabled || typeof IntersectionObserver !== "function") return;
+		const observer = new IntersectionObserver(([entry]) => {
+			callback(entry);
+		}, intersectionObserverOptions);
+		observer.observe(ref.current);
+		return () => {
+			observer.disconnect();
+		};
+	}, [
+		callback,
+		intersectionObserverOptions,
+		options.disabled,
+		ref
+	]);
 }
-/** Check whether a value is a TanStack Router redirect Response. */
-/** Check whether a value is a TanStack Router redirect Response. */
-function isRedirect(obj) {
-	return obj instanceof Response && !!obj.options;
-}
-/** True if value is a redirect with a resolved `href` location. */
-/** True if value is a redirect with a resolved `href` location. */
-function isResolvedRedirect(obj) {
-	return isRedirect(obj) && !!obj.options.href;
-}
-/** Parse a serialized redirect object back into a redirect Response. */
-/** Parse a serialized redirect object back into a redirect Response. */
-function parseRedirect(obj) {
-	if (obj !== null && typeof obj === "object" && obj.isSerializedRedirect) return redirect(obj);
+/**
+* React hook to take a `React.ForwardedRef` and returns a `ref` that can be used on a DOM element.
+*
+* @param ref - The forwarded ref
+* @returns The inner ref returned by `useRef`
+* @example
+* ```tsx
+* const MyComponent = React.forwardRef((props, ref) => {
+*  const innerRef = useForwardedRef(ref)
+*  return <div ref={innerRef} />
+* })
+* ```
+*/
+function useForwardedRef(ref) {
+	const innerRef = import_react.useRef(null);
+	import_react.useImperativeHandle(ref, () => innerRef.current, []);
+	return innerRef;
 }
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/ssr/ssr-match-id.js
-function dehydrateSsrMatchId(id) {
-	return id.replaceAll("~", "~~").replaceAll("\0", "~0").replaceAll("�", "~r").replaceAll("/", "\0");
-}
-//#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/utils.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/utils.js
 /**
 * Return the last element of an array.
 * Intended for non-empty arrays used within router internals.
@@ -78,12 +82,15 @@ function dehydrateSsrMatchId(id) {
 function last(arr) {
 	return arr[arr.length - 1];
 }
+function isFunction(d) {
+	return typeof d === "function";
+}
 /**
 * Apply a value-or-updater to a previous value.
 * Accepts either a literal value or a function of the previous value.
 */
 function functionalUpdate(updater, previous) {
-	if (typeof updater === "function") return updater(previous);
+	if (isFunction(updater)) return updater(previous);
 	return updater;
 }
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -147,12 +154,39 @@ function deepEqual(a, b, opts) {
 	return false;
 }
 /**
+* Create a promise with exposed resolve/reject and status fields.
+* Useful for coordinating async router lifecycle operations.
+*/
+function createControlledPromise(onResolve) {
+	let resolveLoadPromise;
+	let rejectLoadPromise;
+	const controlledPromise = new Promise((resolve, reject) => {
+		resolveLoadPromise = resolve;
+		rejectLoadPromise = reject;
+	});
+	controlledPromise.status = "pending";
+	controlledPromise.resolve = (value) => {
+		controlledPromise.status = "resolved";
+		controlledPromise.value = value;
+		resolveLoadPromise(value);
+		onResolve?.(value);
+	};
+	controlledPromise.reject = (e) => {
+		controlledPromise.status = "rejected";
+		rejectLoadPromise(e);
+	};
+	return controlledPromise;
+}
+/**
 * Heuristically detect dynamic import "module not found" errors
 * across major browsers for lazy route component handling.
 */
 function isModuleNotFoundError(error) {
 	if (typeof error?.message !== "string") return false;
 	return error.message.startsWith("Failed to fetch dynamically imported module") || error.message.startsWith("error loading dynamically imported module") || error.message.startsWith("Importing a module script failed");
+}
+function isPromise(value) {
+	return Boolean(value && typeof value === "object" && typeof value.then === "function");
 }
 /**
 * Re-encode characters that are unsafe in URL paths.
@@ -296,7 +330,12 @@ function arraysEqual(a, b) {
 	return true;
 }
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/lru-cache.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/invariant.js
+function invariant() {
+	throw new Error("Invariant failed");
+}
+//#endregion
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/lru-cache.js
 function createLRUCache(max) {
 	const cache = /* @__PURE__ */ new Map();
 	let oldest;
@@ -363,14 +402,17 @@ function createLRUCache(max) {
 	};
 }
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/invariant.js
-function invariant() {
-	throw new Error("Invariant failed");
-}
-//#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/new-process-route-tree.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/new-process-route-tree.js
 var SEGMENT_TYPE_INDEX = 4;
 var SEGMENT_TYPE_PATHLESS = 5;
+function getOpenAndCloseBraces(part) {
+	const openBrace = part.indexOf("{");
+	if (openBrace === -1) return null;
+	const closeBrace = part.indexOf("}", openBrace);
+	if (closeBrace === -1) return null;
+	if (openBrace + 1 >= part.length) return null;
+	return [openBrace, closeBrace];
+}
 /**
 * Populates the `output` array with the parsed representation of the given `segment` string.
 *
@@ -419,9 +461,9 @@ function parseSegment(path, start, output = /* @__PURE__ */ new Uint16Array(6)) 
 		output[5] = end;
 		return output;
 	}
-	const openBrace = part.indexOf("{");
-	let closeBrace;
-	if (openBrace !== -1 && openBrace + 1 < part.length && (closeBrace = part.indexOf("}", openBrace)) !== -1) {
+	const braces = getOpenAndCloseBraces(part);
+	if (braces) {
+		const [openBrace, closeBrace] = braces;
 		const firstChar = part.charCodeAt(openBrace + 1);
 		if (firstChar === 45) {
 			if (openBrace + 2 < part.length && part.charCodeAt(openBrace + 2) === 36) {
@@ -475,15 +517,14 @@ function parseSegment(path, start, output = /* @__PURE__ */ new Uint16Array(6)) 
 * @param node The current segment node in the trie to populate.
 * @param onRoute Callback invoked for each route processed.
 */
-function parseSegments(defaultCaseSensitive, data, route, start, node, depth, dynamicListsToSort, onRoute) {
+function parseSegments(defaultCaseSensitive, data, route, start, node, depth, onRoute) {
 	onRoute?.(route);
 	let cursor = start;
 	{
 		const path = route.fullPath ?? route.from;
-		const options = route.options;
 		const length = path.length;
-		const caseSensitive = options?.caseSensitive ?? defaultCaseSensitive;
-		const parseParams = options?.params?.parse ?? options?.parseParams;
+		const caseSensitive = route.options?.caseSensitive ?? defaultCaseSensitive;
+		const parseParams = route.options?.params?.parse ?? route.options?.parseParams;
 		while (cursor < length) {
 			const segment = parseSegment(path, cursor, data);
 			let nextNode;
@@ -491,58 +532,89 @@ function parseSegments(defaultCaseSensitive, data, route, start, node, depth, dy
 			const end = segment[5];
 			cursor = end + 1;
 			depth++;
-			const kind = segment[0];
-			switch (kind) {
+			switch (segment[0]) {
 				case 0: {
 					const value = path.substring(segment[2], segment[3]);
-					let name = value;
-					let staticChildren;
-					if (caseSensitive) staticChildren = node.static ??= /* @__PURE__ */ new Map();
-					else {
-						name = value.toLowerCase();
-						staticChildren = node.staticInsensitive ??= /* @__PURE__ */ new Map();
-					}
-					const existingNode = staticChildren.get(name);
-					if (existingNode) nextNode = existingNode;
-					else {
-						const next = createStaticNode(path);
-						next.parent = node;
-						next.depth = depth;
-						nextNode = next;
-						staticChildren.set(name, next);
+					if (caseSensitive) {
+						const existingNode = node.static?.get(value);
+						if (existingNode) nextNode = existingNode;
+						else {
+							node.static ??= /* @__PURE__ */ new Map();
+							const next = createStaticNode(route.fullPath ?? route.from);
+							next.parent = node;
+							next.depth = depth;
+							nextNode = next;
+							node.static.set(value, next);
+						}
+					} else {
+						const name = value.toLowerCase();
+						const existingNode = node.staticInsensitive?.get(name);
+						if (existingNode) nextNode = existingNode;
+						else {
+							node.staticInsensitive ??= /* @__PURE__ */ new Map();
+							const next = createStaticNode(route.fullPath ?? route.from);
+							next.parent = node;
+							next.depth = depth;
+							nextNode = next;
+							node.staticInsensitive.set(name, next);
+						}
 					}
 					break;
 				}
-				case 1:
-				case 3:
+				case 1: {
+					const prefix_raw = path.substring(start, segment[1]);
+					const suffix_raw = path.substring(segment[4], end);
+					const actuallyCaseSensitive = caseSensitive && !!(prefix_raw || suffix_raw);
+					const prefix = !prefix_raw ? void 0 : actuallyCaseSensitive ? prefix_raw : prefix_raw.toLowerCase();
+					const suffix = !suffix_raw ? void 0 : actuallyCaseSensitive ? suffix_raw : suffix_raw.toLowerCase();
+					const existingNode = !parseParams && node.dynamic?.find((s) => !s.parse && s.caseSensitive === actuallyCaseSensitive && s.prefix === prefix && s.suffix === suffix);
+					if (existingNode) nextNode = existingNode;
+					else {
+						const next = createDynamicNode(1, route.fullPath ?? route.from, actuallyCaseSensitive, prefix, suffix);
+						nextNode = next;
+						next.depth = depth;
+						next.parent = node;
+						node.dynamic ??= [];
+						node.dynamic.push(next);
+					}
+					break;
+				}
+				case 3: {
+					const prefix_raw = path.substring(start, segment[1]);
+					const suffix_raw = path.substring(segment[4], end);
+					const actuallyCaseSensitive = caseSensitive && !!(prefix_raw || suffix_raw);
+					const prefix = !prefix_raw ? void 0 : actuallyCaseSensitive ? prefix_raw : prefix_raw.toLowerCase();
+					const suffix = !suffix_raw ? void 0 : actuallyCaseSensitive ? suffix_raw : suffix_raw.toLowerCase();
+					const existingNode = !parseParams && node.optional?.find((s) => !s.parse && s.caseSensitive === actuallyCaseSensitive && s.prefix === prefix && s.suffix === suffix);
+					if (existingNode) nextNode = existingNode;
+					else {
+						const next = createDynamicNode(3, route.fullPath ?? route.from, actuallyCaseSensitive, prefix, suffix);
+						nextNode = next;
+						next.parent = node;
+						next.depth = depth;
+						node.optional ??= [];
+						node.optional.push(next);
+					}
+					break;
+				}
 				case 2: {
 					const prefix_raw = path.substring(start, segment[1]);
 					const suffix_raw = path.substring(segment[4], end);
 					const actuallyCaseSensitive = caseSensitive && !!(prefix_raw || suffix_raw);
 					const prefix = !prefix_raw ? void 0 : actuallyCaseSensitive ? prefix_raw : prefix_raw.toLowerCase();
 					const suffix = !suffix_raw ? void 0 : actuallyCaseSensitive ? suffix_raw : suffix_raw.toLowerCase();
-					const siblings = kind === 1 ? node.dynamic : kind === 3 ? node.optional : node.wildcard;
-					const existingNode = kind !== 2 && !parseParams && siblings?.find((s) => !s.parse && s.caseSensitive === actuallyCaseSensitive && s.prefix === prefix && s.suffix === suffix);
-					if (existingNode) nextNode = existingNode;
-					else {
-						const next = createDynamicNode(kind, path, actuallyCaseSensitive, prefix, suffix);
-						nextNode = next;
-						next.parent = node;
-						next.depth = depth;
-						let nodes;
-						if (kind === 1) nodes = node.dynamic ??= [];
-						else if (kind === 3) nodes = node.optional ??= [];
-						else nodes = node.wildcard ??= [];
-						nodes.push(next);
-						if (nodes.length === 2) dynamicListsToSort?.push(nodes);
-					}
-					break;
+					const next = createDynamicNode(2, route.fullPath ?? route.from, actuallyCaseSensitive, prefix, suffix);
+					nextNode = next;
+					next.parent = node;
+					next.depth = depth;
+					node.wildcard ??= [];
+					node.wildcard.push(next);
 				}
 			}
 			node = nextNode;
 		}
 		if (parseParams && route.children && !route.isRoot && route.id && route.id.charCodeAt(route.id.lastIndexOf("/") + 1) === 95) {
-			const pathlessNode = createStaticNode(path);
+			const pathlessNode = createStaticNode(route.fullPath ?? route.from);
 			pathlessNode.kind = SEGMENT_TYPE_PATHLESS;
 			pathlessNode.parent = node;
 			depth++;
@@ -553,7 +625,7 @@ function parseSegments(defaultCaseSensitive, data, route, start, node, depth, dy
 		}
 		const isLeaf = (route.path || !route.children) && !route.isRoot;
 		if (isLeaf && path.endsWith("/")) {
-			const indexNode = createStaticNode(path);
+			const indexNode = createStaticNode(route.fullPath ?? route.from);
 			indexNode.kind = SEGMENT_TYPE_INDEX;
 			indexNode.parent = node;
 			depth++;
@@ -562,13 +634,13 @@ function parseSegments(defaultCaseSensitive, data, route, start, node, depth, dy
 			node = indexNode;
 		}
 		node.parse = parseParams ?? null;
-		node.priority = options?.params?.priority ?? 0;
+		node.priority = route.options?.params?.priority ?? 0;
 		if (isLeaf && !node.route) {
 			node.route = route;
-			node.fullPath = path;
+			node.fullPath = route.fullPath ?? route.from;
 		}
 	}
-	if (route.children) for (const child of route.children) parseSegments(defaultCaseSensitive, data, child, cursor, node, depth, dynamicListsToSort, onRoute);
+	if (route.children) for (const child of route.children) parseSegments(defaultCaseSensitive, data, child, cursor, node, depth, onRoute);
 }
 function sortDynamic(a, b) {
 	if (a.parse && !b.parse) return -1;
@@ -589,6 +661,23 @@ function sortDynamic(a, b) {
 	if (a.caseSensitive && !b.caseSensitive) return -1;
 	if (!a.caseSensitive && b.caseSensitive) return 1;
 	return 0;
+}
+function sortTreeNodes(node) {
+	if (node.pathless) for (const child of node.pathless) sortTreeNodes(child);
+	if (node.static) for (const child of node.static.values()) sortTreeNodes(child);
+	if (node.staticInsensitive) for (const child of node.staticInsensitive.values()) sortTreeNodes(child);
+	if (node.dynamic?.length) {
+		node.dynamic.sort(sortDynamic);
+		for (const child of node.dynamic) sortTreeNodes(child);
+	}
+	if (node.optional?.length) {
+		node.optional.sort(sortDynamic);
+		for (const child of node.optional) sortTreeNodes(child);
+	}
+	if (node.wildcard?.length) {
+		node.wildcard.sort(sortDynamic);
+		for (const child of node.wildcard) sortTreeNodes(child);
+	}
 }
 function createStaticNode(fullPath) {
 	return {
@@ -636,9 +725,8 @@ function createDynamicNode(kind, fullPath, caseSensitive, prefix, suffix) {
 function processRouteMasks(routeList, processedTree) {
 	const segmentTree = createStaticNode("/");
 	const data = /* @__PURE__ */ new Uint16Array(6);
-	const dynamicListsToSort = [];
-	for (const route of routeList) parseSegments(false, data, route, 1, segmentTree, 0, dynamicListsToSort);
-	for (const nodes of dynamicListsToSort) nodes.sort(sortDynamic);
+	for (const route of routeList) parseSegments(false, data, route, 1, segmentTree, 0);
+	sortTreeNodes(segmentTree);
 	processedTree.masksTree = segmentTree;
 	processedTree.flatCache = createLRUCache(1e3);
 }
@@ -648,7 +736,7 @@ function processRouteMasks(routeList, processedTree) {
 function findFlatMatch(path, processedTree) {
 	path ||= "/";
 	const cached = processedTree.flatCache.get(path);
-	if (cached !== void 0) return cached;
+	if (cached) return cached;
 	const result = findMatch(path, processedTree.masksTree);
 	processedTree.flatCache.set(path, result);
 	return result;
@@ -695,11 +783,10 @@ function trimPathRight$1(path) {
 function processRouteTree(routeTree, caseSensitive = false, initRoute) {
 	const segmentTree = createStaticNode(routeTree.fullPath);
 	const data = /* @__PURE__ */ new Uint16Array(6);
-	const dynamicListsToSort = [];
 	const routesById = {};
 	const routesByPath = {};
 	let index = 0;
-	parseSegments(caseSensitive, data, routeTree, 1, segmentTree, 0, dynamicListsToSort, (route) => {
+	parseSegments(caseSensitive, data, routeTree, 1, segmentTree, 0, (route) => {
 		initRoute?.(route, index);
 		if (route.id in routesById) invariant();
 		routesById[route.id] = route;
@@ -709,7 +796,7 @@ function processRouteTree(routeTree, caseSensitive = false, initRoute) {
 		}
 		index++;
 	});
-	for (const nodes of dynamicListsToSort) nodes.sort(sortDynamic);
+	sortTreeNodes(segmentTree);
 	return {
 		processedTree: {
 			segmentTree,
@@ -835,6 +922,7 @@ function getNodeMatch(path, parts, segmentTree, fuzzy) {
 		node: segmentTree,
 		index: 1,
 		skipped: 0,
+		depth: 1,
 		statics: 0,
 		dynamics: 0,
 		optionals: 0
@@ -843,7 +931,7 @@ function getNodeMatch(path, parts, segmentTree, fuzzy) {
 	let bestMatch = null;
 	while (stack.length) {
 		const frame = stack.pop();
-		const { node, index, skipped, statics, dynamics, optionals } = frame;
+		const { node, index, skipped, depth, statics, dynamics, optionals } = frame;
 		let { extract, rawParams } = frame;
 		if (node.kind === 2 && node.route && !isFrameMoreSpecific(bestMatch, frame)) continue;
 		if (node.parse) {
@@ -864,6 +952,7 @@ function getNodeMatch(path, parts, segmentTree, fuzzy) {
 				node: node.index,
 				index,
 				skipped,
+				depth: depth + 1,
 				statics,
 				dynamics,
 				optionals,
@@ -895,6 +984,7 @@ function getNodeMatch(path, parts, segmentTree, fuzzy) {
 				node: segment,
 				index: partsLength,
 				skipped,
+				depth: depth + 1,
 				statics,
 				dynamics,
 				optionals,
@@ -903,13 +993,15 @@ function getNodeMatch(path, parts, segmentTree, fuzzy) {
 			});
 		}
 		if (node.optional) {
-			const nextSkipped = skipped | 1 << node.depth + 1;
+			const nextSkipped = skipped | 1 << depth;
+			const nextDepth = depth + 1;
 			for (let i = node.optional.length - 1; i >= 0; i--) {
 				const segment = node.optional[i];
 				stack.push({
 					node: segment,
 					index,
 					skipped: nextSkipped,
+					depth: nextDepth,
 					statics,
 					dynamics,
 					optionals,
@@ -929,6 +1021,7 @@ function getNodeMatch(path, parts, segmentTree, fuzzy) {
 					node: segment,
 					index: index + 1,
 					skipped,
+					depth: nextDepth,
 					statics,
 					dynamics,
 					optionals: optionals + segmentScore(partsLength, index),
@@ -949,6 +1042,7 @@ function getNodeMatch(path, parts, segmentTree, fuzzy) {
 				node: segment,
 				index: index + 1,
 				skipped,
+				depth: depth + 1,
 				statics,
 				dynamics: dynamics + segmentScore(partsLength, index),
 				optionals,
@@ -962,6 +1056,7 @@ function getNodeMatch(path, parts, segmentTree, fuzzy) {
 				node: match,
 				index: index + 1,
 				skipped,
+				depth: depth + 1,
 				statics: statics + segmentScore(partsLength, index),
 				dynamics,
 				optionals,
@@ -975,6 +1070,7 @@ function getNodeMatch(path, parts, segmentTree, fuzzy) {
 				node: match,
 				index: index + 1,
 				skipped,
+				depth: depth + 1,
 				statics: statics + segmentScore(partsLength, index),
 				dynamics,
 				optionals,
@@ -982,18 +1078,22 @@ function getNodeMatch(path, parts, segmentTree, fuzzy) {
 				rawParams
 			});
 		}
-		if (node.pathless) for (let i = node.pathless.length - 1; i >= 0; i--) {
-			const segment = node.pathless[i];
-			stack.push({
-				node: segment,
-				index,
-				skipped,
-				statics,
-				dynamics,
-				optionals,
-				extract,
-				rawParams
-			});
+		if (node.pathless) {
+			const nextDepth = depth + 1;
+			for (let i = node.pathless.length - 1; i >= 0; i--) {
+				const segment = node.pathless[i];
+				stack.push({
+					node: segment,
+					index,
+					skipped,
+					depth: nextDepth,
+					statics,
+					dynamics,
+					optionals,
+					extract,
+					rawParams
+				});
+			}
 		}
 	}
 	if (bestMatch) return bestMatch;
@@ -1031,10 +1131,10 @@ function validateParseParams(path, parts, frame) {
 }
 function isFrameMoreSpecific(prev, next) {
 	if (!prev) return true;
-	return next.statics > prev.statics || next.statics === prev.statics && (next.dynamics > prev.dynamics || next.dynamics === prev.dynamics && (next.optionals > prev.optionals || next.optionals === prev.optionals && ((next.node.kind === SEGMENT_TYPE_INDEX) > (prev.node.kind === SEGMENT_TYPE_INDEX) || next.node.kind === SEGMENT_TYPE_INDEX === (prev.node.kind === SEGMENT_TYPE_INDEX) && next.node.depth > prev.node.depth)));
+	return next.statics > prev.statics || next.statics === prev.statics && (next.dynamics > prev.dynamics || next.dynamics === prev.dynamics && (next.optionals > prev.optionals || next.optionals === prev.optionals && ((next.node.kind === SEGMENT_TYPE_INDEX) > (prev.node.kind === SEGMENT_TYPE_INDEX) || next.node.kind === SEGMENT_TYPE_INDEX === (prev.node.kind === SEGMENT_TYPE_INDEX) && next.depth > prev.depth)));
 }
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/path.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/path.js
 /** Join path segments, cleaning duplicate slashes between parts. */
 function joinPaths(paths) {
 	return cleanPath(paths.filter((val) => {
@@ -1075,23 +1175,18 @@ function exactPathTest(pathName1, pathName2, basepath) {
 * and supporting relative segments (`.`/`..`) and absolute `to` values.
 */
 function resolvePath({ base, to, trailingSlash = "never", cache }) {
-	if (to.includes("//")) to = cleanPath(to);
-	if (to.startsWith("/")) {
-		if (to.length === 1 || trailingSlash === "preserve") return to;
-		if (trailingSlash === "always") return to.endsWith("/") ? to : `${to}/`;
-		return to.endsWith("/") ? to.slice(0, -1) : to;
-	}
-	const isBase = to === ".";
+	const isAbsolute = to.startsWith("/");
+	const isBase = !isAbsolute && to === ".";
 	let key;
 	if (cache) {
-		key = isBase ? base : base + "\0" + to;
+		key = isAbsolute ? to : isBase ? base : base + "\0" + to;
 		const cached = cache.get(key);
 		if (cached) return cached;
 	}
 	let baseSegments;
 	if (isBase) baseSegments = base.split("/");
+	else if (isAbsolute) baseSegments = to.split("/");
 	else {
-		if (base.includes("//")) base = cleanPath(base);
 		baseSegments = base.split("/");
 		while (baseSegments.length > 1 && last(baseSegments) === "") baseSegments.pop();
 		const toSegments = to.split("/");
@@ -1100,8 +1195,7 @@ function resolvePath({ base, to, trailingSlash = "never", cache }) {
 			if (value === "") {
 				if (!index) baseSegments = [value];
 				else if (index === length - 1) baseSegments.push(value);
-			} else if (value === "..") if (baseSegments.length > 1) baseSegments.pop();
-			else baseSegments = [""];
+			} else if (value === "..") baseSegments.pop();
 			else if (value === ".") {} else baseSegments.push(value);
 		}
 	}
@@ -1110,8 +1204,7 @@ function resolvePath({ base, to, trailingSlash = "never", cache }) {
 			if (trailingSlash === "never") baseSegments.pop();
 		} else if (trailingSlash === "always") baseSegments.push("");
 	}
-	const joined = baseSegments.join("/");
-	const result = (isBase ? cleanPath(joined) : joined) || "/";
+	const result = cleanPath(baseSegments.join("/")) || "/";
 	if (key && cache) cache.set(key, result);
 	return result;
 }
@@ -1255,7 +1348,13 @@ function encodePathParam(value, decoder) {
 	return decoder?.(encoded) ?? encoded;
 }
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/scroll-restoration.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/not-found.js
+/** Determine if a value is a TanStack Router not-found error. */
+function isNotFound(obj) {
+	return obj?.isNotFound === true;
+}
+//#endregion
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/scroll-restoration.js
 function getSafeSessionStorage() {
 	try {
 		return sessionStorage;
@@ -1275,7 +1374,7 @@ var defaultGetScrollRestorationKey = (location) => {
 	return location.state.__TSR_key || location.href;
 };
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/qss.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/qss.js
 /**
 * Program is a reimplementation of the `qss` package:
 * Copyright (c) Luke Edwards luke.edwards05@gmail.com, MIT License
@@ -1341,8 +1440,7 @@ function decode(str) {
 	return result;
 }
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/searchParams.js
-var jsonStart = /^(?:\s|["[{\d-]|fa|nu|tr)/;
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/searchParams.js
 /** Default `parseSearch` that strips leading '?' and JSON-parses values. */
 var defaultParseSearch = parseSearchWith(JSON.parse);
 /** Default `stringifySearch` using JSON.stringify for complex values. */
@@ -1383,18 +1481,15 @@ function parseSearchWith(parser) {
 * @link https://tanstack.com/router/latest/docs/framework/react/guide/custom-search-param-serialization
 */
 function stringifySearchWith(stringify, parser) {
-	const isJsonParser = parser === JSON.parse;
+	const hasParser = typeof parser === "function";
 	function stringifyValue(val) {
-		if (val && typeof val === "object") try {
+		if (typeof val === "object" && val !== null) try {
 			return stringify(val);
 		} catch (_err) {}
-		else if (parser && typeof val === "string") {
-			if (isJsonParser && !jsonStart.test(val)) return val;
-			try {
-				parser(val);
-				return stringify(val);
-			} catch (_err) {}
-		}
+		else if (hasParser && typeof val === "string") try {
+			parser(val);
+			return stringify(val);
+		} catch (_err) {}
 		return val;
 	}
 	return (search) => {
@@ -1403,7 +1498,51 @@ function stringifySearchWith(stringify, parser) {
 	};
 }
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/rewrite.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/root.js
+/** Stable identifier used for the root route in a route tree. */
+var rootRouteId = "__root__";
+//#endregion
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/redirect.js
+/**
+* Create a redirect Response understood by TanStack Router.
+*
+* Use from route `loader`/`beforeLoad` or server functions to trigger a
+* navigation. If `throw: true` is set, the redirect is thrown instead of
+* returned. When an absolute `href` is supplied and `reloadDocument` is not
+* set, a full-document navigation is inferred.
+*
+* @param opts Options for the redirect. Common fields:
+* - `href`: absolute URL for external redirects; infers `reloadDocument`.
+* - `statusCode`: HTTP status code to use (defaults to 307).
+* - `headers`: additional headers to include on the Response.
+* - Standard navigation options like `to`, `params`, `search`, `replace`,
+*   and `reloadDocument` for internal redirects.
+* @returns A Response augmented with router navigation options.
+* @link https://tanstack.com/router/latest/docs/framework/react/api/router/redirectFunction
+*/
+function redirect(opts) {
+	opts.statusCode = opts.statusCode || opts.code || 307;
+	if (!opts._builtLocation && !opts.reloadDocument && typeof opts.href === "string") try {
+		new URL(opts.href);
+		opts.reloadDocument = true;
+	} catch {}
+	const headers = new Headers(opts.headers);
+	if (opts.href && headers.get("Location") === null) headers.set("Location", opts.href);
+	const response = new Response(null, {
+		status: opts.statusCode,
+		headers
+	});
+	response.options = opts;
+	if (opts.throw) throw response;
+	return response;
+}
+/** Check whether a value is a TanStack Router redirect Response. */
+/** Check whether a value is a TanStack Router redirect Response. */
+function isRedirect(obj) {
+	return obj instanceof Response && !!obj.options;
+}
+//#endregion
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/rewrite.js
 /** Compose multiple rewrite pairs into a single in/out rewrite. */
 function composeRewrites(rewrites) {
 	return {
@@ -1459,7 +1598,7 @@ function executeRewriteOutput(rewrite, url) {
 	return url;
 }
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/stores.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/stores.js
 /** SSR non-reactive createMutableStore */
 function createNonReactiveMutableStore(initialValue) {
 	let value = initialValue;
@@ -1478,90 +1617,775 @@ function createNonReactiveReadonlyStore(read) {
 		return read();
 	} };
 }
-function createRouterStores(initialLocation, config) {
-	const { createMutableStore, createReadonlyStore, batch } = config;
-	const byRoute = /* @__PURE__ */ new Map();
-	const status = createMutableStore("idle");
-	const location = createMutableStore(initialLocation);
-	const resolvedLocation = createMutableStore(void 0);
-	const ids = createMutableStore([]);
-	const matches = createReadonlyStore(() => ids.get().map((id) => byRoute.get(id).get()));
+function createRouterStores(initialState, config) {
+	const { createMutableStore, createReadonlyStore, batch, init } = config;
+	const matchStores = /* @__PURE__ */ new Map();
+	const pendingMatchStores = /* @__PURE__ */ new Map();
+	const cachedMatchStores = /* @__PURE__ */ new Map();
+	const status = createMutableStore(initialState.status);
+	const loadedAt = createMutableStore(initialState.loadedAt);
+	const isLoading = createMutableStore(initialState.isLoading);
+	const isTransitioning = createMutableStore(initialState.isTransitioning);
+	const location = createMutableStore(initialState.location);
+	const resolvedLocation = createMutableStore(initialState.resolvedLocation);
+	const statusCode = createMutableStore(initialState.statusCode);
+	const redirect = createMutableStore(initialState.redirect);
+	const matchesId = createMutableStore([]);
+	const pendingIds = createMutableStore([]);
+	const cachedIds = createMutableStore([]);
+	const matches = createReadonlyStore(() => readPoolMatches(matchStores, matchesId.get()));
+	const pendingMatches = createReadonlyStore(() => readPoolMatches(pendingMatchStores, pendingIds.get()));
+	const cachedMatches = createReadonlyStore(() => readPoolMatches(cachedMatchStores, cachedIds.get()));
+	const firstId = createReadonlyStore(() => matchesId.get()[0]);
+	const hasPending = createReadonlyStore(() => matchesId.get().some((matchId) => {
+		return matchStores.get(matchId)?.get().status === "pending";
+	}));
+	const matchRouteDeps = createReadonlyStore(() => ({
+		locationHref: location.get().href,
+		resolvedLocationHref: resolvedLocation.get()?.href,
+		status: status.get()
+	}));
 	const __store = createReadonlyStore(() => ({
 		status: status.get(),
-		isLoading: status.get() === "pending",
+		loadedAt: loadedAt.get(),
+		isLoading: isLoading.get(),
+		isTransitioning: isTransitioning.get(),
 		matches: matches.get(),
 		location: location.get(),
-		resolvedLocation: resolvedLocation.get()
+		resolvedLocation: resolvedLocation.get(),
+		statusCode: statusCode.get(),
+		redirect: redirect.get()
 	}));
-	function getMatchStore(routeId) {
-		let matchStore = byRoute.get(routeId);
-		if (!matchStore) {
-			matchStore = createMutableStore(void 0);
-			byRoute.set(routeId, matchStore);
+	const matchStoreByRouteIdCache = createLRUCache(64);
+	function getRouteMatchStore(routeId) {
+		let cached = matchStoreByRouteIdCache.get(routeId);
+		if (!cached) {
+			cached = createReadonlyStore(() => {
+				const ids = matchesId.get();
+				for (const id of ids) {
+					const matchStore = matchStores.get(id);
+					if (matchStore && matchStore.routeId === routeId) return matchStore.get();
+				}
+			});
+			matchStoreByRouteIdCache.set(routeId, cached);
 		}
-		return matchStore;
+		return cached;
 	}
 	const store = {
 		status,
+		loadedAt,
+		isLoading,
+		isTransitioning,
 		location,
 		resolvedLocation,
-		ids,
+		statusCode,
+		redirect,
+		matchesId,
+		pendingIds,
+		cachedIds,
 		matches,
-		byRoute,
+		pendingMatches,
+		cachedMatches,
+		firstId,
+		hasPending,
+		matchRouteDeps,
+		matchStores,
+		pendingMatchStores,
+		cachedMatchStores,
 		__store,
-		getMatchStore,
-		setMatches
+		getRouteMatchStore,
+		setMatches,
+		setPending,
+		setCached
 	};
+	setMatches(initialState.matches);
+	init?.(store);
 	function setMatches(nextMatches) {
-		const previousIds = ids.get();
-		const nextIds = nextMatches.map((match) => match.routeId);
-		batch(() => {
-			if (!arraysEqual(previousIds, nextIds)) ids.set(nextIds);
-			for (const id of previousIds) if (!nextIds.includes(id)) byRoute.get(id).set(() => void 0);
-			for (const nextMatch of nextMatches) {
-				const matchStore = getMatchStore(nextMatch.routeId);
-				if (matchStore.get() !== nextMatch) matchStore.set(nextMatch);
-			}
-		});
+		reconcileMatchPool(nextMatches, matchStores, matchesId, createMutableStore, batch);
+	}
+	function setPending(nextMatches) {
+		reconcileMatchPool(nextMatches, pendingMatchStores, pendingIds, createMutableStore, batch);
+	}
+	function setCached(nextMatches) {
+		reconcileMatchPool(nextMatches, cachedMatchStores, cachedIds, createMutableStore, batch);
 	}
 	return store;
 }
-//#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/router.js
-function routeNeedsLoad(route) {
-	return route.options.loader || route.options.beforeLoad || route.lazyFn || route.options.component?.preload || route.options.pendingComponent?.preload;
+function readPoolMatches(pool, ids) {
+	const matches = [];
+	for (const id of ids) {
+		const matchStore = pool.get(id);
+		if (matchStore) matches.push(matchStore.get());
+	}
+	return matches;
 }
+function reconcileMatchPool(nextMatches, pool, idStore, createMutableStore, batch) {
+	const nextIds = nextMatches.map((d) => d.id);
+	const nextIdSet = new Set(nextIds);
+	batch(() => {
+		for (const id of pool.keys()) if (!nextIdSet.has(id)) pool.delete(id);
+		for (const nextMatch of nextMatches) {
+			const existing = pool.get(nextMatch.id);
+			if (!existing) {
+				const matchStore = createMutableStore(nextMatch);
+				matchStore.routeId = nextMatch.routeId;
+				pool.set(nextMatch.id, matchStore);
+				continue;
+			}
+			existing.routeId = nextMatch.routeId;
+			if (existing.get() !== nextMatch) existing.set(nextMatch);
+		}
+		if (!arraysEqual(idStore.get(), nextIds)) idStore.set(nextIds);
+	});
+}
+//#endregion
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/load-matches.js
+var triggerOnReady = (inner) => {
+	if (!inner.rendered) {
+		inner.rendered = true;
+		return inner.onReady?.();
+	}
+};
+var resolvePreload = (inner, matchId) => {
+	return !!(inner.preload && !inner.router.stores.matchStores.has(matchId));
+};
+/**
+* Builds the accumulated context from router options and all matches up to (and optionally including) the given index.
+* Merges __routeContext and __beforeLoadContext from each match.
+*/
+var buildMatchContext = (inner, index, includeCurrentMatch = true) => {
+	const context = { ...inner.router.options.context ?? {} };
+	const end = includeCurrentMatch ? index : index - 1;
+	for (let i = 0; i <= end; i++) {
+		const innerMatch = inner.matches[i];
+		if (!innerMatch) continue;
+		const m = inner.router.getMatch(innerMatch.id);
+		if (!m) continue;
+		Object.assign(context, m.__routeContext, m.__beforeLoadContext);
+	}
+	return context;
+};
+var getNotFoundBoundaryIndex = (inner, err) => {
+	if (!inner.matches.length) return;
+	const requestedRouteId = err.routeId;
+	const matchedRootIndex = inner.matches.findIndex((m) => m.routeId === inner.router.routeTree.id);
+	const rootIndex = matchedRootIndex >= 0 ? matchedRootIndex : 0;
+	let startIndex = requestedRouteId ? inner.matches.findIndex((match) => match.routeId === requestedRouteId) : inner.firstBadMatchIndex ?? inner.matches.length - 1;
+	if (startIndex < 0) startIndex = rootIndex;
+	for (let i = startIndex; i >= 0; i--) {
+		const match = inner.matches[i];
+		if (inner.router.looseRoutesById[match.routeId].options.notFoundComponent) return i;
+	}
+	return requestedRouteId ? startIndex : rootIndex;
+};
+var handleRedirectAndNotFound = (inner, match, err) => {
+	if (!isRedirect(err) && !isNotFound(err)) return;
+	if (isRedirect(err) && err.redirectHandled && !err.options.reloadDocument) throw err;
+	if (match) {
+		match._nonReactive.beforeLoadPromise?.resolve();
+		match._nonReactive.loaderPromise?.resolve();
+		match._nonReactive.beforeLoadPromise = void 0;
+		match._nonReactive.loaderPromise = void 0;
+		match._nonReactive.error = err;
+		inner.updateMatch(match.id, (prev) => ({
+			...prev,
+			status: isRedirect(err) ? "redirected" : isNotFound(err) ? "notFound" : prev.status === "pending" ? "success" : prev.status,
+			context: buildMatchContext(inner, match.index),
+			isFetching: false,
+			error: err
+		}));
+		if (isNotFound(err) && !err.routeId) err.routeId = match.routeId;
+		match._nonReactive.loadPromise?.resolve();
+	}
+	if (isRedirect(err)) {
+		inner.rendered = true;
+		err.options._fromLocation = inner.location;
+		err.redirectHandled = true;
+		err = inner.router.resolveRedirect(err);
+	}
+	throw err;
+};
+var shouldSkipLoader = (inner, matchId) => {
+	const match = inner.router.getMatch(matchId);
+	if (!match) return true;
+	if (match.ssr === false) return true;
+	return false;
+};
+var syncMatchContext = (inner, matchId, index) => {
+	const nextContext = buildMatchContext(inner, index);
+	inner.updateMatch(matchId, (prev) => {
+		return {
+			...prev,
+			context: nextContext
+		};
+	});
+};
+var handleSerialError = (inner, index, err) => {
+	const { id: matchId, routeId } = inner.matches[index];
+	const route = inner.router.looseRoutesById[routeId];
+	if (err instanceof Promise) throw err;
+	inner.firstBadMatchIndex ??= index;
+	handleRedirectAndNotFound(inner, inner.router.getMatch(matchId), err);
+	try {
+		route.options.onError?.(err);
+	} catch (errorHandlerErr) {
+		err = errorHandlerErr;
+		handleRedirectAndNotFound(inner, inner.router.getMatch(matchId), err);
+	}
+	inner.updateMatch(matchId, (prev) => {
+		prev._nonReactive.beforeLoadPromise?.resolve();
+		prev._nonReactive.beforeLoadPromise = void 0;
+		prev._nonReactive.loadPromise?.resolve();
+		return {
+			...prev,
+			error: err,
+			status: "error",
+			isFetching: false,
+			updatedAt: Date.now(),
+			abortController: new AbortController()
+		};
+	});
+	if (!inner.preload && !isRedirect(err) && !isNotFound(err)) inner.serialError ??= err;
+};
+var isBeforeLoadSsr = (inner, matchId, index, route) => {
+	const existingMatch = inner.router.getMatch(matchId);
+	const parentMatchId = inner.matches[index - 1]?.id;
+	const parentMatch = parentMatchId ? inner.router.getMatch(parentMatchId) : void 0;
+	if (inner.router.isShell()) {
+		existingMatch.ssr = route.id === rootRouteId;
+		return;
+	}
+	if (parentMatch?.ssr === false) {
+		existingMatch.ssr = false;
+		return;
+	}
+	const parentOverride = (tempSsr) => {
+		if (tempSsr === true && parentMatch?.ssr === "data-only") return "data-only";
+		return tempSsr;
+	};
+	const defaultSsr = inner.router.options.defaultSsr ?? true;
+	if (route.options.ssr === void 0) {
+		existingMatch.ssr = parentOverride(defaultSsr);
+		return;
+	}
+	if (typeof route.options.ssr !== "function") {
+		existingMatch.ssr = parentOverride(route.options.ssr);
+		return;
+	}
+	const { search, params } = existingMatch;
+	const ssrFnContext = {
+		search: makeMaybe(search, existingMatch.searchError),
+		params: makeMaybe(params, existingMatch.paramsError),
+		location: inner.location,
+		matches: inner.matches.map((match) => ({
+			index: match.index,
+			pathname: match.pathname,
+			fullPath: match.fullPath,
+			staticData: match.staticData,
+			id: match.id,
+			routeId: match.routeId,
+			search: makeMaybe(match.search, match.searchError),
+			params: makeMaybe(match.params, match.paramsError),
+			ssr: match.ssr
+		}))
+	};
+	const tempSsr = route.options.ssr(ssrFnContext);
+	if (isPromise(tempSsr)) return tempSsr.then((ssr) => {
+		existingMatch.ssr = parentOverride(ssr ?? defaultSsr);
+	});
+	existingMatch.ssr = parentOverride(tempSsr ?? defaultSsr);
+};
+var setupPendingTimeout = (inner, matchId, route, match) => {
+	if (match._nonReactive.pendingTimeout !== void 0) return;
+	route.options.pendingMs ?? inner.router.options.defaultPendingMs;
+	if (!!(inner.onReady && false));
+};
+var preBeforeLoadSetup = (inner, matchId, route) => {
+	const existingMatch = inner.router.getMatch(matchId);
+	if (!existingMatch._nonReactive.beforeLoadPromise && !existingMatch._nonReactive.loaderPromise) return;
+	setupPendingTimeout(inner, matchId, route, existingMatch);
+	const then = () => {
+		const match = inner.router.getMatch(matchId);
+		if (match.preload && (match.status === "redirected" || match.status === "notFound")) handleRedirectAndNotFound(inner, match, match.error);
+	};
+	return existingMatch._nonReactive.beforeLoadPromise ? existingMatch._nonReactive.beforeLoadPromise.then(then) : then();
+};
+var executeBeforeLoad = (inner, matchId, index, route) => {
+	const match = inner.router.getMatch(matchId);
+	let prevLoadPromise = match._nonReactive.loadPromise;
+	match._nonReactive.loadPromise = createControlledPromise(() => {
+		prevLoadPromise?.resolve();
+		prevLoadPromise = void 0;
+	});
+	const { paramsError, searchError } = match;
+	if (paramsError) handleSerialError(inner, index, paramsError);
+	if (searchError) handleSerialError(inner, index, searchError);
+	setupPendingTimeout(inner, matchId, route, match);
+	const abortController = new AbortController();
+	let isPending = false;
+	const pending = () => {
+		if (isPending) return;
+		isPending = true;
+		inner.updateMatch(matchId, (prev) => ({
+			...prev,
+			isFetching: "beforeLoad",
+			fetchCount: prev.fetchCount + 1,
+			abortController
+		}));
+	};
+	const resolve = () => {
+		match._nonReactive.beforeLoadPromise?.resolve();
+		match._nonReactive.beforeLoadPromise = void 0;
+		inner.updateMatch(matchId, (prev) => ({
+			...prev,
+			isFetching: false
+		}));
+	};
+	if (!route.options.beforeLoad) {
+		inner.router.batch(() => {
+			pending();
+			resolve();
+		});
+		return;
+	}
+	match._nonReactive.beforeLoadPromise = createControlledPromise();
+	const context = {
+		...buildMatchContext(inner, index, false),
+		...match.__routeContext
+	};
+	const { search, params, cause } = match;
+	const preload = resolvePreload(inner, matchId);
+	const beforeLoadFnContext = {
+		search,
+		abortController,
+		params,
+		preload,
+		context,
+		location: inner.location,
+		navigate: (opts) => inner.router.navigate({
+			...opts,
+			_fromLocation: inner.location
+		}),
+		buildLocation: inner.router.buildLocation,
+		cause: preload ? "preload" : cause,
+		matches: inner.matches,
+		routeId: route.id,
+		...inner.router.options.additionalContext
+	};
+	const updateContext = (beforeLoadContext) => {
+		if (beforeLoadContext === void 0) {
+			inner.router.batch(() => {
+				pending();
+				resolve();
+			});
+			return;
+		}
+		if (isRedirect(beforeLoadContext) || isNotFound(beforeLoadContext)) {
+			pending();
+			handleSerialError(inner, index, beforeLoadContext);
+		}
+		inner.router.batch(() => {
+			pending();
+			inner.updateMatch(matchId, (prev) => ({
+				...prev,
+				__beforeLoadContext: beforeLoadContext
+			}));
+			resolve();
+		});
+	};
+	let beforeLoadContext;
+	try {
+		beforeLoadContext = route.options.beforeLoad(beforeLoadFnContext);
+		if (isPromise(beforeLoadContext)) {
+			pending();
+			return beforeLoadContext.catch((err) => {
+				handleSerialError(inner, index, err);
+			}).then(updateContext);
+		}
+	} catch (err) {
+		pending();
+		handleSerialError(inner, index, err);
+	}
+	updateContext(beforeLoadContext);
+};
+var handleBeforeLoad = (inner, index) => {
+	const { id: matchId, routeId } = inner.matches[index];
+	const route = inner.router.looseRoutesById[routeId];
+	const serverSsr = () => {
+		{
+			const maybePromise = isBeforeLoadSsr(inner, matchId, index, route);
+			if (isPromise(maybePromise)) return maybePromise.then(queueExecution);
+		}
+		return queueExecution();
+	};
+	const execute = () => executeBeforeLoad(inner, matchId, index, route);
+	const queueExecution = () => {
+		if (shouldSkipLoader(inner, matchId)) return;
+		const result = preBeforeLoadSetup(inner, matchId, route);
+		return isPromise(result) ? result.then(execute) : execute();
+	};
+	return serverSsr();
+};
+var executeHead = (inner, matchId, route) => {
+	const match = inner.router.getMatch(matchId);
+	if (!match) return;
+	if (!route.options.head && !route.options.scripts && !route.options.headers) return;
+	const assetContext = {
+		ssr: inner.router.options.ssr,
+		matches: inner.matches,
+		match,
+		params: match.params,
+		loaderData: match.loaderData
+	};
+	return Promise.all([
+		route.options.head?.(assetContext),
+		route.options.scripts?.(assetContext),
+		route.options.headers?.(assetContext)
+	]).then(([headFnContent, scripts, headers]) => {
+		return {
+			meta: headFnContent?.meta,
+			links: headFnContent?.links,
+			headScripts: headFnContent?.scripts,
+			headers,
+			scripts,
+			styles: headFnContent?.styles
+		};
+	});
+};
+var getLoaderContext = (inner, matchPromises, matchId, index, route) => {
+	const parentMatchPromise = matchPromises[index - 1];
+	const { params, loaderDeps, abortController, cause } = inner.router.getMatch(matchId);
+	const context = buildMatchContext(inner, index);
+	const preload = resolvePreload(inner, matchId);
+	return {
+		params,
+		deps: loaderDeps,
+		preload: !!preload,
+		parentMatchPromise,
+		abortController,
+		context,
+		location: inner.location,
+		navigate: (opts) => inner.router.navigate({
+			...opts,
+			_fromLocation: inner.location
+		}),
+		cause: preload ? "preload" : cause,
+		route,
+		...inner.router.options.additionalContext
+	};
+};
+var runLoader = async (inner, matchPromises, matchId, index, route) => {
+	try {
+		const match = inner.router.getMatch(matchId);
+		try {
+			if (match.ssr === true) loadRouteChunk(route);
+			const routeLoader = route.options.loader;
+			const loader = typeof routeLoader === "function" ? routeLoader : routeLoader?.handler;
+			const loaderResult = loader?.(getLoaderContext(inner, matchPromises, matchId, index, route));
+			const loaderResultIsPromise = !!loader && isPromise(loaderResult);
+			if (!!(loaderResultIsPromise || route._lazyPromise || route._componentsPromise || route.options.head || route.options.scripts || route.options.headers || match._nonReactive.minPendingPromise)) inner.updateMatch(matchId, (prev) => ({
+				...prev,
+				isFetching: "loader"
+			}));
+			if (loader) {
+				const loaderData = loaderResultIsPromise ? await loaderResult : loaderResult;
+				handleRedirectAndNotFound(inner, inner.router.getMatch(matchId), loaderData);
+				if (loaderData !== void 0) inner.updateMatch(matchId, (prev) => ({
+					...prev,
+					loaderData
+				}));
+			}
+			if (route._lazyPromise) await route._lazyPromise;
+			const pendingPromise = match._nonReactive.minPendingPromise;
+			if (pendingPromise) await pendingPromise;
+			if (route._componentsPromise) await route._componentsPromise;
+			inner.updateMatch(matchId, (prev) => ({
+				...prev,
+				error: void 0,
+				context: buildMatchContext(inner, index),
+				status: "success",
+				isFetching: false,
+				updatedAt: Date.now()
+			}));
+		} catch (e) {
+			let error = e;
+			if (error?.name === "AbortError") {
+				if (match.abortController.signal.aborted) {
+					match._nonReactive.loaderPromise?.resolve();
+					match._nonReactive.loaderPromise = void 0;
+					return;
+				}
+				inner.updateMatch(matchId, (prev) => ({
+					...prev,
+					status: prev.status === "pending" ? "success" : prev.status,
+					isFetching: false,
+					context: buildMatchContext(inner, index)
+				}));
+				return;
+			}
+			const pendingPromise = match._nonReactive.minPendingPromise;
+			if (pendingPromise) await pendingPromise;
+			if (isNotFound(e)) await route.options.notFoundComponent?.preload?.();
+			handleRedirectAndNotFound(inner, inner.router.getMatch(matchId), e);
+			try {
+				route.options.onError?.(e);
+			} catch (onErrorError) {
+				error = onErrorError;
+				handleRedirectAndNotFound(inner, inner.router.getMatch(matchId), onErrorError);
+			}
+			if (!isRedirect(error) && !isNotFound(error)) await loadRouteChunk(route, ["errorComponent"]);
+			inner.updateMatch(matchId, (prev) => ({
+				...prev,
+				error,
+				context: buildMatchContext(inner, index),
+				status: "error",
+				isFetching: false
+			}));
+		}
+	} catch (err) {
+		const match = inner.router.getMatch(matchId);
+		if (match) match._nonReactive.loaderPromise = void 0;
+		handleRedirectAndNotFound(inner, match, err);
+	}
+};
+var loadRouteMatch = async (inner, matchPromises, index) => {
+	async function handleLoader(preload, prevMatch, previousRouteMatchId, match, route) {
+		const age = Date.now() - prevMatch.updatedAt;
+		const staleAge = preload ? route.options.preloadStaleTime ?? inner.router.options.defaultPreloadStaleTime ?? 3e4 : route.options.staleTime ?? inner.router.options.defaultStaleTime ?? 0;
+		const shouldReloadOption = route.options.shouldReload;
+		const shouldReload = typeof shouldReloadOption === "function" ? shouldReloadOption(getLoaderContext(inner, matchPromises, matchId, index, route)) : shouldReloadOption;
+		const { status, invalid } = match;
+		const staleMatchShouldReload = age >= staleAge && (!!inner.forceStaleReload || match.cause === "enter" || previousRouteMatchId !== void 0 && previousRouteMatchId !== match.id);
+		loaderShouldRunAsync = status === "success" && (invalid || (shouldReload ?? staleMatchShouldReload));
+		if (preload && route.options.preload === false) {} else if (loaderShouldRunAsync && !inner.sync && shouldReloadInBackground) {
+			loaderIsRunningAsync = true;
+			(async () => {
+				try {
+					await runLoader(inner, matchPromises, matchId, index, route);
+					const match = inner.router.getMatch(matchId);
+					match._nonReactive.loaderPromise?.resolve();
+					match._nonReactive.loadPromise?.resolve();
+					match._nonReactive.loaderPromise = void 0;
+					match._nonReactive.loadPromise = void 0;
+				} catch (err) {
+					if (isRedirect(err)) await inner.router.navigate(err.options);
+				}
+			})();
+		} else if (status !== "success" || loaderShouldRunAsync) await runLoader(inner, matchPromises, matchId, index, route);
+		else syncMatchContext(inner, matchId, index);
+	}
+	const { id: matchId, routeId } = inner.matches[index];
+	let loaderShouldRunAsync = false;
+	let loaderIsRunningAsync = false;
+	const route = inner.router.looseRoutesById[routeId];
+	const routeLoader = route.options.loader;
+	const shouldReloadInBackground = ((typeof routeLoader === "function" ? void 0 : routeLoader?.staleReloadMode) ?? inner.router.options.defaultStaleReloadMode) !== "blocking";
+	if (shouldSkipLoader(inner, matchId)) {
+		if (!inner.router.getMatch(matchId)) return inner.matches[index];
+		syncMatchContext(inner, matchId, index);
+		return inner.router.getMatch(matchId);
+	} else {
+		const prevMatch = inner.router.getMatch(matchId);
+		const activeIdAtIndex = inner.router.stores.matchesId.get()[index];
+		const previousRouteMatchId = (activeIdAtIndex && inner.router.stores.matchStores.get(activeIdAtIndex) || null)?.routeId === routeId ? activeIdAtIndex : inner.router.stores.matches.get().find((d) => d.routeId === routeId)?.id;
+		const preload = resolvePreload(inner, matchId);
+		if (prevMatch._nonReactive.loaderPromise) {
+			if (prevMatch.status === "success" && !inner.sync && !prevMatch.preload && shouldReloadInBackground) return prevMatch;
+			await prevMatch._nonReactive.loaderPromise;
+			const match = inner.router.getMatch(matchId);
+			const error = match._nonReactive.error || match.error;
+			if (error) handleRedirectAndNotFound(inner, match, error);
+			if (match.status === "pending") await handleLoader(preload, prevMatch, previousRouteMatchId, match, route);
+		} else {
+			const nextPreload = preload && !inner.router.stores.matchStores.has(matchId);
+			const match = inner.router.getMatch(matchId);
+			match._nonReactive.loaderPromise = createControlledPromise();
+			if (nextPreload !== match.preload) inner.updateMatch(matchId, (prev) => ({
+				...prev,
+				preload: nextPreload
+			}));
+			await handleLoader(preload, prevMatch, previousRouteMatchId, match, route);
+		}
+	}
+	const match = inner.router.getMatch(matchId);
+	if (!loaderIsRunningAsync) {
+		match._nonReactive.loaderPromise?.resolve();
+		match._nonReactive.loadPromise?.resolve();
+		match._nonReactive.loadPromise = void 0;
+	}
+	clearTimeout(match._nonReactive.pendingTimeout);
+	match._nonReactive.pendingTimeout = void 0;
+	if (!loaderIsRunningAsync) match._nonReactive.loaderPromise = void 0;
+	match._nonReactive.dehydrated = void 0;
+	const nextIsFetching = loaderIsRunningAsync ? match.isFetching : false;
+	if (nextIsFetching !== match.isFetching || match.invalid !== false) {
+		inner.updateMatch(matchId, (prev) => ({
+			...prev,
+			isFetching: nextIsFetching,
+			invalid: false
+		}));
+		return inner.router.getMatch(matchId);
+	} else return match;
+};
+async function loadMatches(arg) {
+	const inner = arg;
+	const matchPromises = [];
+	let beforeLoadNotFound;
+	for (let i = 0; i < inner.matches.length; i++) {
+		try {
+			const beforeLoad = handleBeforeLoad(inner, i);
+			if (isPromise(beforeLoad)) await beforeLoad;
+		} catch (err) {
+			if (isRedirect(err)) throw err;
+			if (isNotFound(err)) beforeLoadNotFound = err;
+			else if (!inner.preload) throw err;
+			break;
+		}
+		if (inner.serialError || inner.firstBadMatchIndex != null) break;
+	}
+	const baseMaxIndexExclusive = inner.firstBadMatchIndex ?? inner.matches.length;
+	const boundaryIndex = beforeLoadNotFound && !inner.preload ? getNotFoundBoundaryIndex(inner, beforeLoadNotFound) : void 0;
+	const maxIndexExclusive = beforeLoadNotFound && inner.preload ? 0 : boundaryIndex !== void 0 ? Math.min(boundaryIndex + 1, baseMaxIndexExclusive) : baseMaxIndexExclusive;
+	let firstNotFound;
+	let firstUnhandledRejection;
+	for (let i = 0; i < maxIndexExclusive; i++) matchPromises.push(loadRouteMatch(inner, matchPromises, i));
+	try {
+		await Promise.all(matchPromises);
+	} catch {
+		const settled = await Promise.allSettled(matchPromises);
+		for (const result of settled) {
+			if (result.status !== "rejected") continue;
+			const reason = result.reason;
+			if (isRedirect(reason)) throw reason;
+			if (isNotFound(reason)) firstNotFound ??= reason;
+			else firstUnhandledRejection ??= reason;
+		}
+		if (firstUnhandledRejection !== void 0) throw firstUnhandledRejection;
+	}
+	const notFoundToThrow = firstNotFound ?? (beforeLoadNotFound && !inner.preload ? beforeLoadNotFound : void 0);
+	let headMaxIndex = inner.firstBadMatchIndex !== void 0 ? inner.firstBadMatchIndex : inner.matches.length - 1;
+	if (!notFoundToThrow && beforeLoadNotFound && inner.preload) return inner.matches;
+	if (notFoundToThrow) {
+		const renderedBoundaryIndex = getNotFoundBoundaryIndex(inner, notFoundToThrow);
+		if (renderedBoundaryIndex === void 0) invariant();
+		const boundaryMatch = inner.matches[renderedBoundaryIndex];
+		const boundaryRoute = inner.router.looseRoutesById[boundaryMatch.routeId];
+		const defaultNotFoundComponent = inner.router.options?.defaultNotFoundComponent;
+		if (!boundaryRoute.options.notFoundComponent && defaultNotFoundComponent) boundaryRoute.options.notFoundComponent = defaultNotFoundComponent;
+		notFoundToThrow.routeId = boundaryMatch.routeId;
+		const boundaryIsRoot = boundaryMatch.routeId === inner.router.routeTree.id;
+		inner.updateMatch(boundaryMatch.id, (prev) => ({
+			...prev,
+			...boundaryIsRoot ? {
+				status: "success",
+				globalNotFound: true,
+				error: void 0
+			} : {
+				status: "notFound",
+				error: notFoundToThrow
+			},
+			isFetching: false
+		}));
+		headMaxIndex = renderedBoundaryIndex;
+		await loadRouteChunk(boundaryRoute, ["notFoundComponent"]);
+	} else if (!inner.preload) {
+		const rootMatch = inner.matches[0];
+		if (!rootMatch.globalNotFound) {
+			if (inner.router.getMatch(rootMatch.id)?.globalNotFound) inner.updateMatch(rootMatch.id, (prev) => ({
+				...prev,
+				globalNotFound: false,
+				error: void 0
+			}));
+		}
+	}
+	if (inner.serialError && inner.firstBadMatchIndex !== void 0) {
+		const errorRoute = inner.router.looseRoutesById[inner.matches[inner.firstBadMatchIndex].routeId];
+		await loadRouteChunk(errorRoute, ["errorComponent"]);
+	}
+	for (let i = 0; i <= headMaxIndex; i++) {
+		const { id: matchId, routeId } = inner.matches[i];
+		const route = inner.router.looseRoutesById[routeId];
+		try {
+			const headResult = executeHead(inner, matchId, route);
+			if (headResult) {
+				const head = await headResult;
+				inner.updateMatch(matchId, (prev) => ({
+					...prev,
+					...head
+				}));
+			}
+		} catch (err) {
+			console.error(`Error executing head for route ${routeId}:`, err);
+		}
+	}
+	const readyPromise = triggerOnReady(inner);
+	if (isPromise(readyPromise)) await readyPromise;
+	if (notFoundToThrow) throw notFoundToThrow;
+	if (inner.serialError && !inner.preload && !inner.onReady) throw inner.serialError;
+	return inner.matches;
+}
+function preloadRouteComponents(route, componentTypesToLoad) {
+	const preloads = componentTypesToLoad.map((type) => route.options[type]?.preload?.()).filter(Boolean);
+	if (preloads.length === 0) return void 0;
+	return Promise.all(preloads);
+}
+function loadRouteChunk(route, componentTypesToLoad = componentTypes) {
+	if (!route._lazyLoaded && route._lazyPromise === void 0) if (route.lazyFn) route._lazyPromise = route.lazyFn().then((lazyRoute) => {
+		const { id: _id, ...options } = lazyRoute.options;
+		Object.assign(route.options, options);
+		route._lazyLoaded = true;
+		route._lazyPromise = void 0;
+	});
+	else route._lazyLoaded = true;
+	const runAfterLazy = () => route._componentsLoaded ? void 0 : componentTypesToLoad === componentTypes ? (() => {
+		if (route._componentsPromise === void 0) {
+			const componentsPromise = preloadRouteComponents(route, componentTypes);
+			if (componentsPromise) route._componentsPromise = componentsPromise.then(() => {
+				route._componentsLoaded = true;
+				route._componentsPromise = void 0;
+			});
+			else route._componentsLoaded = true;
+		}
+		return route._componentsPromise;
+	})() : preloadRouteComponents(route, componentTypesToLoad);
+	return route._lazyPromise ? route._lazyPromise.then(runAfterLazy) : runAfterLazy();
+}
+function makeMaybe(value, error) {
+	if (error) return {
+		status: "error",
+		error
+	};
+	return {
+		status: "success",
+		value
+	};
+}
+function routeNeedsPreload(route) {
+	for (const componentType of componentTypes) if (route.options[componentType]?.preload) return true;
+	return false;
+}
+var componentTypes = [
+	"component",
+	"errorComponent",
+	"pendingComponent",
+	"notFoundComponent"
+];
+//#endregion
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/router.js
 /**
 * Compute whether path, href or hash changed between previous and current
 * resolved locations.
 */
 function getLocationChangeInfo(location, resolvedLocation) {
+	const fromLocation = resolvedLocation;
+	const toLocation = location;
 	return {
-		fromLocation: resolvedLocation,
-		toLocation: location,
-		pathChanged: resolvedLocation?.pathname !== location.pathname,
-		hrefChanged: resolvedLocation?.href !== location.href,
-		hashChanged: resolvedLocation?.hash !== location.hash
+		fromLocation,
+		toLocation,
+		pathChanged: fromLocation?.pathname !== toLocation.pathname,
+		hrefChanged: fromLocation?.href !== toLocation.href,
+		hashChanged: fromLocation?.hash !== toLocation.hash
 	};
-}
-/**
-* Return only state owned by the application, excluding volatile history
-* bookkeeping. Mask payloads (`__tempLocation`/`__tempKey`) are kept: they
-* distinguish otherwise-identical locations.
-*/
-function _getUserHistoryState({ key: _key, __TSR_key: _tsrKey, __TSR_index: _tsrIndex, __hashScrollIntoViewOptions: _hashScroll, ...state }) {
-	return state;
-}
-/** Run route lifecycle callbacks in leave/enter/stay phases. */
-function runRouteLifecycle(router, previous, matches, owner) {
-	for (const match of previous) {
-		if (owner && router._tx !== owner) return;
-		if (!matches.some((candidate) => candidate.routeId === match.routeId)) router.routesById[match.routeId].options.onLeave?.(match);
-	}
-	for (const match of matches) {
-		if (owner && router._tx !== owner) return;
-		router.routesById[match.routeId].options[previous.some((candidate) => candidate.routeId === match.routeId) ? "onStay" : "onEnter"]?.(match);
-	}
 }
 /**
 * Core, framework-agnostic router engine that powers TanStack Router.
@@ -1579,15 +2403,12 @@ var RouterCore = class {
 	constructor(options, getStoreConfig) {
 		this.tempLocationKey = `${Math.round(Math.random() * 1e7)}`;
 		this._scroll = { next: true };
+		this.shouldViewTransition = void 0;
+		this.isViewTransitionTypesSupported = void 0;
 		this.subscribers = /* @__PURE__ */ new Set();
-		this._cache = /* @__PURE__ */ new Map();
-		this._committed = [];
 		this.routeBranchCache = /* @__PURE__ */ new WeakMap();
 		this.lightweightCache = /* @__PURE__ */ new WeakMap();
-		this.startTransition = async (fn) => {
-			fn();
-			return false;
-		};
+		this.startTransition = (fn) => fn();
 		this.update = (newOptions) => {
 			const prevOptions = this.options;
 			const prevBasepath = this.basepath ?? prevOptions?.basepath ?? "/";
@@ -1597,7 +2418,7 @@ var RouterCore = class {
 				...prevOptions,
 				...newOptions
 			};
-			this.isServer = this.options.isServer ?? true ?? typeof document === "undefined";
+			this.isServer = this.options.isServer ?? typeof document === "undefined";
 			this.protocolAllowlist = new Set(this.options.protocolAllowlist);
 			if (this.options.pathParamsAllowedCharacters) this.pathParamsDecoder = compileDecodeCharMap(this.options.pathParamsAllowedCharacters);
 			if (!this.history || this.options.history && this.options.history !== this.history) if (!this.options.history) {} else this.history = this.options.history;
@@ -1625,8 +2446,9 @@ var RouterCore = class {
 			if (!this.stores && this.latestLocation) {
 				const config = this.getStoreConfig(this);
 				this.batch = config.batch;
-				this.stores = createRouterStores(this.latestLocation, config);
+				this.stores = createRouterStores(getInitialRouterState(this.latestLocation), config);
 			}
+			let needsLocationUpdate = false;
 			const nextBasepath = this.options.basepath ?? "/";
 			const nextRewriteOption = this.options.rewrite;
 			if (basepathWasUnset || prevBasepath !== nextBasepath || prevRewriteOption !== nextRewriteOption) {
@@ -1637,8 +2459,10 @@ var RouterCore = class {
 				if (nextRewriteOption) rewrites.push(nextRewriteOption);
 				this.rewrite = rewrites.length === 0 ? void 0 : rewrites.length === 1 ? rewrites[0] : composeRewrites(rewrites);
 				if (this.history) this.updateLatestLocation();
-				if (this.stores) this.stores.location.set(this.latestLocation);
+				needsLocationUpdate = true;
 			}
+			if (needsLocationUpdate && this.stores) this.stores.location.set(this.latestLocation);
+			if (typeof window !== "undefined" && "CSS" in window && typeof window.CSS?.supports === "function") this.isViewTransitionTypesSupported = window.CSS.supports("selector(:active-view-transition-type(a))");
 		};
 		this.updateLatestLocation = () => {
 			this.latestLocation = this.parseLocation(this.history.location, this.latestLocation);
@@ -1661,11 +2485,9 @@ var RouterCore = class {
 			};
 		};
 		this.emit = (routerEvent) => {
-			for (const listener of this.subscribers) if (listener.eventType === routerEvent.type) try {
-				listener.fn(routerEvent);
-			} catch (e) {
-				console.error(e);
-			}
+			this.subscribers.forEach((listener) => {
+				if (listener.eventType === routerEvent.type) listener.fn(routerEvent);
+			});
 		};
 		this.parseLocation = (locationToParse, previousLocation) => {
 			const parse = ({ pathname, search, hash, href, state }) => {
@@ -1716,7 +2538,7 @@ var RouterCore = class {
 		this.resolvePathWithBase = (from, path) => {
 			return resolvePath({
 				base: from,
-				to: path,
+				to: path.includes("//") ? cleanPath(path) : path,
 				trailingSlash: this.options.trailingSlash,
 				cache: this.resolvePathCache
 			});
@@ -1729,51 +2551,56 @@ var RouterCore = class {
 			return this.matchRoutesInternal(pathnameOrNext, locationSearchOrOpts);
 		};
 		this.getMatchedRoutes = (pathname) => {
-			const rawParams = Object.create(null);
-			const match = findRouteMatch(trimPathRight(pathname), this.processedTree, true);
-			if (match) Object.assign(rawParams, match.rawParams);
-			return [
-				match?.branch || [this.routesById["__root__"]],
-				rawParams,
-				match?.route
-			];
+			return getMatchedRoutes({
+				pathname,
+				routesById: this.routesById,
+				processedTree: this.processedTree
+			});
+		};
+		this.cancelMatch = (id) => {
+			const match = this.getMatch(id);
+			if (!match) return;
+			match.abortController.abort();
+			clearTimeout(match._nonReactive.pendingTimeout);
+			match._nonReactive.pendingTimeout = void 0;
+		};
+		this.cancelMatches = () => {
+			this.stores.pendingIds.get().forEach((matchId) => {
+				this.cancelMatch(matchId);
+			});
+			this.stores.matchesId.get().forEach((matchId) => {
+				if (this.stores.pendingMatchStores.has(matchId)) return;
+				const match = this.stores.matchStores.get(matchId)?.get();
+				if (!match) return;
+				if (match.status === "pending" || match.isFetching === "loader") this.cancelMatch(matchId);
+			});
 		};
 		this.buildLocation = (opts) => {
 			const build = (dest = {}) => {
-				if (dest.href) {
-					const parsed = parseHref(dest.href, {});
-					dest = {
-						...dest,
-						to: executeRewriteInput(this.rewrite, new URL(parsed.pathname, this.origin)).pathname,
-						search: this.options.parseSearch(parsed.search),
-						hash: parsed.hash.slice(1)
-					};
-				}
-				const currentLocation = dest._fromLocation || this._pendingLocation || this.latestLocation;
+				const currentLocation = dest._fromLocation || this.pendingBuiltLocation || this.latestLocation;
 				const lightweightResult = this.matchRoutesLightweight(currentLocation);
 				if (dest.from && false);
-				const defaultedFromPath = dest.unsafeRelative === "path" ? currentLocation.pathname : dest.from ?? lightweightResult[1];
-				const fromSearch = lightweightResult[2];
-				const fromParams = lightweightResult[3];
-				const nextTo = this.resolvePathWithBase(defaultedFromPath, dest.to ? `${dest.to}` : ".");
-				let nextParams = resolveNextParams(dest.params, fromParams);
+				const defaultedFromPath = dest.unsafeRelative === "path" ? currentLocation.pathname : dest.from ?? lightweightResult.fullPath;
+				const destTo = dest.to ? `${dest.to}` : void 0;
+				const fromSearch = lightweightResult.search;
+				const fromParams = Object.assign(Object.create(null), lightweightResult.params);
+				const sourcePath = destTo?.charCodeAt(0) === 47 ? "/" : this.resolvePathWithBase(defaultedFromPath, ".");
+				const nextTo = destTo ? this.resolvePathWithBase(sourcePath, destTo) : sourcePath;
+				const nextParams = dest.params === false || dest.params === null ? Object.create(null) : (dest.params ?? true) === true ? fromParams : Object.assign(fromParams, functionalUpdate(dest.params, fromParams));
 				const destRoute = this.routesByPath[trimPathRight(nextTo)];
 				let destRoutes;
 				if (destRoute) destRoutes = this.getRouteBranch(destRoute);
 				else if (nextTo.includes("$")) destRoutes = [];
 				else {
-					const [matchedRoutes, rawParams, foundRoute] = this.getMatchedRoutes(nextTo);
-					destRoutes = matchedRoutes;
-					if (this.options.notFoundRoute && (!foundRoute || foundRoute.path !== "/" && rawParams["**"])) destRoutes = [...destRoutes, this.options.notFoundRoute];
+					const destMatchResult = this.getMatchedRoutes(nextTo);
+					destRoutes = destMatchResult.matchedRoutes;
+					if (this.options.notFoundRoute && (!destMatchResult.foundRoute || destMatchResult.foundRoute.path !== "/" && destMatchResult.routeParams["**"])) destRoutes = [...destRoutes, this.options.notFoundRoute];
 				}
 				if (destRoutes.length && hasKeys(nextParams)) for (const route of destRoutes) {
 					const fn = route.options.params?.stringify ?? route.options.stringifyParams;
-					if (fn) {
-						if (nextParams === fromParams) nextParams = Object.assign(Object.create(null), nextParams);
-						try {
-							Object.assign(nextParams, fn(nextParams));
-						} catch {}
-					}
+					if (fn) try {
+						Object.assign(nextParams, fn(nextParams));
+					} catch {}
 				}
 				const nextPathname = opts.leaveParams ? nextTo : decodePath(interpolatePath({
 					path: nextTo,
@@ -1794,13 +2621,18 @@ var RouterCore = class {
 					});
 					nextSearch = validatedSearch;
 				}
-				nextSearch = applySearchMiddleware(nextSearch, dest, destRoutes, opts._includeValidateSearch);
+				nextSearch = applySearchMiddleware({
+					search: nextSearch,
+					dest,
+					destRoutes,
+					_includeValidateSearch: opts._includeValidateSearch
+				});
 				nextSearch = nullReplaceEqualDeep(fromSearch, nextSearch);
 				const searchStr = this.options.stringifySearch(nextSearch);
 				const hash = dest.hash === true ? currentLocation.hash : dest.hash ? functionalUpdate(dest.hash, currentLocation.hash) : void 0;
 				const hashStr = hash ? `#${hash}` : "";
 				let nextState = dest.state === true ? currentLocation.state : dest.state ? functionalUpdate(dest.state, currentLocation.state) : {};
-				if (dest.state) nextState = replaceEqualDeep(currentLocation.state, nextState);
+				nextState = replaceEqualDeep(currentLocation.state, nextState);
 				const fullPath = `${nextPathname}${searchStr}${hashStr}`;
 				let href;
 				let publicHref;
@@ -1829,40 +2661,60 @@ var RouterCore = class {
 					unmaskOnReload: dest.unmaskOnReload
 				};
 			};
-			const next = build(opts);
-			if (opts.mask) next.maskedLocation = build({
+			const buildWithMatches = (dest = {}, maskedDest) => {
+				const next = build(dest);
+				let maskedNext = maskedDest ? build(maskedDest) : void 0;
+				if (!maskedNext) {
+					const params = Object.create(null);
+					if (this.options.routeMasks) {
+						const match = findFlatMatch(next.pathname, this.processedTree);
+						if (match) {
+							Object.assign(params, match.rawParams);
+							const { from: _from, params: maskParams, ...maskProps } = match.route;
+							const nextParams = maskParams === false || maskParams === null ? Object.create(null) : (maskParams ?? true) === true ? params : Object.assign(params, functionalUpdate(maskParams, params));
+							maskedDest = {
+								from: opts.from,
+								...maskProps,
+								params: nextParams
+							};
+							maskedNext = build(maskedDest);
+						}
+					}
+				}
+				if (maskedNext) next.maskedLocation = maskedNext;
+				return next;
+			};
+			if (opts.mask) return buildWithMatches(opts, {
 				from: opts.from,
 				...opts.mask
 			});
-			else if (this.options.routeMasks) {
-				const match = findFlatMatch(next.pathname, this.processedTree);
-				if (match) {
-					const params = Object.assign(Object.create(null), match.rawParams);
-					const { from: _from, params: maskParams, ...maskProps } = match.route;
-					const nextParams = resolveNextParams(maskParams, params);
-					next.maskedLocation = build({
-						from: opts.from,
-						...maskProps,
-						params: nextParams
-					});
-				}
-			}
-			return next;
+			return buildWithMatches(opts);
 		};
 		this.commitLocation = async ({ viewTransition, ignoreBlocker, ...next }) => {
 			let historyAction;
-			const isSameLocation = trimPathRight(this.latestLocation.href) === trimPathRight(next.href) && deepEqual(_getUserHistoryState(next.state), _getUserHistoryState(this.latestLocation.state));
-			const previousCommitPromise = this._commitPromise;
-			let resolve;
-			const commitPromise = new Promise((done) => {
-				resolve = done;
-			});
-			commitPromise.resolve = () => {
-				resolve();
-				previousCommitPromise?.resolve();
+			const isSameState = () => {
+				const ignoredProps = [
+					"key",
+					"__TSR_key",
+					"__TSR_index",
+					"__hashScrollIntoViewOptions"
+				];
+				ignoredProps.forEach((prop) => {
+					next.state[prop] = this.latestLocation.state[prop];
+				});
+				const isEqual = deepEqual(next.state, this.latestLocation.state);
+				ignoredProps.forEach((prop) => {
+					delete next.state[prop];
+				});
+				return isEqual;
 			};
-			this._commitPromise = commitPromise;
-			if (isSameLocation) this.load();
+			const isSameUrl = trimPathRight(this.latestLocation.href) === trimPathRight(next.href);
+			let previousCommitPromise = this.commitLocationPromise;
+			this.commitLocationPromise = createControlledPromise(() => {
+				previousCommitPromise?.resolve();
+				previousCommitPromise = void 0;
+			});
+			if (isSameUrl && isSameState()) this.load();
 			else {
 				let { maskedLocation, hashScrollIntoView, ...nextHistory } = next;
 				if (maskedLocation) {
@@ -1890,17 +2742,25 @@ var RouterCore = class {
 				this.shouldViewTransition = viewTransition;
 				historyAction = next.replace ? "REPLACE" : "PUSH";
 				this.history[historyAction === "REPLACE" ? "replace" : "push"](nextHistory.publicHref, nextHistory.state, { ignoreBlocker });
-				if (!this.history.subscribers.size) this.load({ action: { type: historyAction } });
 			}
 			this._scroll.next = next.resetScroll ?? true;
-			return this._commitPromise;
+			if (!this.history.subscribers.size) this.load(historyAction ? { action: { type: historyAction } } : void 0);
+			return this.commitLocationPromise;
 		};
-		this.buildAndCommitLocation = ({ replace, resetScroll, hashScrollIntoView, viewTransition, ignoreBlocker, ...rest } = {}) => {
+		this.buildAndCommitLocation = ({ replace, resetScroll, hashScrollIntoView, viewTransition, ignoreBlocker, href, ...rest } = {}) => {
+			if (href) {
+				const currentIndex = this.history.location.state.__TSR_index;
+				const parsed = parseHref(href, { __TSR_index: replace ? currentIndex : currentIndex + 1 });
+				const hrefUrl = new URL(parsed.pathname, this.origin);
+				rest.to = executeRewriteInput(this.rewrite, hrefUrl).pathname;
+				rest.search = this.options.parseSearch(parsed.search);
+				rest.hash = parsed.hash.slice(1);
+			}
 			const location = this.buildLocation({
 				...rest,
 				_includeValidateSearch: true
 			});
-			this._pendingLocation = location;
+			this.pendingBuiltLocation = location;
 			const commitPromise = this.commitLocation({
 				...location,
 				viewTransition,
@@ -1910,7 +2770,7 @@ var RouterCore = class {
 				ignoreBlocker
 			});
 			queueMicrotask(() => {
-				if (this._pendingLocation === location) this._pendingLocation = void 0;
+				if (this.pendingBuiltLocation === location) this.pendingBuiltLocation = void 0;
 			});
 			return commitPromise;
 		};
@@ -1953,59 +2813,210 @@ var RouterCore = class {
 				_isNavigate: true
 			});
 		};
+		this.beforeLoad = () => {
+			this.cancelMatches();
+			this.updateLatestLocation();
+			{
+				const nextLocation = this.buildLocation({
+					to: this.latestLocation.pathname,
+					search: true,
+					params: true,
+					hash: true,
+					state: true,
+					_includeValidateSearch: true
+				});
+				if (this.latestLocation.publicHref !== nextLocation.publicHref) {
+					const href = this.getParsedLocationHref(nextLocation);
+					if (nextLocation.external) throw redirect({ href });
+					else throw redirect({
+						href,
+						_builtLocation: nextLocation
+					});
+				}
+			}
+			const pendingMatches = this.matchRoutes(this.latestLocation);
+			const nextCachedMatches = this.stores.cachedMatches.get().filter((d) => !pendingMatches.some((e) => e.id === d.id));
+			this.batch(() => {
+				this.stores.status.set("pending");
+				this.stores.statusCode.set(200);
+				this.stores.isLoading.set(true);
+				this.stores.location.set(this.latestLocation);
+				this.stores.setPending(pendingMatches);
+				this.stores.setCached(nextCachedMatches);
+			});
+		};
 		this.load = async (opts) => {
-			return loadServerRoute(this, opts);
+			const historyAction = opts?.action?.type;
+			let redirect;
+			let notFound;
+			let loadPromise;
+			const previousLocation = this.stores.resolvedLocation.get() ?? this.stores.location.get();
+			loadPromise = new Promise((resolve) => {
+				this.startTransition(async () => {
+					try {
+						this.beforeLoad();
+						if (historyAction) this._scroll.hash = historyAction === "PUSH" || historyAction === "REPLACE";
+						const next = this.latestLocation;
+						const locationChangeInfo = getLocationChangeInfo(next, this.stores.resolvedLocation.get());
+						if (!this.stores.redirect.get()) this.emit({
+							type: "onBeforeNavigate",
+							...locationChangeInfo
+						});
+						this.emit({
+							type: "onBeforeLoad",
+							...locationChangeInfo
+						});
+						await loadMatches({
+							router: this,
+							sync: opts?.sync,
+							forceStaleReload: previousLocation.href === next.href,
+							matches: this.stores.pendingMatches.get(),
+							location: next,
+							updateMatch: this.updateMatch,
+							onReady: async () => {
+								this.startTransition(() => {
+									this.startViewTransition(async () => {
+										let exitingMatches = null;
+										let hookExitingMatches = null;
+										let hookEnteringMatches = null;
+										let hookStayingMatches = null;
+										this.batch(() => {
+											const pendingMatches = this.stores.pendingMatches.get();
+											const mountPending = pendingMatches.length;
+											const currentMatches = this.stores.matches.get();
+											exitingMatches = mountPending ? currentMatches.filter((match) => !this.stores.pendingMatchStores.has(match.id)) : null;
+											const pendingRouteIds = /* @__PURE__ */ new Set();
+											for (const s of this.stores.pendingMatchStores.values()) if (s.routeId) pendingRouteIds.add(s.routeId);
+											const activeRouteIds = /* @__PURE__ */ new Set();
+											for (const s of this.stores.matchStores.values()) if (s.routeId) activeRouteIds.add(s.routeId);
+											hookExitingMatches = mountPending ? currentMatches.filter((match) => !pendingRouteIds.has(match.routeId)) : null;
+											hookEnteringMatches = mountPending ? pendingMatches.filter((match) => !activeRouteIds.has(match.routeId)) : null;
+											hookStayingMatches = mountPending ? pendingMatches.filter((match) => activeRouteIds.has(match.routeId)) : currentMatches;
+											this.stores.isLoading.set(false);
+											this.stores.loadedAt.set(Date.now());
+											/**
+											* When committing new matches, cache any exiting matches that are still usable.
+											* Routes that resolved with `status: 'error'` or `status: 'notFound'` are
+											* deliberately excluded from `cachedMatches` so that subsequent invalidations
+											* or reloads re-run their loaders instead of reusing the failed/not-found data.
+											*/
+											if (mountPending) {
+												this.stores.setMatches(pendingMatches);
+												this.stores.setPending([]);
+												this.stores.setCached([...this.stores.cachedMatches.get(), ...exitingMatches.filter((d) => d.status !== "error" && d.status !== "notFound" && d.status !== "redirected")]);
+												this.clearExpiredCache();
+											}
+										});
+										for (const [matches, hook] of [
+											[hookExitingMatches, "onLeave"],
+											[hookEnteringMatches, "onEnter"],
+											[hookStayingMatches, "onStay"]
+										]) {
+											if (!matches) continue;
+											for (const match of matches) this.looseRoutesById[match.routeId].options[hook]?.(match);
+										}
+									});
+								});
+							}
+						});
+					} catch (err) {
+						if (isRedirect(err)) redirect = err;
+						else if (isNotFound(err)) notFound = err;
+						const nextStatusCode = redirect ? redirect.status : notFound ? 404 : this.stores.matches.get().some((d) => d.status === "error") ? 500 : 200;
+						this.batch(() => {
+							this.stores.statusCode.set(nextStatusCode);
+							this.stores.redirect.set(redirect);
+						});
+					}
+					if (this.latestLoadPromise === loadPromise) {
+						this.commitLocationPromise?.resolve();
+						this.latestLoadPromise = void 0;
+						this.commitLocationPromise = void 0;
+					}
+					resolve();
+				});
+			});
+			this.latestLoadPromise = loadPromise;
+			await loadPromise;
+			while (this.latestLoadPromise && loadPromise !== this.latestLoadPromise) await this.latestLoadPromise;
+			let newStatusCode = void 0;
+			if (this.hasNotFoundMatch()) newStatusCode = 404;
+			else if (this.stores.matches.get().some((d) => d.status === "error")) newStatusCode = 500;
+			if (newStatusCode !== void 0) this.stores.statusCode.set(newStatusCode);
 		};
 		this.startViewTransition = (fn) => {
-			this.shouldViewTransition ?? this.options.defaultViewTransition;
+			const shouldViewTransition = this.shouldViewTransition ?? this.options.defaultViewTransition;
 			this.shouldViewTransition = void 0;
-			return fn();
+			if (shouldViewTransition && typeof document !== "undefined" && "startViewTransition" in document && typeof document.startViewTransition === "function") {
+				let startViewTransitionParams;
+				if (typeof shouldViewTransition === "object" && this.isViewTransitionTypesSupported) {
+					const next = this.latestLocation;
+					const prevLocation = this.stores.resolvedLocation.get();
+					const resolvedViewTransitionTypes = typeof shouldViewTransition.types === "function" ? shouldViewTransition.types(getLocationChangeInfo(next, prevLocation)) : shouldViewTransition.types;
+					if (resolvedViewTransitionTypes === false) {
+						fn();
+						return;
+					}
+					startViewTransitionParams = {
+						update: fn,
+						types: resolvedViewTransitionTypes
+					};
+				} else startViewTransitionParams = fn;
+				document.startViewTransition(startViewTransitionParams);
+			} else fn();
+		};
+		this.updateMatch = (id, updater) => {
+			this.startTransition(() => {
+				const pendingMatch = this.stores.pendingMatchStores.get(id);
+				if (pendingMatch) {
+					pendingMatch.set(updater);
+					return;
+				}
+				const activeMatch = this.stores.matchStores.get(id);
+				if (activeMatch) {
+					activeMatch.set(updater);
+					return;
+				}
+				const cachedMatch = this.stores.cachedMatchStores.get(id);
+				if (cachedMatch) {
+					const next = updater(cachedMatch.get());
+					if (next.status === "redirected") {
+						if (this.stores.cachedMatchStores.delete(id)) this.stores.cachedIds.set((prev) => prev.filter((matchId) => matchId !== id));
+					} else cachedMatch.set(next);
+				}
+			});
+		};
+		this.getMatch = (matchId) => {
+			return this.stores.cachedMatchStores.get(matchId)?.get() ?? this.stores.pendingMatchStores.get(matchId)?.get() ?? this.stores.matchStores.get(matchId)?.get();
 		};
 		this.invalidate = (opts) => {
-			const committedMatches = this._committed;
-			const filter = opts?.filter;
-			const preloads = this._preloads;
-			const invalidIds = new Set([
-				...committedMatches,
-				...this._cache.values(),
-				...[...preloads?.values() ?? []].flat(),
-				...this._tx?.[3] ?? []
-			].filter((match) => !filter || filter(match)).map((match) => match.id));
-			const discardedPreloads = [];
-			for (const [controller, matches] of preloads ?? []) if (matches.some((match) => invalidIds.has(match.id))) {
-				preloads.delete(controller);
-				discardedPreloads.push(controller);
-			}
 			const invalidate = (d) => {
-				if (invalidIds.has(d.id)) {
-					const route = this.routesById[d.routeId];
-					const next = {
-						...d,
-						invalid: true,
-						...(opts?.forcePending || d.status === "error" || d.status === "notFound") && routeNeedsLoad(route) ? {
-							status: "pending",
-							error: void 0
-						} : void 0
-					};
-					d._flight = void 0;
-					return next;
-				}
+				if (opts?.filter?.(d) ?? true) return {
+					...d,
+					invalid: true,
+					...opts?.forcePending || d.status === "error" || d.status === "notFound" ? {
+						status: "pending",
+						error: void 0
+					} : void 0
+				};
 				return d;
 			};
-			this._committed = committedMatches.map(invalidate);
-			for (const [id, match] of this._cache) if (invalidIds.has(id)) {
-				match.invalid = true;
-				if (opts?.forcePending) match.status = "pending";
-			}
-			for (const id of invalidIds) this._flights?.delete(id);
-			for (const controller of discardedPreloads) controller.abort();
+			this.batch(() => {
+				this.stores.setMatches(this.stores.matches.get().map(invalidate));
+				this.stores.setCached(this.stores.cachedMatches.get().map(invalidate));
+				this.stores.setPending(this.stores.pendingMatches.get().map(invalidate));
+			});
 			this.shouldViewTransition = false;
 			return this.load({ sync: opts?.sync });
 		};
+		this.getParsedLocationHref = (location) => {
+			return location.publicHref || "/";
+		};
 		this.resolveRedirect = (redirect) => {
 			const locationHeader = redirect.headers.get("Location");
-			if (!redirect.options.href) {
-				const href = this.buildLocation(redirect.options).publicHref || "/";
+			if (!redirect.options.href || redirect.options._builtLocation) {
+				const location = redirect.options._builtLocation ?? this.buildLocation(redirect.options);
+				const href = this.getParsedLocationHref(location);
 				redirect.options.href = href;
 				redirect.headers.set("Location", href);
 			} else if (locationHeader) try {
@@ -2016,39 +3027,65 @@ var RouterCore = class {
 					redirect.headers.set("Location", href);
 				}
 			} catch {}
-			if (redirect.options.href && isDangerousProtocol(redirect.options.href, this.protocolAllowlist)) throw new Error("Redirect blocked: unsafe protocol");
+			if (redirect.options.href && !redirect.options._builtLocation && isDangerousProtocol(redirect.options.href, this.protocolAllowlist)) throw new Error("Redirect blocked: unsafe protocol");
 			if (!redirect.headers.get("Location")) redirect.headers.set("Location", redirect.options.href);
 			return redirect;
 		};
 		this.clearCache = (opts) => {
-			const cached = this._cache;
-			const preloads = this._preloads;
 			const filter = opts?.filter;
-			const discarded = [];
-			const discardedIds = [];
-			for (const [id, match] of cached) if (!filter || filter(match)) {
-				discardedIds.push(id);
-				discarded.push(match);
-			}
-			const abort = [];
-			for (const [controller, matches] of preloads ?? []) if (!filter || matches.some(filter)) {
-				abort.push(controller);
-				discarded.push(...matches);
-			}
-			for (const id of discardedIds) cached.delete(id);
-			for (const controller of abort) preloads.delete(controller);
-			for (const match of discarded) {
-				const flight = match._flight;
-				match._flight = void 0;
-				if (flight && !--flight[2]) {
-					if (this._flights?.get(match.id) === flight) this._flights.delete(match.id);
-					abort.push(flight[1]);
-				}
-			}
-			for (const controller of abort) controller.abort();
+			if (filter !== void 0) this.stores.setCached(this.stores.cachedMatches.get().filter((m) => !filter(m)));
+			else this.stores.setCached([]);
+		};
+		this.clearExpiredCache = () => {
+			const now = Date.now();
+			const filter = (d) => {
+				const route = this.looseRoutesById[d.routeId];
+				if (!route.options.loader) return true;
+				const gcTime = (d.preload ? route.options.preloadGcTime ?? this.options.defaultPreloadGcTime : route.options.gcTime ?? this.options.defaultGcTime) ?? 300 * 1e3;
+				if (d.status === "error") return true;
+				return now - d.updatedAt >= gcTime;
+			};
+			this.clearCache({ filter });
 		};
 		this.loadRouteChunk = loadRouteChunk;
-		this.preloadRoute = (opts, builtLocation) => preloadClientRoute(this, opts, 0, builtLocation);
+		this.preloadRoute = async (opts) => {
+			const next = opts._builtLocation ?? this.buildLocation(opts);
+			let matches = this.matchRoutes(next, {
+				throwOnError: true,
+				preload: true,
+				dest: opts
+			});
+			const activeMatchIds = /* @__PURE__ */ new Set([...this.stores.matchesId.get(), ...this.stores.pendingIds.get()]);
+			const loadedMatchIds = /* @__PURE__ */ new Set([...activeMatchIds, ...this.stores.cachedIds.get()]);
+			const matchesToCache = matches.filter((match) => !loadedMatchIds.has(match.id));
+			if (matchesToCache.length) {
+				const cachedMatches = this.stores.cachedMatches.get();
+				this.stores.setCached([...cachedMatches, ...matchesToCache]);
+			}
+			try {
+				matches = await loadMatches({
+					router: this,
+					matches,
+					location: next,
+					preload: true,
+					updateMatch: (id, updater) => {
+						if (activeMatchIds.has(id)) matches = matches.map((d) => d.id === id ? updater(d) : d);
+						else this.updateMatch(id, updater);
+					}
+				});
+				return matches;
+			} catch (err) {
+				if (isRedirect(err)) {
+					if (err.options.reloadDocument) return;
+					return await this.preloadRoute({
+						...err.options,
+						_fromLocation: next
+					});
+				}
+				if (!isNotFound(err)) console.error(err);
+				return;
+			}
+		};
 		this.matchRoute = (location, opts) => {
 			const matchLocation = {
 				...location,
@@ -2057,9 +3094,8 @@ var RouterCore = class {
 				leaveParams: true
 			};
 			const next = this.buildLocation(matchLocation);
-			const isPending = this.stores.status.get() === "pending";
-			if (opts?.pending && !isPending) return false;
-			const baseLocation = opts?.pending ?? !isPending ? this.latestLocation : this.stores.resolvedLocation.get() || this.stores.location.get();
+			if (opts?.pending && this.stores.status.get() !== "pending") return false;
+			const baseLocation = (opts?.pending === void 0 ? !this.stores.isLoading.get() : opts.pending) ? this.latestLocation : this.stores.resolvedLocation.get() || this.stores.location.get();
 			const match = findSingleMatch(next.pathname, opts?.caseSensitive ?? false, opts?.fuzzy ?? false, baseLocation.pathname, this.processedTree);
 			if (!match) return false;
 			if (location.params) {
@@ -2067,6 +3103,9 @@ var RouterCore = class {
 			}
 			if (opts?.includeSearch ?? true) return deepEqual(baseLocation.search, next.search, { partial: true }) ? match.rawParams : false;
 			return match.rawParams;
+		};
+		this.hasNotFoundMatch = () => {
+			return this.stores.matches.get().some((d) => d.status === "notFound" || d.globalNotFound);
 		};
 		this.getStoreConfig = getStoreConfig;
 		this.update({
@@ -2081,9 +3120,13 @@ var RouterCore = class {
 			parseSearch: options.parseSearch ?? defaultParseSearch,
 			protocolAllowlist: options.protocolAllowlist ?? DEFAULT_PROTOCOL_ALLOWLIST
 		});
+		if (typeof document !== "undefined") self.__TSR_ROUTER__ = this;
 	}
 	isShell() {
 		return !!this.options.isShell;
+	}
+	isPrerendering() {
+		return !!this.options.isPrerendering;
 	}
 	get state() {
 		return this.stores.__store.get();
@@ -2106,20 +3149,23 @@ var RouterCore = class {
 		}
 		return branch;
 	}
+	get looseRoutesById() {
+		return this.routesById;
+	}
+	getParentContext(parentMatch) {
+		return !parentMatch?.id ? this.options.context ?? void 0 : parentMatch.context ?? this.options.context ?? void 0;
+	}
 	matchRoutesInternal(next, opts) {
-		const [initialMatchedRoutes, rawParams, foundRoute] = this.getMatchedRoutes(next.pathname);
-		let matchedRoutes = initialMatchedRoutes;
+		const matchedRoutesResult = this.getMatchedRoutes(next.pathname);
+		const { foundRoute, routeParams } = matchedRoutesResult;
+		let { matchedRoutes } = matchedRoutesResult;
 		let isGlobalNotFound = false;
-		if (foundRoute ? foundRoute.path !== "/" && rawParams["**"] : trimPathRight(next.pathname)) if (this.options.notFoundRoute) matchedRoutes = [...matchedRoutes, this.options.notFoundRoute];
+		if (foundRoute ? foundRoute.path !== "/" && routeParams["**"] : trimPathRight(next.pathname)) if (this.options.notFoundRoute) matchedRoutes = [...matchedRoutes, this.options.notFoundRoute];
 		else isGlobalNotFound = true;
-		const _notFoundRouteId = isGlobalNotFound ? findGlobalNotFoundRouteId(this.options.notFoundMode, matchedRoutes) : void 0;
+		const globalNotFoundRouteId = isGlobalNotFound ? findGlobalNotFoundRouteId(this.options.notFoundMode, matchedRoutes) : void 0;
 		const matches = new Array(matchedRoutes.length);
-		const committed = this._committed;
-		const previousAt = (route, index) => {
-			const match = committed[index];
-			return match?.routeId === route.id ? match : route === this.options.notFoundRoute ? committed.find((candidate) => candidate.routeId === route.id) : void 0;
-		};
-		let strictParams;
+		const previousActiveMatchesByRouteId = /* @__PURE__ */ new Map();
+		for (const store of this.stores.matchStores.values()) if (store.routeId) previousActiveMatchesByRouteId.set(store.routeId, store.get());
 		for (let index = 0; index < matchedRoutes.length; index++) {
 			const route = matchedRoutes[index];
 			const parentMatch = matches[index - 1];
@@ -2139,6 +3185,7 @@ var RouterCore = class {
 						...parentStrictSearch,
 						...strictSearch
 					};
+					searchError = void 0;
 				} catch (err) {
 					let searchParamError = err;
 					if (!(err instanceof SearchParamError)) searchParamError = new SearchParamError(err.message, { cause: err });
@@ -2148,26 +3195,19 @@ var RouterCore = class {
 					searchError = searchParamError;
 				}
 			}
-			let loaderDeps = "";
-			let loaderDepsHash = "";
-			try {
-				loaderDeps = route.options.loaderDeps?.({ search: preMatchSearch }) ?? "";
-				loaderDepsHash = loaderDeps ? JSON.stringify(loaderDeps) || "" : "";
-			} catch (cause) {
-				if (opts?.throwOnError) throw cause;
-				searchError ??= cause;
-			}
+			const loaderDeps = route.options.loaderDeps?.({ search: preMatchSearch }) ?? "";
+			const loaderDepsHash = loaderDeps ? JSON.stringify(loaderDeps) : "";
 			const { interpolatedPath, usedParams } = interpolatePath({
 				path: route.fullPath,
-				params: rawParams,
+				params: routeParams,
 				decoder: this.pathParamsDecoder,
 				server: this.isServer
 			});
 			const matchId = route.id + interpolatedPath + loaderDepsHash;
-			const previousMatch = previousAt(route, index);
-			const existingMatch = this._cache.get(matchId) ?? (previousMatch?.id === matchId ? previousMatch : void 0);
-			strictParams = existingMatch?._strictParams ?? Object.assign(usedParams, strictParams);
-			let paramsError;
+			const existingMatch = this.getMatch(matchId);
+			const previousMatch = previousActiveMatchesByRouteId.get(route.id);
+			const strictParams = existingMatch?._strictParams ?? usedParams;
+			let paramsError = void 0;
 			if (!existingMatch) try {
 				extractStrictParams(route, strictParams);
 			} catch (err) {
@@ -2175,88 +3215,132 @@ var RouterCore = class {
 				else paramsError = new PathParamError(err.message, { cause: err });
 				if (opts?.throwOnError) throw paramsError;
 			}
+			Object.assign(routeParams, strictParams);
 			const cause = previousMatch ? "stay" : "enter";
 			let match;
 			if (existingMatch) match = {
 				...existingMatch,
 				cause,
+				params: previousMatch?.params ?? routeParams,
+				_strictParams: strictParams,
 				search: previousMatch ? nullReplaceEqualDeep(previousMatch.search, preMatchSearch) : nullReplaceEqualDeep(existingMatch.search, preMatchSearch),
-				_strictSearch: strictMatchSearch,
-				searchError
+				_strictSearch: strictMatchSearch
 			};
 			else {
-				const status = routeNeedsLoad(route) ? "pending" : "success";
+				const status = route.options.loader || route.options.beforeLoad || route.lazyFn || routeNeedsPreload(route) ? "pending" : "success";
 				match = {
 					id: matchId,
 					ssr: void 0,
 					index,
 					routeId: route.id,
-					params: previousMatch?.params ?? strictParams,
+					params: previousMatch?.params ?? routeParams,
 					_strictParams: strictParams,
 					pathname: interpolatedPath,
 					updatedAt: Date.now(),
 					search: previousMatch ? nullReplaceEqualDeep(previousMatch.search, preMatchSearch) : preMatchSearch,
 					_strictSearch: strictMatchSearch,
-					searchError,
+					searchError: void 0,
 					status,
 					isFetching: false,
 					error: void 0,
 					paramsError,
+					__routeContext: void 0,
+					_nonReactive: { loadPromise: createControlledPromise() },
+					__beforeLoadContext: void 0,
 					context: {},
-					abortController: opts?._controller ?? new AbortController(),
+					abortController: new AbortController(),
+					fetchCount: 0,
 					cause,
 					loaderDeps: previousMatch ? replaceEqualDeep(previousMatch.loaderDeps, loaderDeps) : loaderDeps,
 					invalid: false,
 					preload: false,
+					links: void 0,
+					scripts: void 0,
+					headScripts: void 0,
+					meta: void 0,
 					staticData: route.options.staticData || {},
 					fullPath: route.fullPath
 				};
 			}
-			const _notFound = _notFoundRouteId === route.id;
-			if (match._notFound && !_notFound) match.error = void 0;
-			match._notFound = _notFound;
+			if (!opts?.preload) match.globalNotFound = globalNotFoundRouteId === route.id;
+			match.searchError = searchError;
+			const parentContext = this.getParentContext(parentMatch);
+			match.context = {
+				...parentContext,
+				...match.__routeContext,
+				...match.__beforeLoadContext
+			};
 			matches[index] = match;
 		}
 		for (let index = 0; index < matches.length; index++) {
 			const match = matches[index];
-			match.params = match.cause === "stay" ? nullReplaceEqualDeep(match.params, strictParams) : strictParams;
-			if (opts?._controller) match.context = {};
+			const route = this.looseRoutesById[match.routeId];
+			const existingMatch = this.getMatch(match.id);
+			const previousMatch = previousActiveMatchesByRouteId.get(match.routeId);
+			match.params = previousMatch ? nullReplaceEqualDeep(previousMatch.params, routeParams) : routeParams;
+			if (!existingMatch) {
+				const parentMatch = matches[index - 1];
+				const parentContext = this.getParentContext(parentMatch);
+				if (route.options.context) {
+					const contextFnContext = {
+						deps: match.loaderDeps,
+						params: match.params,
+						context: parentContext ?? {},
+						location: next,
+						navigate: (opts) => this.navigate({
+							...opts,
+							_fromLocation: next
+						}),
+						buildLocation: this.buildLocation,
+						cause: match.cause,
+						abortController: match.abortController,
+						preload: !!match.preload,
+						matches,
+						routeId: route.id
+					};
+					match.__routeContext = route.options.context(contextFnContext) ?? void 0;
+				}
+				match.context = {
+					...parentContext,
+					...match.__routeContext,
+					...match.__beforeLoadContext
+				};
+			}
 		}
 		return matches;
 	}
 	/**
 	* Lightweight route matching for buildLocation.
 	* Only computes fullPath, accumulated search, and params - skipping expensive
-	* operations like AbortController, loaderDeps, and full match objects.
+	* operations like AbortController, ControlledPromise, loaderDeps, and full match objects.
 	*/
 	matchRoutesLightweight(location) {
-		const lastRouteId = last(this.stores.ids.get());
-		const lastStateMatch = lastRouteId ? this.stores.byRoute.get(lastRouteId).get() : void 0;
-		const lastStateMatchId = lastStateMatch?.id;
+		const lastStateMatchId = last(this.stores.matchesId.get());
 		const cached = this.lightweightCache.get(location);
 		if (cached && cached[0] === lastStateMatchId) return cached[1];
-		const [matchedRoutes, rawParams] = this.getMatchedRoutes(location.pathname);
+		const { matchedRoutes, routeParams } = this.getMatchedRoutes(location.pathname);
 		const lastRoute = last(matchedRoutes);
 		const accumulatedSearch = { ...location.search };
 		for (const route of matchedRoutes) try {
 			Object.assign(accumulatedSearch, validateSearch(route.options.validateSearch, accumulatedSearch));
 		} catch {}
+		const lastStateMatch = lastStateMatchId && this.stores.matchStores.get(lastStateMatchId)?.get();
 		const canReuseParams = lastStateMatch && lastStateMatch.routeId === lastRoute.id && lastStateMatch.pathname === location.pathname;
 		let params;
 		if (canReuseParams) params = lastStateMatch.params;
 		else {
-			const strictParams = Object.assign(Object.create(null), rawParams);
+			const strictParams = Object.assign(Object.create(null), routeParams);
 			for (const route of matchedRoutes) try {
 				extractStrictParams(route, strictParams);
 			} catch {}
 			params = strictParams;
 		}
-		const result = [
+		const result = {
 			matchedRoutes,
-			lastRoute.fullPath,
-			accumulatedSearch,
+			fullPath: lastRoute.fullPath,
+			search: accumulatedSearch,
 			params
-		];
+		};
 		this.lightweightCache.set(location, [lastStateMatchId, result]);
 		return result;
 	}
@@ -2265,6 +3349,19 @@ var RouterCore = class {
 var SearchParamError = class extends Error {};
 /** Error thrown when path parameter parsing/validation fails. */
 var PathParamError = class extends Error {};
+/** Create an initial RouterState from a parsed location. */
+function getInitialRouterState(location) {
+	return {
+		loadedAt: 0,
+		isLoading: false,
+		isTransitioning: false,
+		status: "idle",
+		resolvedLocation: void 0,
+		location,
+		matches: [],
+		statusCode: 200
+	};
+}
 function validateSearch(validateSearch, input) {
 	if (validateSearch == null) return {};
 	if ("~standard" in validateSearch) {
@@ -2277,7 +3374,35 @@ function validateSearch(validateSearch, input) {
 	if (typeof validateSearch === "function") return validateSearch(input);
 	return {};
 }
-function applySearchMiddleware(search, dest, destRoutes, includeValidateSearch) {
+/**
+* Build the matched route chain and extract params for a pathname.
+* Falls back to the root route if no specific route is found.
+*/
+function getMatchedRoutes({ pathname, routesById, processedTree }) {
+	const routeParams = Object.create(null);
+	const trimmedPath = trimPathRight(pathname);
+	let foundRoute = void 0;
+	const match = findRouteMatch(trimmedPath, processedTree, true);
+	if (match) {
+		foundRoute = match.route;
+		Object.assign(routeParams, match.rawParams);
+	}
+	return {
+		matchedRoutes: match?.branch || [routesById["__root__"]],
+		routeParams,
+		foundRoute
+	};
+}
+/**
+* TODO: once caches are persisted across requests on the server,
+* we can cache the built middleware chain using `last(destRoutes)` as the key
+*/
+function applySearchMiddleware({ search, dest, destRoutes, _includeValidateSearch }) {
+	return buildMiddlewareChain(destRoutes)(search, dest, _includeValidateSearch ?? false);
+}
+function buildMiddlewareChain(destRoutes) {
+	let dest;
+	let includeValidateSearch;
 	const middlewares = [];
 	for (const route of destRoutes) {
 		const routeOptions = route.options;
@@ -2291,10 +3416,10 @@ function applySearchMiddleware(search, dest, destRoutes, includeValidateSearch) 
 			middlewares.push(legacyMiddleware);
 		}
 		const routeValidateSearch = routeOptions.validateSearch;
-		if (includeValidateSearch && routeValidateSearch) {
+		if (routeValidateSearch) {
 			const validate = ({ search, next, meta }) => {
 				const result = next(search);
-				try {
+				if (includeValidateSearch) try {
 					const validated = validateSearch(routeValidateSearch, result);
 					if (meta && validated) {
 						for (const key in validated) if (!(key in result)) (meta.defaulted ||= /* @__PURE__ */ new Map()).set(key, validated[key]);
@@ -2333,1326 +3458,32 @@ function applySearchMiddleware(search, dest, destRoutes, includeValidateSearch) 
 			meta
 		});
 	};
-	return applyNext(0, search);
+	return function middleware(search, nextDest, _includeValidateSearch) {
+		dest = nextDest;
+		includeValidateSearch = _includeValidateSearch;
+		return applyNext(0, search);
+	};
 }
 function findGlobalNotFoundRouteId(notFoundMode, routes) {
-	if (notFoundMode !== "root") {
-		let fallback;
-		for (let i = routes.length - 1; i >= 0; i--) {
-			const route = routes[i];
-			if (route.options.notFoundComponent) return route.id;
-			fallback ||= route.children && route.id;
-		}
-		if (fallback) return fallback;
+	if (notFoundMode !== "root") for (let i = routes.length - 1; i >= 0; i--) {
+		const route = routes[i];
+		if (route.children) return route.id;
 	}
 	return rootRouteId;
 }
-function resolveNextParams(spec, base) {
-	if (spec === false || spec === null) return Object.create(null);
-	if ((spec ?? true) === true) return base;
-	const next = Object.assign(Object.create(null), base);
-	return Object.assign(next, functionalUpdate(spec, next));
-}
 function extractStrictParams(route, accumulatedParams) {
 	const parseParams = route.options.params?.parse ?? route.options.parseParams;
-	if (parseParams) Object.assign(accumulatedParams, parseParams(accumulatedParams));
-}
-//#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/load-client.js
-function preloadComponent(route, type) {
-	return route.options[type]?.preload?.();
-}
-function loadComponents(route, onPendingReady) {
-	const component = preloadComponent(route, "component");
-	const pending = preloadComponent(route, "pendingComponent");
-	const pendingReady = onPendingReady && pending ? pending.then(onPendingReady) : pending;
-	if (onPendingReady && !pending) onPendingReady();
-	if (component && pendingReady) return Promise.all([component, pendingReady]).then(() => {});
-	return component ?? pendingReady;
-}
-function loadRouteChunk(route, componentType, onPendingReady) {
-	const afterLazy = () => componentType === false ? void 0 : componentType ? preloadComponent(route, componentType) : loadComponents(route, onPendingReady);
-	const current = route._lazy;
-	if (current) return current === true ? afterLazy() : current.then(afterLazy);
-	if (!route.lazyFn) return afterLazy();
-	const promise = route.lazyFn().then((lazyRoute) => {
-		{
-			const { id: _id, ...options } = lazyRoute.options;
-			Object.assign(route.options, options);
-			route._lazy = true;
-		}
-	}, (error) => {
-		route._lazy = void 0;
-		throw error;
-	});
-	route._lazy = promise;
-	return promise.then(afterLazy);
-}
-/** Return the structural lane through the first terminal render boundary. */
-function _getRenderedMatches(matches) {
-	const end = matches.findIndex((match) => match.status !== "success" || match._notFound) + 1;
-	return end && end < matches.length ? matches.slice(0, end) : matches;
-}
-/** Return the lane whose document assets belong to the current presentation. */
-function _getAssetMatches(matches) {
-	let end = matches.length;
-	for (let index = 0; index < end; index++) {
-		const match = matches[index];
-		if (match._assetEnd !== void 0) {
-			end = Math.min(end, Math.max(index + 1, match._assetEnd));
-			continue;
-		}
-		if (match.status !== "success" || match._notFound) {
-			end = index + 1;
-			break;
-		}
-	}
-	return end < matches.length ? matches.slice(0, end) : matches;
-}
-var SUCCESS$1 = 0;
-var ERROR$1 = 1;
-var NOT_FOUND$1 = 2;
-var REDIRECTED$1 = 3;
-var CANCELED_OUTCOME = [4];
-function isControl(result) {
-	return typeof result[0] === "number";
-}
-function waitFor$1(value, signal) {
-	if (signal.aborted) return Promise.race([Promise.reject(signal), value]);
-	return new Promise((resolve, reject) => {
-		const abort = () => reject(signal);
-		signal.addEventListener("abort", abort, { once: true });
-		Promise.resolve(value).then(resolve, reject).finally(() => signal.removeEventListener("abort", abort));
-	});
-}
-function getRoute$1(router, match) {
-	return router.routesById[match.routeId];
-}
-function normalize$1(value, rejected, routeId) {
-	if (isRedirect(value)) return [REDIRECTED$1, value];
-	if (isNotFound(value)) {
-		value.routeId ||= routeId;
-		return [NOT_FOUND$1, value];
-	}
-	if (rejected && typeof value?.then === "function") value = new Error("A Promise was thrown", { cause: value });
-	return rejected ? [ERROR$1, value] : [SUCCESS$1, value];
-}
-function normalizeError$1(route, cause) {
-	let outcome = normalize$1(cause, true, route.id);
-	if (outcome[0] !== ERROR$1) return outcome;
-	try {
-		route.options.onError?.(outcome[1]);
-	} catch (onErrorCause) {
-		outcome = normalize$1(onErrorCause, true, route.id);
-	}
-	return outcome;
-}
-function normalizeLaneError(router, lane, route, cause, options) {
-	if (options[0].signal.aborted) return CANCELED_OUTCOME;
-	return materializeRedirect$1(router, lane, route, normalizeError$1(route, cause), options);
-}
-async function contextualize$1(router, lane, options, end, planSuccessfulLane, retainedEnd) {
-	const [location, matches] = lane;
-	const signal = options[0].signal;
-	const preload = !!options[3];
-	for (let index = options[6] ?? 0; index < end; index++) {
-		const match = matches[index];
-		const route = getRoute$1(router, match);
-		match.abortController = options[0];
-		const parentContext = matches[index - 1]?.context ?? router.options.context ?? {};
-		const common = {
-			params: match.params,
-			location,
-			navigate: (opts) => router.navigate({
-				...opts,
-				_fromLocation: location
-			}),
-			buildLocation: router.buildLocation,
-			cause: preload ? "preload" : match.cause,
-			abortController: options[0],
-			preload,
-			matches,
-			routeId: route.id
-		};
-		let context = parentContext;
-		try {
-			let routeContext = match._ctx;
-			if (!routeContext && route.options.context) routeContext = match._ctx = route.options.context({
-				...common,
-				deps: match.loaderDeps,
-				context: parentContext
-			}) || {};
-			context = {
-				...parentContext,
-				...routeContext
-			};
-			match.context = context;
-		} catch (cause) {
-			releaseFlight(router, match);
-			return [index, normalizeLaneError(router, lane, route, cause, options)];
-		}
-		if (signal.aborted) return [index, CANCELED_OUTCOME];
-		const validationError = match.paramsError ?? match.searchError;
-		if (validationError !== void 0) {
-			releaseFlight(router, match);
-			return [index, normalizeLaneError(router, lane, route, validationError, options)];
-		}
-		const beforeLoad = route.options.beforeLoad;
-		if (!beforeLoad) continue;
-		const beforeLoadContext = {
-			...common,
-			search: match.search,
-			context,
-			...router.options.additionalContext
-		};
-		const previousStatus = match.status;
-		if (index >= retainedEnd) {
-			match.status = "pending";
-			options[7]?.();
-		}
-		try {
-			setFetching(router, match, "beforeLoad", options[0]);
-			const result = await waitFor$1(beforeLoad(beforeLoadContext), signal);
-			if (signal.aborted) return [index, CANCELED_OUTCOME];
-			const outcome = materializeRedirect$1(router, lane, route, normalize$1(result, false, route.id), options);
-			if (outcome[0] !== SUCCESS$1) {
-				releaseFlight(router, match);
-				return [index, outcome];
-			}
-			match.context = {
-				...context,
-				...result
-			};
-		} catch (cause) {
-			releaseFlight(router, match);
-			return [index, normalizeLaneError(router, lane, route, cause, options)];
-		} finally {
-			if (match.status === "pending") match.status = previousStatus;
-			setFetching(router, match, false, options[0]);
-		}
-	}
-	planSuccessfulLane();
-}
-function releaseOwnedFlight(router, match, flight) {
-	if (!flight || --flight[2]) return;
-	if (router._flights?.get(match.id) === flight) {
-		const current = router._tx;
-		if (current && !current[0].signal.aborted && !current[3].includes(match) && current[3].some((candidate) => candidate.id === match.id) && current[3].some((candidate) => candidate.isFetching === "beforeLoad")) return;
-		router._flights.delete(match.id);
-	}
-	return flight[1];
-}
-function releaseFlight(router, match) {
-	const flight = match._flight;
-	match._flight = void 0;
-	releaseOwnedFlight(router, match, flight)?.abort();
-}
-/**
-* Not passing in a `next` ownership recipient
-* is equivalent to discarding the match resources
-*/
-function transferMatchResources(router, previous, next, deferSameIdFlight) {
-	const abort = [];
-	for (const match of previous) if (!next?.includes(match)) {
-		const flight = match._flight;
-		match._flight = void 0;
-		if (deferSameIdFlight && flight?.[2] === 1 && router._flights?.get(match.id) === flight && next?.some((candidate) => candidate.id === match.id)) flight[2] = 0;
-		else {
-			const controller = releaseOwnedFlight(router, match, flight);
-			if (controller) abort.push(controller);
-		}
-	}
-	for (const controller of abort) controller.abort();
-}
-function acquireMatchResources(matches) {
-	for (const match of matches) {
-		const flight = match._flight;
-		if (flight) flight[2]++;
-	}
-}
-function setFetching(router, match, value, owner) {
-	match.isFetching = value;
-	if (owner && router._tx?.[0] !== owner) return;
-	const store = router.stores.byRoute.get(match.routeId);
-	const presented = store?.get();
-	if (presented?.id === match.id) store.set({
-		...presented,
-		isFetching: value
-	});
-}
-function getLoaderContext$1(router, lane, match, route, controller, parentMatchPromise, preload) {
-	const location = lane[0];
-	return {
-		params: match.params,
-		location,
-		navigate: (opts) => router.navigate({
-			...opts,
-			_fromLocation: location
-		}),
-		cause: preload ? "preload" : match.cause,
-		abortController: controller,
-		preload,
-		deps: match.loaderDeps,
-		parentMatchPromise,
-		context: match.context,
-		route,
-		...router.options.additionalContext
-	};
-}
-async function loadResource(router, lane, match, route, loader, parentMatchPromise, options) {
-	const owner = options[0];
-	const signal = owner.signal;
-	if (signal.aborted) return CANCELED_OUTCOME;
-	if (!loader) return [SUCCESS$1, void 0];
-	let flight = match._flight;
-	setFetching(router, match, "loader", owner);
-	try {
-		if (!flight) {
-			const controller = new AbortController();
-			flight = [
-				Promise.resolve().then(() => loader(getLoaderContext$1(router, lane, match, route, controller, parentMatchPromise, !!options[3]))).then((value) => normalize$1(value, false, route.id), (cause) => normalize$1(cause, true, route.id)).then((result) => {
-					if (result[0] !== SUCCESS$1 && router._flights?.get(match.id) === flight) {
-						router._flights.delete(match.id);
-						if (!flight[2]) controller.abort();
-					}
-					return result[0] === ERROR$1 && flight[2] ? normalizeError$1(route, result[1]) : result;
-				}),
-				controller,
-				1
-			];
-			(router._flights ??= /* @__PURE__ */ new Map()).set(match.id, flight);
-		}
-		match._flight = flight;
-		match.abortController = flight[1];
-		return materializeRedirect$1(router, lane, route, await waitFor$1(flight[0], signal), options);
-	} catch (cause) {
-		if (cause !== signal || !signal.aborted) throw cause;
-		releaseFlight(router, match);
-		return CANCELED_OUTCOME;
-	} finally {
-		setFetching(router, match, false, owner);
-	}
-}
-function settleInto(match, result, preload) {
-	if (result[0] === SUCCESS$1) {
-		match.loaderData = result[1];
-		match.error = void 0;
-		match.status = "success";
-		match.invalid = false;
-		match.updatedAt = Date.now();
-		match.preload = preload;
-	} else if (result[0] !== REDIRECTED$1) {
-		match.status = "success";
-		match.error = void 0;
-		match.invalid = true;
-	}
-}
-function cacheLoaderMatch(router, match, planned) {
-	const current = router._cache.get(match.id);
-	if (current !== planned || router._committed.some((candidate) => candidate.id === match.id && candidate._flight === match._flight)) return;
-	const cached = {
-		...match,
-		_notFound: void 0,
-		context: {}
-	};
-	if (cached._flight) cached._flight[2]++;
-	router._cache.set(match.id, cached);
-	if (current) releaseFlight(router, current);
-}
-function getParentSnapshot(match, outcome) {
-	if (outcome[0] === ERROR$1 || outcome[0] === NOT_FOUND$1) return {
-		...match,
-		status: outcome[0] === ERROR$1 ? "error" : "notFound",
-		error: outcome[1],
-		_flight: void 0
-	};
-	return match;
-}
-function createLoaderTask$1(router, lane, index, tasks, semanticParent, options, retainedEnd) {
-	const match = lane[1][index];
-	const route = getRoute$1(router, match);
-	const preload = !!options[3];
-	const plannedCacheMatch = router._cache.get(match.id);
-	let configured;
-	let reload = false;
-	let reloadFailure;
-	try {
-		if (match.status === "success") {
-			configured = route.options.shouldReload;
-			if (typeof configured === "function") configured = configured(getLoaderContext$1(router, lane, match, route, options[0], semanticParent, preload));
-			if (options[0].signal.aborted) reloadFailure = CANCELED_OUTCOME;
-		}
-		if (!reloadFailure) if (match.status !== "success") reload = true;
-		else {
-			const staleAge = options[3] || match.preload ? route.options.preloadStaleTime ?? router.options.defaultPreloadStaleTime ?? 3e4 : route.options.staleTime ?? router.options.defaultStaleTime ?? 0;
-			reload = !!(match.invalid || configured || configured === void 0 && Date.now() - match.updatedAt >= staleAge && (options[5] || match.cause === "enter" || options[2].some((candidate) => candidate.routeId === match.routeId && candidate.id !== match.id)));
-		}
-	} catch (cause) {
-		match.invalid = true;
-		releaseFlight(router, match);
-		reloadFailure = normalizeLaneError(router, lane, route, cause, options);
-	}
-	const routeLoader = route.options.loader;
-	const loader = typeof routeLoader === "function" ? routeLoader : routeLoader?.handler;
-	let donor = (!preload || route.options.preload !== false) && routeLoader && true ? router._flights?.get(match.id) : void 0;
-	if (donor === match._flight || reloadFailure) donor = void 0;
-	else if (donor && !reload && !preload && configured === void 0) reload = true;
-	else if (!reload) donor = void 0;
-	const background = !!(routeLoader && reload && match.status === "success" && !preload && !options[4] && ((typeof routeLoader === "function" ? void 0 : routeLoader?.staleReloadMode) ?? router.options.defaultStaleReloadMode) !== "blocking");
-	const loaded = reload && (!preload || route.options.preload !== false);
-	const blocking = loaded && !background && (match.status !== "success" || !!routeLoader);
-	const onReady = index >= retainedEnd ? options[7] : void 0;
-	const onLazyReady = route.lazyFn && route._lazy !== true ? onReady : void 0;
-	if (loaded && !routeLoader) {
-		match.invalid = false;
-		match.updatedAt = Date.now();
-	}
-	if (donor) donor[2]++;
-	if (blocking) {
-		const acceptedFlight = match._flight;
-		match._flight = donor;
-		releaseOwnedFlight(router, match, acceptedFlight)?.abort();
-		if (index >= retainedEnd) match.status = "pending";
-		onReady?.();
-	}
-	if (!loaded) match.isFetching = false;
-	const outcome = (reloadFailure ? Promise.resolve(reloadFailure) : !blocking ? Promise.resolve([SUCCESS$1, match.loaderData]) : loadResource(router, lane, match, route, loader, semanticParent, options)).then((result) => {
-		if (blocking) {
-			settleInto(match, result, preload);
-			if (result[0] === SUCCESS$1) {
-				if (routeLoader && !options[0].signal.aborted) cacheLoaderMatch(router, match, plannedCacheMatch);
-				if (index >= retainedEnd) match.status = "pending";
-			}
-		}
-		return result;
-	});
-	const chunkFailure = waitFor$1(Promise.resolve().then(() => loadRouteChunk(route, void 0, onLazyReady)), options[0].signal).then(() => void 0, (cause) => lane[1].some((candidate, candidateIndex) => candidateIndex <= index && (candidate.status === "error" || candidate.status === "notFound" || candidate._notFound)) ? void 0 : [index, normalizeLaneError(router, lane, route, cause, options)]).then((failure) => outcome.then((result) => {
-		if (blocking && !failure && result[0] === SUCCESS$1 && match.status === "pending" && !options[0].signal.aborted) {
-			match.status = "success";
-			onReady?.();
-		}
-		return failure;
-	}));
-	tasks.push([
-		index,
-		outcome,
-		chunkFailure
-	]);
-	if (!background) return outcome.then((result) => getParentSnapshot(match, result));
-	const candidate = {
-		...match,
-		status: "pending",
-		preload: false,
-		_flight: donor
-	};
-	match.invalid = false;
-	match.isFetching = "loader";
-	const backgroundOutcome = loadResource(router, lane, candidate, route, loader, semanticParent, options).then((result) => {
-		match.isFetching = false;
-		settleInto(candidate, result, false);
-		return result;
-	});
-	(lane[2] ??= []).push([
-		index,
-		backgroundOutcome,
-		chunkFailure,
-		candidate
-	]);
-	return backgroundOutcome.then((result) => getParentSnapshot(candidate, result));
-}
-async function getNotFoundBoundary$1(router, matches, indexed, signal, fallback = 0) {
-	const cause = indexed?.[1][1];
-	let index = cause?.routeId ? matches.findIndex((match) => match.routeId === cause.routeId) : indexed?.[0] ?? matches.length - 1;
-	if (index < 0) index = 0;
-	for (let i = index; i >= 0; i--) {
-		const route = getRoute$1(router, matches[i]);
-		try {
-			const loading = loadRouteChunk(route, false);
-			if (loading) await waitFor$1(loading, signal);
-		} catch (cause) {
-			if (cause === signal && signal.aborted) throw cause;
-		}
-		if (route.options.notFoundComponent) return i;
-	}
-	return cause?.routeId ? index : fallback;
-}
-function discardBackground(router, lane) {
-	if (lane[2]) {
-		transferMatchResources(router, lane[2].map((task) => task[3]));
-		lane[2] = void 0;
-	}
-}
-async function settleTasks(tasks, serialFailure, redirectTasks, gate) {
-	let loaderFailure;
-	try {
-		await Promise.all(tasks.map((task) => task[1].then(async (outcome) => {
-			const taskIndex = task[0];
-			if (gate && taskIndex >= await gate) return;
-			if (outcome[0] >= REDIRECTED$1) throw [taskIndex, outcome];
-			if (!loaderFailure && outcome[0] !== SUCCESS$1) {
-				loaderFailure = [taskIndex, outcome];
-				await Promise.all((redirectTasks ?? []).map((nextTask) => {
-					if (nextTask[0] <= taskIndex) return;
-					return nextTask[1].then((nextOutcome) => {
-						if (nextOutcome[0] === REDIRECTED$1) throw [nextTask[0], nextOutcome];
-					});
-				}));
-			}
-		})));
-	} catch (cause) {
-		return cause;
-	}
-	return serialFailure ?? loaderFailure;
-}
-function materializeRedirect$1(router, lane, route, outcome, options, failed) {
-	while (outcome[0] === REDIRECTED$1) {
-		const redirect = outcome[1];
-		if (redirect.options.reloadDocument ? options[3] : options[1] >= 20) return outcome;
-		try {
-			if (redirect.options.href && redirect.options.reloadDocument) {
-				router.resolveRedirect(redirect);
-				return outcome;
-			}
-			return [
-				REDIRECTED$1,
-				redirect,
-				router.buildLocation({
-					...redirect.options,
-					_fromLocation: lane[0],
-					_includeValidateSearch: true
-				})
-			];
-		} catch (cause) {
-			outcome = failed ? [ERROR$1, cause] : normalizeError$1(route, cause);
-			failed = true;
-		}
-	}
-	return outcome;
-}
-async function reduceLane(router, lane, tasks, controller, settlement, onReady) {
-	const matches = lane[1];
-	let failure = await settlement;
-	let redirectLimitExceeded = false;
-	const plannedBoundary = matches.findIndex((match) => match._notFound);
-	const boundaryOf = (found) => found[1][0] === NOT_FOUND$1 ? getNotFoundBoundary$1(router, matches, found, controller.signal) : found[0];
-	let readinessEnd = plannedBoundary < 0 ? matches.length : plannedBoundary;
-	if ((failure?.[1][0] ?? 0) >= REDIRECTED$1) readinessEnd = 0;
-	else if (failure) {
-		readinessEnd = failure[2] ??= await boundaryOf(failure);
-		for (const task of tasks) {
-			if (task[0] >= readinessEnd) break;
-			const outcome = await task[1];
-			if (outcome[0] !== SUCCESS$1 && outcome[0] < REDIRECTED$1 && !("loaderData" in matches[task[0]])) {
-				failure = [task[0], outcome];
-				readinessEnd = failure[2] = await boundaryOf(failure);
-				break;
-			}
-		}
-	}
-	for (const task of tasks) {
-		if (task[0] >= readinessEnd) break;
-		const chunkFailure = await task[2];
-		if (!chunkFailure) continue;
-		failure = chunkFailure;
-		break;
-	}
-	if ((failure?.[1][0] ?? 0) >= REDIRECTED$1) {
-		const outcome = failure[1];
-		if (outcome[0] !== REDIRECTED$1 || outcome[1].options.reloadDocument || outcome[2]) {
-			discardBackground(router, lane);
-			return outcome;
-		}
-		redirectLimitExceeded = true;
-		failure = [0, [ERROR$1, /* @__PURE__ */ new Error("Too many redirects")]];
-	}
-	const boundary = failure ? failure[2] ?? await boundaryOf(failure) : plannedBoundary;
-	if (boundary >= 0) {
-		const outcome = failure?.[1];
-		const kind = outcome?.[0];
-		const match = matches[boundary];
-		const cause = outcome?.[1];
-		const install = () => {
-			if (outcome) {
-				match._notFound = void 0;
-				if (kind === ERROR$1) match.status = "error";
-				else {
-					cause.routeId = match.routeId;
-					if (match.routeId === router.routeTree.id) {
-						match.status = "success";
-						match._notFound = true;
-					} else match.status = "notFound";
-				}
-				match.error = cause;
-				match.isFetching = false;
-			}
-		};
-		install();
-		if (!outcome) onReady?.();
-		const route = getRoute$1(router, match);
-		try {
-			await waitFor$1(outcome ? Promise.resolve().then(() => loadRouteChunk(route, kind === ERROR$1 ? "errorComponent" : "notFoundComponent")) : Promise.all([loadRouteChunk(route), loadRouteChunk(route, "notFoundComponent")]), controller.signal);
-		} catch (cause) {
-			if (cause === controller.signal && controller.signal.aborted) {
-				discardBackground(router, lane);
-				return CANCELED_OUTCOME;
-			}
-		}
-		if (!outcome) match.status = "success";
-		else if (redirectLimitExceeded) {
-			controller.abort();
-			await Promise.all([
-				...tasks.map((task) => task[1]),
-				...tasks.map((task) => task[2]),
-				...(lane[2] ?? []).map((task) => task[1])
-			]);
-			discardBackground(router, lane);
-			transferMatchResources(router, matches);
-			install();
-		}
-	}
-	return lane;
-}
-async function projectLane$1(router, lane, signal, start = 0, end = lane[1].length) {
-	const matches = lane[1];
-	for (let index = start; index < end; index++) {
-		const match = matches[index];
-		const routeOptions = getRoute$1(router, match).options;
-		if (routeOptions.head || routeOptions.scripts) try {
-			const context = {
-				ssr: router.options.ssr,
-				matches,
-				match,
-				params: match.params,
-				loaderData: match.loaderData
-			};
-			const [head, scripts] = await waitFor$1(Promise.all([routeOptions.head?.(context), routeOptions.scripts?.(context)]), signal);
-			match.meta = head?.meta;
-			match.links = head?.links;
-			match.headScripts = head?.scripts;
-			match.styles = head?.styles;
-			match.scripts = scripts;
-		} catch (cause) {
-			if (cause === signal && signal.aborted) break;
-			console.error(cause);
-		}
-		if (match.status !== "success" || match._notFound) break;
-	}
-	return lane;
-}
-async function executeClientLane(router, location, matches, options) {
-	const matched = [location, matches];
-	const signal = options[0].signal;
-	let reduced;
-	try {
-		const presented = router.stores.matches.get();
-		let plannedBoundary = matches.findIndex((match) => match._notFound);
-		if (router.options.notFoundMode !== "root" && plannedBoundary >= 0) {
-			const boundary = await getNotFoundBoundary$1(router, matched[1], void 0, signal, plannedBoundary);
-			if (boundary !== plannedBoundary) {
-				matches[plannedBoundary]._notFound = void 0;
-				matches[boundary]._notFound = true;
-			}
-			plannedBoundary = boundary;
-		}
-		let end = plannedBoundary < 0 ? matches.length : plannedBoundary + 1;
-		let retainedEnd = 0;
-		while (retainedEnd < end && retainedEnd !== plannedBoundary) {
-			const match = matches[retainedEnd];
-			const committed = options[2][retainedEnd];
-			const visible = presented[retainedEnd];
-			if (committed?.id !== match.id || committed.status !== "success" || committed._notFound || match.preload || visible?.id !== match.id || visible.status !== "success" || visible._notFound) break;
-			retainedEnd++;
-		}
-		const tasks = [];
-		const start = options[6] ?? 0;
-		let semanticParent = start ? Promise.resolve(matched[1][start - 1]) : void 0;
-		const planSuccessfulLane = () => {
-			for (let index = start; index < end; index++) {
-				if (signal.aborted) break;
-				semanticParent = createLoaderTask$1(router, matched, index, tasks, semanticParent, options, retainedEnd);
-			}
-		};
-		const failure = await contextualize$1(router, matched, options, end, planSuccessfulLane, retainedEnd);
-		if (failure) {
-			options[4] = true;
-			end = failure[0];
-			if (failure[1][0] === NOT_FOUND$1) {
-				const boundary = await getNotFoundBoundary$1(router, matched[1], failure, signal);
-				failure[2] = boundary;
-				end = Math.min(end, boundary + 1);
-			} else if (failure[1][0] >= REDIRECTED$1) end = 0;
-			planSuccessfulLane();
-		}
-		if (!signal.aborted && !options[3]) {
-			const abort = [];
-			for (const [id, flight] of router._flights ?? []) if (!flight[2]) {
-				router._flights.delete(id);
-				abort.push(flight[1]);
-			}
-			for (const controller of abort) controller.abort();
-		}
-		const reduction = reduceLane(router, matched, tasks, options[0], settleTasks(tasks, failure, matched[2]), options[7]);
-		if (matched[2]?.length) matched[3] = settleTasks(matched[2], void 0, void 0, reduction.then((foreground) => isControl(foreground) ? 0 : _getRenderedMatches(foreground[1]).length, () => 0));
-		reduced = await reduction;
-	} catch (cause) {
-		discardBackground(router, matched);
-		if (cause === signal && signal.aborted) return CANCELED_OUTCOME;
-		throw cause;
-	}
-	if (isControl(reduced)) return reduced;
-	return projectLane$1(router, reduced, signal, options[6] === reduced[1].length ? options[6] : 0);
-}
-async function preloadClientRoute(router, opts, redirects = 0, builtLocation) {
-	const location = builtLocation ?? router.buildLocation(opts);
-	const base = router._committed;
-	const controller = new AbortController();
-	let matches;
-	try {
-		matches = router.matchRoutes(location, { _controller: controller });
-		acquireMatchResources(matches);
-	} catch (cause) {
-		controller.abort();
-		if (!isNotFound(cause)) console.error(cause);
-		return;
-	}
-	(router._preloads ??= /* @__PURE__ */ new Map()).set(controller, matches);
-	let active;
-	try {
-		let result;
-		try {
-			result = await executeClientLane(router, location, matches, [
-				controller,
-				redirects,
-				base,
-				true
-			]);
-		} finally {
-			active = router._preloads.delete(controller);
-			transferMatchResources(router, matches);
-			controller.abort();
-		}
-		if (!isControl(result)) return result[1];
-		if (active && result[0] === REDIRECTED$1 && !result[1].options.reloadDocument) return preloadClientRoute(router, result[1].options, redirects + 1, result[2]);
-	} catch (cause) {
-		if (!isNotFound(cause)) console.error(cause);
+	if (parseParams) {
+		const result = parseParams(accumulatedParams);
+		if (result === false) throw new Error("Route params.parse returned false for a matched route");
+		Object.assign(accumulatedParams, result);
 	}
 }
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/await-signal.js
-function waitForReason(value, signal, onLate) {
-	const promise = Promise.resolve(value);
-	if (signal.aborted) {
-		if (!onLate) return Promise.race([Promise.reject(signal.reason), promise]);
-		promise.then(onLate, () => {});
-		return Promise.reject(signal.reason);
-	}
-	return new Promise((resolve, reject) => {
-		const abort = () => reject(signal.reason);
-		signal.addEventListener("abort", abort, { once: true });
-		promise.then((result) => {
-			if (signal.aborted) onLate?.(result);
-			else resolve(result);
-		}, reject).finally(() => signal.removeEventListener("abort", abort));
-	});
-}
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/link.js
+var preloadWarning = "Error preloading route! ☝️";
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/load-server.js
-var SUCCESS = 0;
-var ERROR = 1;
-var NOT_FOUND = 2;
-var REDIRECTED = 3;
-var SKIPPED = 4;
-function getRoute(router, match) {
-	return router.routesById[match.routeId];
-}
-function normalize(value, rejected) {
-	if (isRedirect(value)) return [REDIRECTED, value];
-	if (isNotFound(value)) return [NOT_FOUND, value];
-	if (rejected && typeof value?.then === "function") value = new Error("A Promise was thrown", { cause: value });
-	return rejected ? [ERROR, value] : [SUCCESS, value];
-}
-function normalizeError(router, lane, route, cause, signal, notify = true) {
-	signal?.throwIfAborted();
-	let outcome = normalize(cause, true);
-	if (outcome[0] !== ERROR) return materializeRedirect(router, lane, route, outcome, signal, notify);
-	try {
-		route.options.onError?.(outcome[1]);
-	} catch (onErrorCause) {
-		outcome = normalize(onErrorCause, true);
-	}
-	signal?.throwIfAborted();
-	return materializeRedirect(router, lane, route, outcome, signal, notify);
-}
-function materializeRedirect(router, lane, route, outcome, signal, notify = true) {
-	if (outcome[0] !== REDIRECTED) return outcome;
-	signal?.throwIfAborted();
-	try {
-		outcome[1].options._fromLocation = lane.location;
-		router.resolveRedirect(outcome[1]);
-		signal?.throwIfAborted();
-		return outcome;
-	} catch (cause) {
-		signal?.throwIfAborted();
-		return notify ? normalizeError(router, lane, route, cause, signal, false) : [ERROR, cause];
-	}
-}
-function maybe(value, cause) {
-	if (cause !== void 0) return {
-		status: "error",
-		error: cause
-	};
-	return {
-		status: "success",
-		value
-	};
-}
-function navigateFrom(router, location) {
-	return (options) => router.navigate({
-		...options,
-		_fromLocation: location
-	});
-}
-function waitFor(value, signal) {
-	return signal ? waitForReason(value, signal) : value;
-}
-async function resolveSsr(router, lane, index) {
-	const match = lane.matches[index];
-	const route = getRoute(router, match);
-	const parentSsr = lane.matches[index - 1]?.ssr;
-	if (router.isShell()) return route.id === rootRouteId;
-	if (parentSsr === false) return false;
-	const inherit = (value) => {
-		return value === true && parentSsr === "data-only" ? "data-only" : value;
-	};
-	const defaultSsr = router.options.defaultSsr ?? true;
-	const inheritedDefault = inherit(defaultSsr);
-	match.ssr = inheritedDefault;
-	const option = route.options.ssr;
-	if (option === void 0) return inheritedDefault;
-	if (typeof option !== "function") return inherit(option);
-	return inherit(await option({
-		search: maybe(match.search, match.searchError),
-		params: maybe(match.params, match.paramsError),
-		location: lane.location,
-		matches: lane.matches.map((candidate) => ({
-			index: candidate.index,
-			pathname: candidate.pathname,
-			fullPath: candidate.fullPath,
-			staticData: candidate.staticData,
-			id: candidate.id,
-			routeId: candidate.routeId,
-			search: maybe(candidate.search, candidate.searchError),
-			params: maybe(candidate.params, candidate.paramsError),
-			ssr: candidate.ssr
-		}))
-	}) ?? defaultSsr);
-}
-function stampNotFound(match, outcome) {
-	if (outcome[0] === NOT_FOUND && !outcome[1].routeId) outcome[1].routeId = match.routeId;
-	return outcome;
-}
-async function contextualize(router, lane, signal) {
-	const globalBoundary = lane.matches.findIndex((match) => match._notFound);
-	let end = globalBoundary < 0 ? lane.matches.length : globalBoundary + 1;
-	let failure;
-	let parentContext = { ...router.options.context ?? {} };
-	for (let index = 0; index < end; index++) {
-		const match = lane.matches[index];
-		const route = getRoute(router, match);
-		try {
-			match.ssr = await resolveSsr(router, lane, index);
-		} catch (cause) {
-			signal?.throwIfAborted();
-			failure = [index, stampNotFound(match, normalizeError(router, lane, route, cause, signal))];
-			end = index;
-		}
-		signal?.throwIfAborted();
-		if (failure?.[1][0] === REDIRECTED) break;
-		match.__beforeLoadContext = void 0;
-		let context = parentContext;
-		try {
-			let routeContext;
-			if (route.options.context) {
-				const routeContextOptions = {
-					deps: match.loaderDeps,
-					params: match.params,
-					context: parentContext,
-					location: lane.location,
-					navigate: navigateFrom(router, lane.location),
-					buildLocation: router.buildLocation,
-					cause: match.cause,
-					abortController: match.abortController,
-					preload: false,
-					matches: lane.matches,
-					routeId: route.id
-				};
-				routeContext = route.options.context(routeContextOptions) ?? void 0;
-			}
-			context = {
-				...parentContext,
-				...routeContext
-			};
-			match.context = context;
-		} catch (cause) {
-			signal?.throwIfAborted();
-			if (!failure) failure = [index, stampNotFound(match, normalizeError(router, lane, route, cause, signal))];
-			end = index;
-			break;
-		}
-		signal?.throwIfAborted();
-		if (failure) break;
-		const validationError = match.paramsError ?? match.searchError;
-		if (validationError !== void 0) {
-			failure = [index, stampNotFound(match, normalizeError(router, lane, route, validationError, signal))];
-			end = index;
-			break;
-		}
-		signal?.throwIfAborted();
-		if (match.ssr === false || !route.options.beforeLoad) {
-			parentContext = context;
-			continue;
-		}
-		const abortController = match.abortController;
-		const options = {
-			search: match.search,
-			abortController,
-			params: match.params,
-			preload: false,
-			context,
-			location: lane.location,
-			navigate: navigateFrom(router, lane.location),
-			buildLocation: router.buildLocation,
-			cause: match.cause,
-			matches: lane.matches,
-			routeId: route.id,
-			...router.options.additionalContext
-		};
-		try {
-			const beforeLoadContext = await route.options.beforeLoad(options);
-			signal?.throwIfAborted();
-			const outcome = stampNotFound(match, materializeRedirect(router, lane, route, normalize(beforeLoadContext, false), signal));
-			if (outcome[0] !== SUCCESS) {
-				failure = [index, outcome];
-				end = index;
-				break;
-			}
-			match.__beforeLoadContext = beforeLoadContext;
-			match.context = {
-				...context,
-				...beforeLoadContext
-			};
-			parentContext = match.context;
-		} catch (cause) {
-			signal?.throwIfAborted();
-			failure = [index, stampNotFound(match, normalizeError(router, lane, route, cause, signal))];
-			end = index;
-			break;
-		}
-	}
-	return {
-		location: lane.location,
-		matches: lane.matches,
-		end,
-		failure
-	};
-}
-function getLoaderContext(router, lane, match, route, index, tasks) {
-	return {
-		params: match.params,
-		deps: match.loaderDeps,
-		preload: false,
-		parentMatchPromise: tasks[index - 1]?.match,
-		abortController: match.abortController,
-		context: match.context,
-		location: lane.location,
-		navigate: navigateFrom(router, lane.location),
-		cause: match.cause,
-		route,
-		...router.options.additionalContext
-	};
-}
-function createLoaderTask(router, lane, index, tasks, signal) {
-	const match = lane.matches[index];
-	const route = getRoute(router, match);
-	let outcome;
-	if (match.ssr === false) outcome = Promise.resolve([SKIPPED]);
-	else {
-		const routeLoader = route.options.loader;
-		const loader = typeof routeLoader === "function" ? routeLoader : routeLoader?.handler;
-		if (!loader) outcome = Promise.resolve([SUCCESS, void 0]);
-		else outcome = Promise.resolve().then(() => loader(getLoaderContext(router, lane, match, route, index, tasks))).then((result) => normalize(result, false), (cause) => normalize(cause, true)).then((result) => {
-			if (signal?.aborted || match.abortController.signal.reason === lane) return [SKIPPED];
-			if (result[0] === ERROR) result = normalizeError(router, lane, route, result[1], signal);
-			else result = materializeRedirect(router, lane, route, result, signal);
-			return stampNotFound(match, result);
-		});
-	}
-	const parentMatch = outcome.then((result) => {
-		const snapshot = { ...match };
-		if (result[0] === SUCCESS) {
-			snapshot.loaderData = result[1];
-			snapshot.status = "success";
-			snapshot.error = void 0;
-			snapshot.invalid = false;
-			snapshot.isFetching = false;
-		} else if (result[0] === ERROR) {
-			snapshot.status = "error";
-			snapshot.error = result[1];
-		} else if (result[0] === NOT_FOUND) {
-			snapshot.status = "notFound";
-			snapshot.error = result[1];
-		}
-		return snapshot;
-	});
-	return {
-		index,
-		outcome,
-		match: parentMatch
-	};
-}
-async function getNotFoundBoundary(router, matches, indexed, signal, fallback = 0) {
-	const cause = indexed?.[1][1];
-	let index = cause?.routeId ? matches.findIndex((match) => match.routeId === cause.routeId) : indexed?.[0] ?? matches.length - 1;
-	if (index < 0) index = 0;
-	for (let candidate = index; candidate >= 0; candidate--) {
-		const route = getRoute(router, matches[candidate]);
-		try {
-			const loading = loadRouteChunk(route, false);
-			if (loading) await loading;
-		} catch {
-			signal?.throwIfAborted();
-		}
-		signal?.throwIfAborted();
-		if (route.options.notFoundComponent) return candidate;
-	}
-	return cause?.routeId ? index : fallback;
-}
-function abortMatches(matches, start = 0, reason) {
-	for (let index = start; index < matches.length; index++) matches[index].abortController.abort(reason);
-}
-async function applyFailure(router, lane, indexed, signal) {
-	if (!indexed) {
-		const boundary = lane.matches.findIndex((match) => match._notFound);
-		if (boundary >= 0) {
-			abortMatches(lane.matches, boundary + 1);
-			return {
-				status: 404,
-				boundary,
-				kind: NOT_FOUND
-			};
-		}
-		return { status: 200 };
-	}
-	const [index, outcome] = indexed;
-	if (outcome[0] === ERROR) {
-		const match = lane.matches[index];
-		match._notFound = void 0;
-		match.status = "error";
-		match.error = outcome[1];
-		match.isFetching = false;
-		abortMatches(lane.matches, index + 1);
-		return {
-			status: 500,
-			boundary: index,
-			kind: ERROR
-		};
-	}
-	const boundary = indexed[2] ?? await getNotFoundBoundary(router, lane.matches, indexed, signal);
-	const match = lane.matches[boundary];
-	const cause = outcome[1];
-	cause.routeId = match.routeId;
-	match._notFound = void 0;
-	if (match.routeId === router.routeTree.id) {
-		match.status = "success";
-		match._notFound = true;
-		match.error = cause;
-	} else {
-		match.status = "notFound";
-		match.error = cause;
-	}
-	match.isFetching = false;
-	abortMatches(lane.matches, boundary + 1);
-	return {
-		status: 404,
-		boundary,
-		kind: NOT_FOUND
-	};
-}
-async function loadNormalChunks(router, lane, end, signal) {
-	const chunks = [];
-	for (let index = 0; index < lane.matches.length; index++) {
-		const match = lane.matches[index];
-		if (index >= end || match.ssr !== true || match.status !== "success") continue;
-		const route = getRoute(router, match);
-		try {
-			const loading = loadRouteChunk(route);
-			if (loading) {
-				const chunk = loading.then(() => {
-					signal?.throwIfAborted();
-				}, (cause) => {
-					signal?.throwIfAborted();
-					return [index, stampNotFound(match, normalizeError(router, lane, route, cause, signal))];
-				});
-				chunk.catch(() => {});
-				chunks.push(chunk);
-			}
-		} catch (cause) {
-			signal?.throwIfAborted();
-			chunks.push([index, stampNotFound(match, normalizeError(router, lane, route, cause, signal))]);
-		}
-	}
-	for (const chunk of chunks) {
-		const indexed = Array.isArray(chunk) ? chunk : await chunk;
-		if (indexed) return indexed;
-	}
-}
-async function projectLane(router, lane, signal) {
-	for (const match of lane.matches) {
-		const routeOptions = getRoute(router, match).options;
-		if (routeOptions.head || routeOptions.scripts || routeOptions.headers) {
-			const context = {
-				ssr: router.options.ssr,
-				matches: lane.matches,
-				match,
-				params: match.params,
-				loaderData: match.loaderData
-			};
-			try {
-				const [head, scripts, headers] = await Promise.all([
-					routeOptions.head?.(context),
-					routeOptions.scripts?.(context),
-					routeOptions.headers?.(context)
-				]);
-				signal?.throwIfAborted();
-				match.meta = head?.meta;
-				match.links = head?.links;
-				match.headScripts = head?.scripts;
-				match.styles = head?.styles;
-				match.scripts = scripts;
-				match.headers = headers;
-			} catch (cause) {
-				signal?.throwIfAborted();
-				console.error(cause);
-			}
-		}
-		if (match.ssr === false || match.status !== "success" || match._notFound) break;
-	}
-}
-async function executeServerLane(router, location, matchedMatches, signal) {
-	const matched = {
-		location,
-		matches: matchedMatches.map((match) => ({
-			...match,
-			__beforeLoadContext: void 0,
-			context: {},
-			isFetching: false,
-			abortController: new AbortController()
-		}))
-	};
-	const abortLane = () => abortMatches(matched.matches, 0, signal?.reason);
-	if (signal?.aborted) {
-		abortLane();
-		signal.throwIfAborted();
-	}
-	signal?.addEventListener("abort", abortLane, { once: true });
-	try {
-		const plannedGlobalBoundary = matched.matches.findIndex((match) => match._notFound);
-		if (router.options.notFoundMode !== "root" && plannedGlobalBoundary >= 0) {
-			const boundary = await getNotFoundBoundary(router, matched.matches, void 0, signal, plannedGlobalBoundary);
-			if (boundary !== plannedGlobalBoundary) {
-				matched.matches[plannedGlobalBoundary]._notFound = void 0;
-				matched.matches[boundary]._notFound = true;
-			}
-		}
-		const lane = await contextualize(router, matched, signal);
-		signal?.throwIfAborted();
-		let loaderEnd = lane.end;
-		if (lane.failure?.[1][0] === REDIRECTED) loaderEnd = 0;
-		else if (lane.failure?.[1][0] === NOT_FOUND) {
-			lane.failure[2] = await getNotFoundBoundary(router, lane.matches, lane.failure, signal);
-			loaderEnd = Math.min(loaderEnd, lane.failure[2] + 1);
-		}
-		const tasks = [];
-		for (let index = 0; index < loaderEnd; index++) {
-			const task = createLoaderTask(router, lane, index, tasks, signal);
-			tasks.push(task);
-		}
-		let loaderFailure;
-		let control = lane.failure?.[1][0] === REDIRECTED ? lane.failure : void 0;
-		try {
-			await Promise.all(tasks.map((task) => task.outcome.then((loadedOutcome) => {
-				const match = lane.matches[task.index];
-				const outcome = loadedOutcome;
-				if (outcome[0] === SUCCESS) {
-					match.loaderData = outcome[1];
-					match.status = "success";
-					match.error = void 0;
-					match.invalid = false;
-					match.isFetching = false;
-					match.updatedAt = Date.now();
-				} else if (outcome[0] === REDIRECTED) {
-					control = [task.index, outcome];
-					throw control;
-				} else {
-					if (match.ssr !== false) {
-						match.status = "success";
-						match.error = void 0;
-						match.invalid = true;
-						match.isFetching = false;
-					}
-					if (!loaderFailure && outcome[0] !== SKIPPED) loaderFailure = [task.index, outcome];
-				}
-			})));
-		} catch (cause) {
-			if (!Array.isArray(cause)) throw cause;
-			control = cause;
-		}
-		signal?.throwIfAborted();
-		if (control?.[1][0] === REDIRECTED) {
-			abortMatches(lane.matches, 0, lane);
-			return {
-				type: "redirect",
-				redirect: control[1][1]
-			};
-		}
-		let failure = lane.failure ?? loaderFailure;
-		const plannedBoundary = lane.matches.findIndex((match) => match._notFound);
-		let readinessEnd;
-		if (failure) {
-			const outcomeEnd = failure[2] ??= failure[1][0] === NOT_FOUND ? await getNotFoundBoundary(router, lane.matches, failure, signal) : failure[0];
-			for (const task of tasks) {
-				if (task.index >= outcomeEnd) break;
-				const outcome = await task.outcome;
-				if (outcome[0] !== SUCCESS && outcome[0] < REDIRECTED && !("loaderData" in lane.matches[task.index])) {
-					failure = [task.index, outcome];
-					failure[2] = outcome[0] === NOT_FOUND ? await getNotFoundBoundary(router, lane.matches, failure, signal) : task.index;
-					break;
-				}
-			}
-			readinessEnd = failure[2];
-		} else readinessEnd = plannedBoundary < 0 ? lane.matches.length : plannedBoundary;
-		const requiredFailure = await loadNormalChunks(router, lane, readinessEnd, signal);
-		signal?.throwIfAborted();
-		if (requiredFailure) {
-			if (requiredFailure[1][0] === REDIRECTED) {
-				abortMatches(lane.matches);
-				return {
-					type: "redirect",
-					redirect: requiredFailure[1][1]
-				};
-			}
-			failure = requiredFailure;
-		}
-		const terminal = await applyFailure(router, lane, failure, signal);
-		if (terminal.boundary !== void 0) {
-			const match = lane.matches[terminal.boundary];
-			if (match.ssr === true) {
-				const route = getRoute(router, match);
-				try {
-					if (terminal.kind === ERROR) await loadRouteChunk(route, "errorComponent");
-					else if (match._notFound) await Promise.all([loadRouteChunk(route), loadRouteChunk(route, "notFoundComponent")]);
-					else await loadRouteChunk(route, "notFoundComponent");
-				} catch {}
-				signal?.throwIfAborted();
-			}
-		}
-		signal?.throwIfAborted();
-		await projectLane(router, {
-			location: lane.location,
-			matches: lane.matches
-		}, signal);
-		signal?.throwIfAborted();
-		router.serverSsr?.onCleanup(abortLane);
-		return {
-			type: "render",
-			status: terminal.status,
-			matches: lane.matches
-		};
-	} finally {
-		signal?.removeEventListener("abort", abortLane);
-	}
-}
-async function loadServerRoute(router, opts) {
-	router.updateLatestLocation();
-	const next = router.latestLocation;
-	const previous = router._committed;
-	let result;
-	try {
-		const canonical = router.buildLocation({
-			to: next.pathname,
-			search: true,
-			params: true,
-			hash: true,
-			state: true,
-			_includeValidateSearch: true
-		});
-		if (next.publicHref !== canonical.publicHref) throw redirect({ href: canonical.publicHref || "/" });
-		const changeInfo = getLocationChangeInfo(next, router.stores.resolvedLocation.get());
-		router.emit({
-			type: "onBeforeNavigate",
-			...changeInfo
-		});
-		router.emit({
-			type: "onBeforeLoad",
-			...changeInfo
-		});
-		opts?._signal?.throwIfAborted();
-		result = await waitFor(executeServerLane(router, next, router.matchRoutes(next), opts?._signal), opts?._signal);
-		opts?._signal?.throwIfAborted();
-	} catch (cause) {
-		opts?._signal?.throwIfAborted();
-		if (!isRedirect(cause)) throw cause;
-		cause.options._fromLocation = next;
-		result = {
-			type: "redirect",
-			redirect: router.resolveRedirect(cause)
-		};
-	}
-	router._serverResult = result;
-	router.batch(() => {
-		router.stores.location.set(next);
-		router.stores.status.set("idle");
-		if (result.type === "render") {
-			router.stores.setMatches(result.matches);
-			router.stores.resolvedLocation.set(next);
-		}
-	});
-	if (result.type === "render") {
-		router._committed = result.matches;
-		runRouteLifecycle(router, previous, result.matches);
-	}
-	router._commitPromise?.resolve();
-	router._commitPromise = void 0;
-}
-//#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/utils.js
-var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
-/**
-* React.use if available (React 19+), undefined otherwise.
-* Use dynamic lookup to avoid Webpack compilation errors with React 18.
-*/
-var reactUse = import_react.use;
-var useLayoutEffect = import_react.useEffect;
-/**
-* React hook to take a `React.ForwardedRef` and returns a `ref` that can be used on a DOM element.
-*
-* @param ref - The forwarded ref
-* @returns The inner ref returned by `useRef`
-* @example
-* ```tsx
-* const MyComponent = React.forwardRef((props, ref) => {
-*  const innerRef = useForwardedRef(ref)
-*  return <div ref={innerRef} />
-* })
-* ```
-*/
-function useForwardedRef(ref) {
-	const innerRef = import_react.useRef(null);
-	import_react.useImperativeHandle(ref, () => innerRef.current, []);
-	return innerRef;
-}
-//#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/manifest.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/manifest.js
 function getAssetCrossOrigin(assetCrossOrigin, kind) {
 	if (!assetCrossOrigin) return;
 	if (typeof assetCrossOrigin === "string") return assetCrossOrigin;
@@ -3694,9 +3525,6 @@ function appendUniqueUserTags(target, tags) {
 		target.push(tag);
 	}
 }
-function getStylesheetHref(asset) {
-	return resolveManifestCssLink(asset).href;
-}
 function resolveManifestCssLink(link) {
 	if (typeof link === "string") return {
 		href: link,
@@ -3704,17 +3532,8 @@ function resolveManifestCssLink(link) {
 	};
 	return link;
 }
-function createInlineCssStyleAsset(css) {
-	return {
-		attrs: { suppressHydrationWarning: true },
-		children: css
-	};
-}
-function createInlineCssPlaceholderAsset() {
-	return { attrs: { suppressHydrationWarning: true } };
-}
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/route.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/route.js
 var BaseRoute = class {
 	get to() {
 		return this._to;
@@ -3786,19 +3605,27 @@ var BaseRootRoute = class extends BaseRoute {
 	}
 };
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/ssr/constants.js
-var GLOBAL_TSR = "$_TSR";
-var TSR_SCRIPT_BARRIER_ID = "$tsr-stream-barrier";
-//#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/CatchBoundary.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/CatchBoundary.js
+var import_react_dom = /* @__PURE__ */ __toESM(require_react_dom(), 1);
 var import_jsx_runtime = require_jsx_runtime();
-var CatchBoundary = class extends import_react.Component {
+function CatchBoundary(props) {
+	const errorComponent = props.errorComponent ?? ErrorComponent;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CatchBoundaryImpl, {
+		getResetKey: props.getResetKey,
+		onCatch: props.onCatch,
+		children: ({ error, reset }) => {
+			if (error) return import_react.createElement(errorComponent, {
+				error,
+				reset
+			});
+			return props.children;
+		}
+	});
+}
+var CatchBoundaryImpl = class extends import_react.Component {
 	constructor(..._args) {
 		super(..._args);
 		this.state = { error: null };
-		this.reset = () => {
-			this.setState({ error: null });
-		};
 	}
 	static getDerivedStateFromProps(props, state) {
 		const resetKey = props.getResetKey();
@@ -3811,16 +3638,19 @@ var CatchBoundary = class extends import_react.Component {
 	static getDerivedStateFromError(error) {
 		return { error };
 	}
+	reset() {
+		this.setState({ error: null });
+	}
 	componentDidCatch(error, errorInfo) {
-		this.props.onCatch?.(error, errorInfo);
+		if (this.props.onCatch) this.props.onCatch(error, errorInfo);
 	}
 	render() {
-		const error = this.state.error;
-		if (error) return import_react.createElement(this.props.errorComponent ?? ErrorComponent, {
-			error,
-			reset: this.reset
+		return this.props.children({
+			error: this.state.error,
+			reset: () => {
+				this.reset();
+			}
 		});
-		return this.props.children;
 	}
 };
 function ErrorComponent({ error }) {
@@ -3869,7 +3699,7 @@ function ErrorComponent({ error }) {
 	});
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/ClientOnly.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/ClientOnly.js
 /**
 * Render the children only after the JS has loaded client-side. Use an optional
 * fallback component if the JS is not yet loaded.
@@ -3888,7 +3718,7 @@ function ErrorComponent({ error }) {
 * ```
 */
 function ClientOnly({ children, fallback = null }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, { children: useHydrated() ? children : fallback });
+	return useHydrated() ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, { children }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, { children: fallback });
 }
 /**
 * Return a boolean indicating if the JS has been hydrated already.
@@ -3916,10 +3746,10 @@ function subscribe() {
 	return () => {};
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/routerContext.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/routerContext.js
 var routerContext = import_react.createContext(null);
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/useRouter.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/useRouter.js
 /**
 * Access the current TanStack Router instance from React context.
 * Must be used within a `RouterProvider`.
@@ -3934,11 +3764,11 @@ function useRouter(opts) {
 	return import_react.useContext(routerContext);
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/matchContext.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/matchContext.js
 var matchContext = import_react.createContext(void 0);
 var dummyMatchContext = import_react.createContext(void 0);
 //#endregion
-//#region node_modules/@tanstack/store/dist/esm/alien.js
+//#region node_modules/.pnpm/@tanstack+store@0.9.3/node_modules/@tanstack/store/dist/esm/alien.js
 var ReactiveFlags = /* @__PURE__ */ ((ReactiveFlags2) => {
 	ReactiveFlags2[ReactiveFlags2["None"] = 0] = "None";
 	ReactiveFlags2[ReactiveFlags2["Mutable"] = 1] = "Mutable";
@@ -4142,7 +3972,7 @@ function purgeDeps(sub) {
 	while (dep !== void 0) dep = unlink(dep, sub);
 }
 //#endregion
-//#region node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.js
+//#region node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.js
 /**
 * @license React
 * use-sync-external-store-shim.production.js
@@ -4202,12 +4032,12 @@ var require_use_sync_external_store_shim_production = /* @__PURE__ */ __commonJS
 	exports.useSyncExternalStore = void 0 !== React.useSyncExternalStore ? React.useSyncExternalStore : shim;
 }));
 //#endregion
-//#region node_modules/use-sync-external-store/shim/index.js
+//#region node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/shim/index.js
 var require_shim = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = require_use_sync_external_store_shim_production();
 }));
 //#endregion
-//#region node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.production.js
+//#region node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.production.js
 /**
 * @license React
 * use-sync-external-store-shim/with-selector.production.js
@@ -4278,29 +4108,62 @@ var require_with_selector_production = /* @__PURE__ */ __commonJSMin(((exports) 
 		return value;
 	};
 }));
-(/* @__PURE__ */ __commonJSMin(((exports, module) => {
+//#endregion
+//#region node_modules/.pnpm/@tanstack+react-store@0.9.3_de819ca0110a625e828ca59f92341daa/node_modules/@tanstack/react-store/dist/esm/useStore.js
+var import_with_selector = (/* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = require_with_selector_production();
 })))();
+function defaultCompare(a, b) {
+	return a === b;
+}
+function useStore(atom, selector, compare = defaultCompare) {
+	const subscribe = (0, import_react.useCallback)((handleStoreChange) => {
+		if (!atom) return () => {};
+		const { unsubscribe } = atom.subscribe(handleStoreChange);
+		return unsubscribe;
+	}, [atom]);
+	const boundGetSnapshot = (0, import_react.useCallback)(() => atom?.get(), [atom]);
+	return (0, import_with_selector.useSyncExternalStoreWithSelector)(subscribe, boundGetSnapshot, boundGetSnapshot, selector, compare);
+}
+//#endregion
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/useMatch.js
+var dummyStore = {
+	get() {},
+	subscribe() {
+		return { unsubscribe() {} };
+	}
+};
+function useStructuralSharing(opts, router) {
+	const previousResult = import_react.useRef();
+	return (slice) => {
+		const selected = opts?.select ? opts.select(slice) : slice;
+		if (opts?.structuralSharing ?? router.options.defaultStructuralSharing) return previousResult.current = replaceEqualDeep(previousResult.current, selected);
+		return selected;
+	};
+}
 /**
 * Read and select the nearest or targeted route match.
 * @link https://tanstack.com/router/latest/docs/framework/react/api/router/useMatchHook
 */
 function useMatch(opts) {
 	const router = useRouter();
-	const nearestRouteId = import_react.useContext(opts.from ? dummyMatchContext : matchContext);
-	const routeId = opts.from ?? nearestRouteId;
-	const matchStore = router.stores.getMatchStore(routeId);
+	const nearestMatchId = import_react.useContext(opts.from ? dummyMatchContext : matchContext);
+	const matchStore = opts.from ? router.stores.getRouteMatchStore(opts.from) : router.stores.matchStores.get(nearestMatchId);
 	{
-		const match = matchStore.get();
+		const match = matchStore?.get();
 		if (!match) {
 			if (opts.shouldThrow ?? true) invariant();
 			return;
 		}
 		return opts.select ? opts.select(match) : match;
 	}
+	const selector = useStructuralSharing(opts, router);
+	const matchSelection = useStore(matchStore ?? dummyStore, (match) => match ? selector(match) : dummyStore);
+	if (matchSelection !== dummyStore) return matchSelection;
+	if (opts.shouldThrow ?? true) invariant();
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/useLoaderData.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/useLoaderData.js
 /**
 * Read and select the current route's loader data with type‑safety.
 *
@@ -4323,7 +4186,7 @@ function useLoaderData(opts) {
 	});
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/useLoaderDeps.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/useLoaderDeps.js
 /**
 * Read and select the current route's loader dependencies object.
 *
@@ -4345,7 +4208,7 @@ function useLoaderDeps(opts) {
 	});
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/useParams.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/useParams.js
 /**
 * Access the current route's path parameters with type-safety.
 *
@@ -4371,7 +4234,7 @@ function useParams(opts) {
 	});
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/useSearch.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/useSearch.js
 /**
 * Read and select the current route's search parameters with type-safety.
 *
@@ -4396,7 +4259,7 @@ function useSearch(opts) {
 	});
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/useNavigate.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/useNavigate.js
 /**
 * Imperative navigation hook.
 *
@@ -4421,13 +4284,15 @@ function useNavigate(_defaultOpts) {
 	}, [_defaultOpts?.from, router]);
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/useRouteContext.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/useRouteContext.js
 function useRouteContext(opts) {
 	return useMatch({
 		...opts,
 		select: (match) => opts.select ? opts.select(match.context) : match.context
 	});
 }
+//#endregion
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/link.js
 /**
 * Build anchor-like props for declarative navigation and preloading.
 *
@@ -4563,6 +4428,215 @@ function useLinkProps(options, forwardedRef) {
 			...isActive && STATIC_ACTIVE_PROPS
 		};
 	}
+	const isHydrated = useHydrated();
+	const _options = import_react.useMemo(() => options, [
+		router,
+		options.from,
+		options._fromLocation,
+		options.hash,
+		options.to,
+		options.search,
+		options.params,
+		options.state,
+		options.mask,
+		options.unsafeRelative
+	]);
+	const currentLocation = useStore(router.stores.location, (l) => l, (prev, next) => prev.href === next.href);
+	const next = import_react.useMemo(() => {
+		const opts = {
+			_fromLocation: currentLocation,
+			..._options
+		};
+		return router.buildLocation(opts);
+	}, [
+		router,
+		currentLocation,
+		_options
+	]);
+	const hrefOptionPublicHref = next.maskedLocation ? next.maskedLocation.publicHref : next.publicHref;
+	const hrefOptionExternal = next.maskedLocation ? next.maskedLocation.external : next.external;
+	const hrefOption = import_react.useMemo(() => getHrefOption(hrefOptionPublicHref, hrefOptionExternal, router.history, disabled), [
+		disabled,
+		hrefOptionExternal,
+		hrefOptionPublicHref,
+		router.history
+	]);
+	const externalLink = import_react.useMemo(() => {
+		if (hrefOption?.external) {
+			if (isDangerousProtocol(hrefOption.href, router.protocolAllowlist)) return;
+			return hrefOption.href;
+		}
+		if (isSafeInternal(to)) return void 0;
+		if (typeof to !== "string" || to.indexOf(":") === -1) return void 0;
+		try {
+			new URL(to);
+			if (isDangerousProtocol(to, router.protocolAllowlist)) return;
+			return to;
+		} catch {}
+	}, [
+		to,
+		hrefOption,
+		router.protocolAllowlist
+	]);
+	const isActive = import_react.useMemo(() => {
+		if (externalLink) return false;
+		if (activeOptions?.exact) {
+			if (!exactPathTest(currentLocation.pathname, next.pathname, router.basepath)) return false;
+		} else {
+			const currentPathSplit = removeTrailingSlash(currentLocation.pathname, router.basepath);
+			const nextPathSplit = removeTrailingSlash(next.pathname, router.basepath);
+			if (!(currentPathSplit.startsWith(nextPathSplit) && (currentPathSplit.length === nextPathSplit.length || currentPathSplit[nextPathSplit.length] === "/"))) return false;
+		}
+		if (activeOptions?.includeSearch ?? true) {
+			if (!deepEqual(currentLocation.search, next.search, {
+				partial: !activeOptions?.exact,
+				ignoreUndefined: !activeOptions?.explicitUndefined
+			})) return false;
+		}
+		if (activeOptions?.includeHash) return isHydrated && currentLocation.hash === next.hash;
+		return true;
+	}, [
+		activeOptions?.exact,
+		activeOptions?.explicitUndefined,
+		activeOptions?.includeHash,
+		activeOptions?.includeSearch,
+		currentLocation,
+		externalLink,
+		isHydrated,
+		next.hash,
+		next.pathname,
+		next.search,
+		router.basepath
+	]);
+	const resolvedActiveProps = isActive ? functionalUpdate(activeProps, {}) ?? STATIC_ACTIVE_OBJECT : STATIC_EMPTY_OBJECT;
+	const resolvedInactiveProps = isActive ? STATIC_EMPTY_OBJECT : functionalUpdate(inactiveProps, {}) ?? STATIC_EMPTY_OBJECT;
+	const resolvedClassName = [
+		className,
+		resolvedActiveProps.className,
+		resolvedInactiveProps.className
+	].filter(Boolean).join(" ");
+	const resolvedStyle = (style || resolvedActiveProps.style || resolvedInactiveProps.style) && {
+		...style,
+		...resolvedActiveProps.style,
+		...resolvedInactiveProps.style
+	};
+	const [isTransitioning, setIsTransitioning] = import_react.useState(false);
+	const hasRenderFetched = import_react.useRef(false);
+	const preload = options.reloadDocument || externalLink ? false : userPreload ?? router.options.defaultPreload;
+	const preloadDelay = userPreloadDelay ?? router.options.defaultPreloadDelay ?? 0;
+	const doPreload = import_react.useCallback(() => {
+		router.preloadRoute({
+			..._options,
+			_builtLocation: next
+		}).catch((err) => {
+			console.warn(err);
+			console.warn(preloadWarning);
+		});
+	}, [
+		router,
+		_options,
+		next
+	]);
+	useIntersectionObserver(innerRef, import_react.useCallback((entry) => {
+		if (entry?.isIntersecting) doPreload();
+	}, [doPreload]), intersectionObserverOptions, { disabled: !!disabled || !(preload === "viewport") });
+	import_react.useEffect(() => {
+		if (hasRenderFetched.current) return;
+		if (!disabled && preload === "render") {
+			doPreload();
+			hasRenderFetched.current = true;
+		}
+	}, [
+		disabled,
+		doPreload,
+		preload
+	]);
+	const handleClick = (e) => {
+		const elementTarget = e.currentTarget.getAttribute("target");
+		const effectiveTarget = target !== void 0 ? target : elementTarget;
+		if (!disabled && !isCtrlEvent(e) && !e.defaultPrevented && (!effectiveTarget || effectiveTarget === "_self") && e.button === 0) {
+			e.preventDefault();
+			(0, import_react_dom.flushSync)(() => {
+				setIsTransitioning(true);
+			});
+			const unsub = router.subscribe("onResolved", () => {
+				unsub();
+				setIsTransitioning(false);
+			});
+			router.navigate({
+				..._options,
+				replace,
+				resetScroll,
+				hashScrollIntoView,
+				startTransition,
+				viewTransition,
+				ignoreBlocker
+			});
+		}
+	};
+	if (externalLink) return {
+		...propsSafeToSpread,
+		ref: innerRef,
+		href: externalLink,
+		...children && { children },
+		...target && { target },
+		...disabled && { disabled },
+		...style && { style },
+		...className && { className },
+		...onClick && { onClick },
+		...onBlur && { onBlur },
+		...onFocus && { onFocus },
+		...onMouseEnter && { onMouseEnter },
+		...onMouseLeave && { onMouseLeave },
+		...onTouchStart && { onTouchStart }
+	};
+	const enqueueIntentPreload = (e) => {
+		if (disabled || preload !== "intent") return;
+		if (!preloadDelay) {
+			doPreload();
+			return;
+		}
+		const eventTarget = e.currentTarget;
+		if (timeoutMap.has(eventTarget)) return;
+		const id = setTimeout(() => {
+			timeoutMap.delete(eventTarget);
+			doPreload();
+		}, preloadDelay);
+		timeoutMap.set(eventTarget, id);
+	};
+	const handleTouchStart = (_) => {
+		if (disabled || preload !== "intent") return;
+		doPreload();
+	};
+	const handleLeave = (e) => {
+		if (disabled || !preload || !preloadDelay) return;
+		const eventTarget = e.currentTarget;
+		const id = timeoutMap.get(eventTarget);
+		if (id) {
+			clearTimeout(id);
+			timeoutMap.delete(eventTarget);
+		}
+	};
+	return {
+		...propsSafeToSpread,
+		...resolvedActiveProps,
+		...resolvedInactiveProps,
+		href: hrefOption?.href,
+		ref: innerRef,
+		onClick: composeHandlers([onClick, handleClick]),
+		onBlur: composeHandlers([onBlur, handleLeave]),
+		onFocus: composeHandlers([onFocus, enqueueIntentPreload]),
+		onMouseEnter: composeHandlers([onMouseEnter, enqueueIntentPreload]),
+		onMouseLeave: composeHandlers([onMouseLeave, handleLeave]),
+		onTouchStart: composeHandlers([onTouchStart, handleTouchStart]),
+		disabled: !!disabled,
+		target,
+		...resolvedStyle && { style: resolvedStyle },
+		...resolvedClassName && { className: resolvedClassName },
+		...disabled && STATIC_DISABLED_PROPS,
+		...isActive && STATIC_ACTIVE_PROPS,
+		...isHydrated && isTransitioning && STATIC_TRANSITIONING_PROPS
+	};
 }
 var STATIC_EMPTY_OBJECT = {};
 var STATIC_ACTIVE_OBJECT = { className: "active" };
@@ -4573,6 +4647,16 @@ var STATIC_DISABLED_PROPS = {
 var STATIC_ACTIVE_PROPS = {
 	"data-status": "active",
 	"aria-current": "page"
+};
+var STATIC_TRANSITIONING_PROPS = { "data-transitioning": "transitioning" };
+var timeoutMap = /* @__PURE__ */ new WeakMap();
+var intersectionObserverOptions = { rootMargin: "100px" };
+var composeHandlers = (handlers) => (e) => {
+	for (const handler of handlers) {
+		if (!handler) continue;
+		if (e.defaultPrevented) return;
+		handler(e);
+	}
 };
 function getHrefOption(publicHref, external, history, disabled) {
 	if (disabled) return void 0;
@@ -4598,7 +4682,7 @@ function isSafeInternal(to) {
 *
 * Props:
 * - `preload`: Controls route preloading (eg. 'intent', 'render', 'viewport', true/false)
-* - `preloadDelay`: Delay in ms before preloading on focus, hover, or viewport entry
+* - `preloadDelay`: Delay in ms before preloading on hover
 * - `activeProps`/`inactiveProps`: Additional props merged when link is active/inactive
 * - `resetScroll`/`hashScrollIntoView`: Control scroll behavior on navigation
 * - `viewTransition`/`startTransition`: Use View Transitions/React transitions for navigation
@@ -4617,8 +4701,11 @@ var Link = import_react.forwardRef((props, ref) => {
 	}
 	return import_react.createElement(_asChild, linkProps, children);
 });
+function isCtrlEvent(e) {
+	return !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
+}
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/route.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/route.js
 var Route = class extends BaseRoute {
 	/**
 	* @deprecated Use the `createRoute` function instead.
@@ -4775,7 +4862,7 @@ function createRootRoute(options) {
 	return new RootRoute(options);
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/fileRoute.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/fileRoute.js
 /**
 * Creates a file-based Route factory for a given path.
 *
@@ -4788,14 +4875,25 @@ function createRootRoute(options) {
 * @link https://tanstack.com/router/latest/docs/framework/react/api/router/createFileRouteFunction
 */
 function createFileRoute(path) {
-	return (options) => {
-		const route = createRoute(options);
-		route.isRoot = false;
-		return route;
-	};
+	return new FileRoute(path, { silent: true }).createRoute;
 }
+/** 
+@deprecated It's no longer recommended to use the `FileRoute` class directly.
+Instead, use `createFileRoute('/path/to/file')(options)` to create a file route.
+*/
+var FileRoute = class {
+	constructor(path, _opts) {
+		this.path = path;
+		this.createRoute = (options) => {
+			const route = createRoute(options);
+			route.isRoot = false;
+			return route;
+		};
+		this.silent = _opts?.silent;
+	}
+};
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/lazyRouteComponent.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/lazyRouteComponent.js
 /**
 * Wrap a dynamic import to create a route component that supports
 * `.preload()` and friendly reload-on-module-missing behavior.
@@ -4809,23 +4907,31 @@ function lazyRouteComponent(importer, exportName) {
 	let loadPromise;
 	let comp;
 	let error;
+	let reload;
 	const load = () => {
-		if (!loadPromise) {
-			error = void 0;
-			loadPromise = importer().then((res) => {
-				comp = res[exportName ?? "default"];
-			}).catch((err) => {
-				loadPromise = void 0;
-				error = err;
-			});
-		}
+		if (!loadPromise) loadPromise = importer().then((res) => {
+			loadPromise = void 0;
+			comp = res[exportName ?? "default"];
+		}).catch((err) => {
+			error = err;
+			if (isModuleNotFoundError(error)) {
+				if (error instanceof Error && typeof window !== "undefined" && typeof sessionStorage !== "undefined") {
+					const storageKey = `tanstack_router_reload:${error.message}`;
+					if (!sessionStorage.getItem(storageKey)) {
+						sessionStorage.setItem(storageKey, "1");
+						reload = true;
+					}
+				}
+			}
+		});
 		return loadPromise;
 	};
 	const lazyComp = function Lazy(props) {
-		if (error) {
-			if (isModuleNotFoundError(error) && false);
-			throw error;
+		if (reload) {
+			window.location.reload();
+			throw new Promise(() => {});
 		}
+		if (error) throw error;
 		if (!comp) if (reactUse) reactUse(load());
 		else throw load();
 		return import_react.createElement(comp, props);
@@ -4834,7 +4940,7 @@ function lazyRouteComponent(importer, exportName) {
 	return lazyComp;
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/not-found.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/not-found.js
 function CatchNotFound(props) {
 	const router = useRouter();
 	{
@@ -4852,12 +4958,25 @@ function CatchNotFound(props) {
 			children: props.children
 		});
 	}
+	const resetKey = `not-found-${useStore(router.stores.location, (location) => location.pathname)}-${useStore(router.stores.status, (status) => status)}`;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CatchBoundary, {
+		getResetKey: () => resetKey,
+		onCatch: (error, errorInfo) => {
+			if (isNotFound(error)) props.onCatch?.(error, errorInfo);
+			else throw error;
+		},
+		errorComponent: ({ error }) => {
+			if (isNotFound(error)) return props.fallback?.(error);
+			else throw error;
+		},
+		children: props.children
+	});
 }
 function DefaultGlobalNotFound() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Not Found" });
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/ScriptOnce.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/ScriptOnce.js
 /**
 * Server-only helper to emit a script tag exactly once during SSR.
 */
@@ -4869,12 +4988,12 @@ function ScriptOnce({ children }) {
 	});
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/SafeFragment.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/SafeFragment.js
 function SafeFragment(props) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: props.children });
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/renderRouteNotFound.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/renderRouteNotFound.js
 /**
 * Renders a not found component for a route when no matching route is found.
 *
@@ -4891,10 +5010,10 @@ function renderRouteNotFound(router, route, data) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(route.options.notFoundComponent, { ...data });
 }
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/scroll-restoration-inline.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/scroll-restoration-inline.js
 var scroll_restoration_inline_default = "function(a,f){let l;try{l=JSON.parse(sessionStorage.getItem(a)||\"{}\")}catch{return}const n=l?.[f||history.state?.__TSR_key];let c=!1;for(const t in n){const e=n[t],o=e?.scrollX,s=e?.scrollY;if(Number.isFinite(o)&&Number.isFinite(s)){if(t===\"window\")scrollTo(o,s),c=!0;else if(t)try{const r=document.querySelector(t);r&&(r.scrollLeft=o,r.scrollTop=s)}catch{}}}if(c)return;const i=location.hash.slice(1);if(i){const t=history.state?.__hashScrollIntoViewOptions??!0;if(t){const e=document.getElementById(i);e&&e.scrollIntoView(t)}return}scrollTo(0,0)}";
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/scroll-restoration-script/server.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/scroll-restoration-script/server.js
 var defaultInlineScrollRestorationScript = `(${scroll_restoration_inline_default})(${escapeHtml(JSON.stringify(storageKey))})`;
 function getScrollRestorationScript(key) {
 	if (key === void 0) return defaultInlineScrollRestorationScript;
@@ -4910,72 +5029,147 @@ function getScrollRestorationScriptForRouter(router) {
 	return getScrollRestorationScript(userKey);
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/scroll-restoration.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/scroll-restoration.js
 function ScrollRestoration() {
 	const script = getScrollRestorationScriptForRouter(useRouter());
 	if (!script) return null;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScriptOnce, { children: script });
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/Match.js
-function renderPending(router, route) {
-	const PendingComponent = route?.options.pendingComponent ?? router.options.defaultPendingComponent;
-	if (!PendingComponent) return null;
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PendingComponent, {});
-}
-var canWrapInSuspense = (router, route, ssr) => !route.isRoot || route.options.shellComponent || route.options.wrapInSuspense || ssr === false || ssr === "data-only" || false;
-var Match = import_react.memo(function MatchImpl({ routeId }) {
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/Match.js
+var matchViewFieldsEqual = (a, b) => a.routeId === b.routeId && a._displayPending === b._displayPending;
+var Match = import_react.memo(function MatchImpl({ matchId }) {
 	const router = useRouter();
+	{
+		const match = router.stores.matchStores.get(matchId)?.get();
+		if (!match) invariant();
+		const routeId = match.routeId;
+		const parentRouteId = router.routesById[routeId].parentRoute?.id;
+		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MatchView, {
+			router,
+			matchId,
+			resetKey: router.stores.loadedAt.get(),
+			matchState: {
+				routeId,
+				ssr: match.ssr,
+				_displayPending: match._displayPending,
+				parentRouteId
+			}
+		});
+	}
+	const matchStore = router.stores.matchStores.get(matchId);
+	if (!matchStore) invariant();
+	const resetKey = useStore(router.stores.loadedAt, (loadedAt) => loadedAt);
+	const match = useStore(matchStore, (value) => value, matchViewFieldsEqual);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MatchView, {
 		router,
-		match: router.stores.byRoute.get(routeId).get()
+		matchId,
+		resetKey,
+		matchState: import_react.useMemo(() => {
+			const routeId = match.routeId;
+			const parentRouteId = router.routesById[routeId].parentRoute?.id;
+			return {
+				routeId,
+				ssr: match.ssr,
+				_displayPending: match._displayPending,
+				parentRouteId
+			};
+		}, [
+			match._displayPending,
+			match.routeId,
+			match.ssr,
+			router.routesById
+		])
 	});
 });
-function MatchView({ router, match }) {
-	const route = router.routesById[match.routeId];
-	const pendingElement = renderPending(router, route);
+function MatchView({ router, matchId, resetKey, matchState }) {
+	const route = router.routesById[matchState.routeId];
+	const PendingComponent = route.options.pendingComponent ?? router.options.defaultPendingComponent;
+	const pendingElement = PendingComponent ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PendingComponent, {}) : null;
 	const routeErrorComponent = route.options.errorComponent ?? router.options.defaultErrorComponent;
 	const routeOnCatch = route.options.onCatch ?? router.options.defaultOnCatch;
 	const routeNotFoundComponent = route.isRoot ? route.options.notFoundComponent ?? router.options.notFoundRoute?.options.component : route.options.notFoundComponent;
-	const resolvedNoSsr = match.ssr === false || match.ssr === "data-only";
-	const ResolvedSuspenseBoundary = canWrapInSuspense(router, route, match.ssr) && (route.options.wrapInSuspense ?? pendingElement ?? (route.options.errorComponent?.preload || resolvedNoSsr)) ? import_react.Suspense : SafeFragment;
+	const resolvedNoSsr = matchState.ssr === false || matchState.ssr === "data-only";
+	const ResolvedSuspenseBoundary = (!route.isRoot || route.options.wrapInSuspense || resolvedNoSsr) && (route.options.wrapInSuspense ?? PendingComponent ?? (route.options.errorComponent?.preload || resolvedNoSsr)) ? import_react.Suspense : SafeFragment;
 	const ResolvedCatchBoundary = routeErrorComponent ? CatchBoundary : SafeFragment;
 	const ResolvedNotFoundBoundary = routeNotFoundComponent ? CatchNotFound : SafeFragment;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(route.isRoot ? route.options.shellComponent ?? SafeFragment : SafeFragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(matchContext.Provider, {
-		value: match.routeId,
+		value: matchId,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResolvedSuspenseBoundary, {
 			fallback: pendingElement,
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResolvedCatchBoundary, {
-				getResetKey: () => match,
-				errorComponent: routeErrorComponent,
+				getResetKey: () => resetKey,
+				errorComponent: routeErrorComponent || ErrorComponent,
 				onCatch: (error, errorInfo) => {
 					if (isNotFound(error)) {
-						error.routeId ??= match.routeId;
+						error.routeId ??= matchState.routeId;
 						throw error;
 					}
 					routeOnCatch?.(error, errorInfo);
 				},
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResolvedNotFoundBoundary, {
 					fallback: (error) => {
-						error.routeId ??= match.routeId;
-						if (error.routeId !== match.routeId) throw error;
+						error.routeId ??= matchState.routeId;
+						if (!routeNotFoundComponent || error.routeId && error.routeId !== matchState.routeId || !error.routeId && !route.isRoot) throw error;
 						return import_react.createElement(routeNotFoundComponent, error);
 					},
-					children: resolvedNoSsr ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientOnly, {
+					children: resolvedNoSsr || matchState._displayPending ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientOnly, {
 						fallback: pendingElement,
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MatchInner, { match })
-					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MatchInner, { match })
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MatchInner, { matchId })
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MatchInner, { matchId })
 				})
 			})
 		})
-	}), route.parentRoute?.id === "__root__" && router.options.scrollRestoration ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollRestoration, {}) : null] });
+	}), matchState.parentRouteId === "__root__" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(OnRendered, {}), router.options.scrollRestoration && true ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollRestoration, {}) : null] }) : null] });
 }
-var MatchInner = import_react.memo(function MatchInnerImpl({ match }) {
+function OnRendered() {
+	useRouter();
+	return null;
+}
+var MatchInner = import_react.memo(function MatchInnerImpl({ matchId }) {
 	const router = useRouter();
+	const getMatchPromise = (match, key) => {
+		return router.getMatch(match.id)?._nonReactive[key] ?? match._nonReactive[key];
+	};
+	{
+		const match = router.stores.matchStores.get(matchId)?.get();
+		if (!match) invariant();
+		const routeId = match.routeId;
+		const route = router.routesById[routeId];
+		const remountDeps = (router.routesById[routeId].options.remountDeps ?? router.options.defaultRemountDeps)?.({
+			routeId,
+			loaderDeps: match.loaderDeps,
+			params: match._strictParams,
+			search: match._strictSearch
+		});
+		const key = remountDeps ? JSON.stringify(remountDeps) : void 0;
+		const Comp = route.options.component ?? router.options.defaultComponent;
+		const out = Comp ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Comp, {}, key) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {});
+		if (match._displayPending) throw getMatchPromise(match, "displayPendingPromise");
+		if (match._forcePending) throw getMatchPromise(match, "minPendingPromise");
+		if (match.status === "pending") throw getMatchPromise(match, "loadPromise");
+		if (match.status === "notFound") {
+			if (!isNotFound(match.error)) invariant();
+			return renderRouteNotFound(router, route, match.error);
+		}
+		if (match.status === "redirected") {
+			if (!isRedirect(match.error)) invariant();
+			throw getMatchPromise(match, "loadPromise");
+		}
+		if (match.status === "error") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)((route.options.errorComponent ?? router.options.defaultErrorComponent) || ErrorComponent, {
+			error: match.error,
+			reset: void 0,
+			info: { componentStack: "" }
+		});
+		return out;
+	}
+	const matchStore = router.stores.matchStores.get(matchId);
+	if (!matchStore) invariant();
+	const match = useStore(matchStore, (value) => value);
 	const routeId = match.routeId;
 	const route = router.routesById[routeId];
 	const key = import_react.useMemo(() => {
-		const remountDeps = (route.options.remountDeps ?? router.options.defaultRemountDeps)?.({
+		const remountDeps = (router.routesById[routeId].options.remountDeps ?? router.options.defaultRemountDeps)?.({
 			routeId,
 			loaderDeps: match.loaderDeps,
 			params: match._strictParams,
@@ -4987,23 +5181,35 @@ var MatchInner = import_react.memo(function MatchInnerImpl({ match }) {
 		match.loaderDeps,
 		match._strictParams,
 		match._strictSearch,
-		route.options.remountDeps,
-		router.options.defaultRemountDeps
+		router.options.defaultRemountDeps,
+		router.routesById
 	]);
 	const out = import_react.useMemo(() => {
 		const Comp = route.options.component ?? router.options.defaultComponent;
-		return Comp ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Comp, {}, key) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {});
+		if (Comp) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Comp, {}, key);
+		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {});
 	}, [
 		key,
 		route.options.component,
 		router.options.defaultComponent
 	]);
+	if (match._displayPending) throw getMatchPromise(match, "displayPendingPromise");
+	if (match._forcePending) throw getMatchPromise(match, "minPendingPromise");
 	if (match.status === "pending") {
-		if (router.ssr && !canWrapInSuspense(router, route, match.ssr)) return out;
-		if (router._tx) throw router._tx[5];
-		return renderPending(router, route);
+		if (route.options.pendingMinMs ?? router.options.defaultPendingMinMs) {
+			const routerMatch = router.getMatch(match.id);
+			if (routerMatch && !routerMatch._nonReactive.minPendingPromise) {}
+		}
+		throw getMatchPromise(match, "loadPromise");
 	}
-	if (match.status === "notFound") return renderRouteNotFound(router, route, match.error);
+	if (match.status === "notFound") {
+		if (!isNotFound(match.error)) invariant();
+		return renderRouteNotFound(router, route, match.error);
+	}
+	if (match.status === "redirected") {
+		if (!isRedirect(match.error)) invariant();
+		throw getMatchPromise(match, "loadPromise");
+	}
 	if (match.status === "error") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)((route.options.errorComponent ?? router.options.defaultErrorComponent) || ErrorComponent, {
 		error: match.error,
 		reset: void 0,
@@ -5019,72 +5225,65 @@ var MatchInner = import_react.memo(function MatchInnerImpl({ match }) {
 */
 var Outlet = import_react.memo(function OutletImpl() {
 	const router = useRouter();
-	const routeId = import_react.useContext(matchContext);
-	let parentGlobalNotFound;
-	let parentNotFoundError;
-	let childRouteId;
+	const matchId = import_react.useContext(matchContext);
+	let routeId;
+	let parentGlobalNotFound = false;
+	let childMatchId;
 	{
 		const matches = router.stores.matches.get();
-		const parentIndex = matches.findIndex((match) => match.routeId === routeId);
-		const parentMatch = matches[parentIndex];
-		parentGlobalNotFound = !!parentMatch._notFound;
-		parentNotFoundError = parentMatch.error;
-		childRouteId = matches[parentIndex + 1]?.routeId;
+		const parentIndex = matchId ? matches.findIndex((match) => match.id === matchId) : -1;
+		const parentMatch = parentIndex >= 0 ? matches[parentIndex] : void 0;
+		routeId = parentMatch?.routeId;
+		parentGlobalNotFound = parentMatch?.globalNotFound ?? false;
+		childMatchId = parentIndex >= 0 ? matches[parentIndex + 1]?.id : void 0;
 	}
-	if (parentGlobalNotFound) return renderRouteNotFound(router, router.routesById[routeId], parentNotFoundError);
-	if (!childRouteId) return null;
-	const nextMatch = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Match, { routeId: childRouteId });
+	const route = routeId ? router.routesById[routeId] : void 0;
+	const pendingElement = router.options.defaultPendingComponent ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(router.options.defaultPendingComponent, {}) : null;
+	if (parentGlobalNotFound) {
+		if (!route) invariant();
+		return renderRouteNotFound(router, route, void 0);
+	}
+	if (!childMatchId) return null;
+	const nextMatch = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Match, { matchId: childMatchId });
 	if (routeId === "__root__") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
-		fallback: renderPending(router),
+		fallback: pendingElement,
 		children: nextMatch
 	});
 	return nextMatch;
 });
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/Transitioner.js
-function settleOwner(owner, rendered) {
-	const settle = owner[1];
-	owner.length = 0;
-	settle?.(rendered);
-}
-//#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/Matches.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/Matches.js
 /**
 * Internal component that renders the router's active match tree with
 * suspense, error, and not-found boundaries. Rendered by `RouterProvider`.
 */
 function Matches() {
 	const router = useRouter();
-	const rootRoute = router.routesById[rootRouteId];
-	const pendingElement = renderPending(router, rootRoute);
-	const ResolvedSuspense = SafeFragment;
-	const inner = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [false, /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResolvedSuspense, {
+	const PendingComponent = router.routesById["__root__"].options.pendingComponent ?? router.options.defaultPendingComponent;
+	const pendingElement = PendingComponent ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PendingComponent, {}) : null;
+	const inner = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SafeFragment, {
 		fallback: pendingElement,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MatchesInner, {})
-	})] });
+		children: [false, /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MatchesInner, {})]
+	});
 	return router.options.InnerWrap ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(router.options.InnerWrap, { children: inner }) : inner;
 }
 function MatchesInner() {
 	const router = useRouter();
-	const acknowledgement = router._rendered;
-	const matches = router.stores.matches.get();
-	const match = matches[0];
-	const routeId = match?.routeId;
-	useLayoutEffect(() => {
-		if (acknowledgement[0] === matches) settleOwner(acknowledgement, true);
-	}, [acknowledgement, matches]);
-	const matchComponent = routeId ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Match, { routeId }) : null;
+	const matchId = router.stores.firstId.get();
+	const resetKey = router.stores.loadedAt.get();
+	const matchComponent = matchId ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Match, { matchId }) : null;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(matchContext.Provider, {
-		value: routeId,
+		value: matchId,
 		children: router.options.disableGlobalCatchBoundary ? matchComponent : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CatchBoundary, {
-			getResetKey: () => match,
+			getResetKey: () => resetKey,
+			errorComponent: ErrorComponent,
 			onCatch: void 0,
 			children: matchComponent
 		})
 	});
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/routerStores.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/routerStores.js
 var getStoreFactory = (opts) => {
 	return {
 		createMutableStore: createNonReactiveMutableStore,
@@ -5093,7 +5292,7 @@ var getStoreFactory = (opts) => {
 	};
 };
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/router.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/router.js
 /**
 * Creates a new Router instance for React.
 *
@@ -5114,7 +5313,7 @@ var Router = class extends RouterCore {
 	}
 };
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/RouterProvider.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/RouterProvider.js
 /**
 * Low-level provider that places the router into React context and optionally
 * updates router options from props. Most apps should use `RouterProvider`.
@@ -5136,8 +5335,8 @@ function RouterContextProvider({ router, children, ...rest }) {
 	return provider;
 }
 /**
-* Renders the current match presentation and provides the router to the React
-* tree via context.
+* Top-level component that renders the active route matches and provides the
+* router to the React tree via context.
 *
 * Accepts the same options as `createRouter` via props to update the router
 * instance after creation.
@@ -5152,7 +5351,7 @@ function RouterProvider({ router, ...rest }) {
 	});
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/useRouterState.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/useRouterState.js
 /**
 * Subscribe to the router's state store with optional selection and
 * structural sharing for render optimization.
@@ -5172,9 +5371,10 @@ function useRouterState(opts) {
 		const state = router.stores.__store.get();
 		return opts?.select ? opts.select(state) : state;
 	}
+	return useStore(router.stores.__store, useStructuralSharing(opts, router));
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/Asset.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/Asset.js
 var noopScriptHandler = () => {};
 function setScriptAttrs(script, attrs) {
 	if (!attrs) return;
@@ -5273,9 +5473,8 @@ function Script({ attrs, children, preventScriptHoist }) {
 	return null;
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/headContentUtils.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/headContentUtils.js
 function buildTagsFromMatches(router, nonce, matches, assetCrossOrigin) {
-	matches = _getAssetMatches(matches);
 	const routeMeta = matches.map((match) => match.meta).filter((meta) => meta !== void 0);
 	const resultMeta = [];
 	const metaByAttribute = {};
@@ -5394,7 +5593,7 @@ function buildTagsFromMatches(router, nonce, matches, assetCrossOrigin) {
 	return tags;
 }
 /**
-* Build the head/link/meta/script tags from the renderable presented prefix.
+* Build the list of head/link/meta/script tags to render for active matches.
 * Used internally by `HeadContent`.
 */
 var useTags = (assetCrossOrigin) => {
@@ -5403,7 +5602,7 @@ var useTags = (assetCrossOrigin) => {
 	return buildTagsFromMatches(router, nonce, router.stores.matches.get(), assetCrossOrigin);
 };
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/HeadContent.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/HeadContent.js
 /**
 * Render route-managed head tags (title, meta, links, styles, head scripts).
 * Place inside the document head of your app shell.
@@ -5419,7 +5618,7 @@ function HeadContent(props) {
 	})) });
 }
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/Scripts.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/Scripts.js
 /**
 * Render body script tags collected from route matches and SSR manifests.
 * Should be placed near the end of the document body.
@@ -5427,23 +5626,14 @@ function HeadContent(props) {
 var Scripts = () => {
 	const router = useRouter();
 	const nonce = router.options.ssr?.nonce;
-	const getScripts = (matches) => {
-		matches = _getAssetMatches(matches);
-		const scripts = matches.flatMap((match) => match.scripts ?? []).filter(Boolean).map(({ children, ...script }) => ({
-			tag: "script",
-			attrs: {
-				...script,
-				suppressHydrationWarning: true,
-				nonce
-			},
-			children
-		}));
+	const getAssetScripts = (matches) => {
+		const assetScripts = [];
 		const manifest = router.ssr?.manifest;
-		if (!manifest) return scripts;
+		if (!manifest) return [];
 		for (const match of matches) {
-			const manifestScripts = manifest.routes[match.routeId]?.scripts;
-			if (!manifestScripts) continue;
-			for (const asset of manifestScripts) scripts.push({
+			const scripts = manifest.routes[match.routeId]?.scripts;
+			if (!scripts) continue;
+			for (const asset of scripts) assetScripts.push({
 				tag: "script",
 				attrs: {
 					...asset.attrs,
@@ -5453,22 +5643,38 @@ var Scripts = () => {
 				...typeof asset.attrs?.src === "string" ? { preventScriptHoist: true } : {}
 			});
 		}
-		return scripts;
+		return assetScripts;
 	};
-	return renderScripts(router, getScripts(router.stores.matches.get()));
+	const getScripts = (matches) => matches.map((match) => match.scripts).flat(1).filter(Boolean).map(({ children, ...script }) => ({
+		tag: "script",
+		attrs: {
+			...script,
+			suppressHydrationWarning: true,
+			nonce
+		},
+		children
+	}));
+	{
+		const activeMatches = router.stores.matches.get();
+		const assetScripts = getAssetScripts(activeMatches);
+		return renderScripts(router, getScripts(activeMatches), assetScripts);
+	}
+	const assetScripts = useStore(router.stores.matches, getAssetScripts, deepEqual);
+	return renderScripts(router, useStore(router.stores.matches, getScripts, deepEqual), assetScripts);
 };
-function renderScripts(router, scripts) {
+function renderScripts(router, scripts, assetScripts) {
+	const allScripts = [...scripts, ...assetScripts];
 	if (router.serverSsr) {
 		const serverBufferedScript = router.serverSsr.takeBufferedScripts();
-		if (serverBufferedScript) scripts.unshift(serverBufferedScript);
+		if (serverBufferedScript) allScripts.unshift(serverBufferedScript);
 	}
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: scripts.map((asset, i) => /* @__PURE__ */ (0, import_react.createElement)(Asset, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: allScripts.map((asset, i) => /* @__PURE__ */ (0, import_react.createElement)(Asset, {
 		...asset,
 		key: `tsr-scripts-${asset.tag}-${i}`
 	})) });
 }
 //#endregion
-//#region node_modules/react-dom/cjs/react-dom-server-legacy.node.production.js
+//#region node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-server-legacy.node.production.js
 /**
 * @license React
 * react-dom-server-legacy.node.production.js
@@ -9360,7 +9566,7 @@ var require_react_dom_server_legacy_node_production = /* @__PURE__ */ __commonJS
 	exports.version = "19.2.8";
 }));
 //#endregion
-//#region node_modules/react-dom/cjs/react-dom-server.node.production.js
+//#region node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-server.node.production.js
 /**
 * @license React
 * react-dom-server.node.production.js
@@ -13759,7 +13965,7 @@ var require_react_dom_server_node_production = /* @__PURE__ */ __commonJSMin(((e
 	exports.version = "19.2.8";
 }));
 //#endregion
-//#region node_modules/react-dom/server.node.js
+//#region node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/server.node.js
 var require_server_node = /* @__PURE__ */ __commonJSMin(((exports) => {
 	var l = require_react_dom_server_legacy_node_production();
 	var s = require_react_dom_server_node_production();
@@ -13772,36 +13978,7 @@ var require_server_node = /* @__PURE__ */ __commonJSMin(((exports) => {
 	exports.resume = s.resume;
 }));
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/ssr/handlerCallback.js
-function isSsrResponse(value) {
-	return typeof value === "object" && value !== null && "response" in value && "serverSsrCleanup" in value;
-}
-function normalizeSsrResponse(result) {
-	return isSsrResponse(result) ? result : {
-		response: result,
-		serverSsrCleanup: "none"
-	};
-}
-function disposeSsrResponse(response, reason) {
-	if (response.serverSsrCleanup !== "stream") return Promise.resolve();
-	try {
-		return Promise.resolve(response.dispose(reason));
-	} catch (error) {
-		return Promise.reject(error);
-	}
-}
-function disposeSsrResponseDetached(result, reason, onError = console.error) {
-	const ssrResponse = normalizeSsrResponse(result);
-	if (ssrResponse.serverSsrCleanup === "stream") {
-		disposeSsrResponse(ssrResponse, reason).catch(onError);
-		return;
-	}
-	if (ssrResponse.response.body) try {
-		ssrResponse.response.body.cancel(reason).catch(onError);
-	} catch (error) {
-		onError(error);
-	}
-}
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/ssr/handlerCallback.js
 function createSsrStreamResponse(router, response) {
 	if (!response.body) throw new Error("Invariant failed: SSR stream response requires a body");
 	let disposed = false;
@@ -13811,56 +13988,18 @@ function createSsrStreamResponse(router, response) {
 		async dispose(reason) {
 			if (disposed) return;
 			disposed = true;
-			router.serverSsr?.cleanup();
 			try {
 				await response.body.cancel(reason);
 			} catch {}
+			router.serverSsr?.cleanup();
 		}
-	};
-}
-function bindSsrResponseToRequest(router, result, signal) {
-	const ssrResponse = normalizeSsrResponse(result);
-	if (ssrResponse.serverSsrCleanup !== "stream") {
-		if (signal.aborted) disposeSsrResponseDetached(result, signal.reason);
-		return ssrResponse;
-	}
-	const failed = (error) => {
-		router?.serverSsr?.cleanup();
-		console.error(error);
-	};
-	const abort = () => {
-		disposeSsrResponseDetached(ssrResponse, signal.reason, failed);
-	};
-	if (signal.aborted) {
-		abort();
-		return ssrResponse;
-	}
-	signal.addEventListener("abort", abort, { once: true });
-	router?.serverSsr?.onCleanup(() => {
-		signal.removeEventListener("abort", abort);
-	});
-	return ssrResponse;
-}
-async function replaceSsrResponse(result, response, reason) {
-	await disposeSsrResponse(normalizeSsrResponse(result), reason);
-	return {
-		response,
-		serverSsrCleanup: "none"
-	};
-}
-async function stripSsrResponseBody(result, reason) {
-	const ssrResponse = normalizeSsrResponse(result);
-	await disposeSsrResponse(ssrResponse, reason);
-	return {
-		response: new Response(null, ssrResponse.response),
-		serverSsrCleanup: "none"
 	};
 }
 function defineHandlerCallback(handler) {
 	return handler;
 }
 //#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/ssr/transformStreamWithRouter.js
+//#region node_modules/.pnpm/@tanstack+router-core@1.171.15/node_modules/@tanstack/router-core/dist/esm/ssr/transformStreamWithRouter.js
 function transformReadableStreamWithRouter(router, routerStream, opts) {
 	return transformStreamWithRouter(router, routerStream, opts);
 }
@@ -13871,9 +14010,9 @@ var MIN_CLOSING_TAG_LENGTH = 4;
 var DEFAULT_SERIALIZATION_TIMEOUT_MS = 6e4;
 var DEFAULT_LIFETIME_TIMEOUT_MS = DEFAULT_SERIALIZATION_TIMEOUT_MS * 2;
 var MAX_LEFTOVER_CHARS = 2048;
-var MAX_TAIL_CHARS = 65536;
-var MAX_ROUTER_HTML_CHARS = 16777216;
-var MAX_PENDING_WRITE_CHARS = 16777216;
+var MAX_TAIL_CHARS = 64 * 1024;
+var MAX_ROUTER_HTML_CHARS = 16 * 1024 * 1024;
+var MAX_PENDING_WRITE_CHARS = 16 * 1024 * 1024;
 var MergeState = {
 	ReadingBody: 0,
 	HoldingTail: 1,
@@ -13958,16 +14097,6 @@ function createAbortNotifier(opts) {
 		} catch {}
 	};
 }
-function listenToAbort(signal, onAbort) {
-	if (!signal) return;
-	if (signal.aborted) {
-		onAbort(signal.reason);
-		return;
-	}
-	const listener = () => onAbort(signal.reason);
-	signal.addEventListener("abort", listener, { once: true });
-	return () => signal.removeEventListener("abort", listener);
-}
 function transformStreamWithRouter(router, appStream, opts) {
 	const serverSsr = router.serverSsr;
 	if (!serverSsr) throw new Error("Invariant failed: router.serverSsr is required");
@@ -13979,7 +14108,6 @@ function makeFastPathStream(appStream, opts, serverSsr) {
 	let controller;
 	let state = MergeState.ReadingBody;
 	let lifetimeTimeoutHandle;
-	let stopListeningToAbort;
 	let stopListeningToInjectedHtml;
 	const readerState = createReaderState(appStream);
 	const notifyAbort = createAbortNotifier(opts);
@@ -14004,8 +14132,6 @@ function makeFastPathStream(appStream, opts, serverSsr) {
 			clearTimeout(lifetimeTimeoutHandle);
 			lifetimeTimeoutHandle = void 0;
 		}
-		stopListeningToAbort?.();
-		stopListeningToAbort = void 0;
 		try {
 			stopListeningToInjectedHtml?.();
 		} catch {}
@@ -14047,7 +14173,7 @@ function makeFastPathStream(appStream, opts, serverSsr) {
 			cleanup(err);
 		}
 	}, lifetimeMs);
-	const stream = new ReadableStream$1({
+	return new ReadableStream$1({
 		start(c) {
 			controller = c;
 		},
@@ -14080,18 +14206,12 @@ function makeFastPathStream(appStream, opts, serverSsr) {
 			return cleanup(reason);
 		}
 	});
-	stopListeningToAbort = listenToAbort(opts?.signal, (reason) => {
-		safeError(reason);
-		cleanup(reason);
-	});
-	return stream;
 }
 function makeMainStream(serverSsr, appStream, opts) {
 	let stopListeningToInjectedHtml;
 	let stopListeningToSerializationFinished;
 	let serializationTimeoutHandle;
 	let lifetimeTimeoutHandle;
-	let stopListeningToAbort;
 	let cleanedUp = false;
 	let controller;
 	let closeWhenDrained = false;
@@ -14190,8 +14310,6 @@ function makeMainStream(serverSsr, appStream, opts) {
 		} catch {}
 		stopListeningToInjectedHtml = void 0;
 		stopListeningToSerializationFinished = void 0;
-		stopListeningToAbort?.();
-		stopListeningToAbort = void 0;
 		if (serializationTimeoutHandle !== void 0) {
 			clearTimeout(serializationTimeoutHandle);
 			serializationTimeoutHandle = void 0;
@@ -14376,11 +14494,6 @@ function makeMainStream(serverSsr, appStream, opts) {
 		drainRouterHtml();
 		if (cleanedUp || isDone()) return stream;
 	}
-	stopListeningToAbort = listenToAbort(opts?.signal, (reason) => {
-		safeError(reason);
-		cleanup(reason);
-	});
-	if (cleanedUp || isDone()) return stream;
 	(async () => {
 		try {
 			while (true) {
@@ -14460,7 +14573,7 @@ function makeMainStream(serverSsr, appStream, opts) {
 	return stream;
 }
 //#endregion
-//#region node_modules/isbot/index.mjs
+//#region node_modules/.pnpm/isbot@5.2.1/node_modules/isbot/index.mjs
 var import_server_node = /* @__PURE__ */ __toESM(require_server_node(), 1);
 var fullPattern = " daum[ /]| deusu/|(?:^|[^g])news(?!sapphire)|(?<! channel/|google/)google(?!(?:wv|app|/google| pixel))|(?<! cu)bots?(?:\\b|_)|(?<!cam)scan|(?<!lib)http|24x7|;\\s\\w+;$|@[a-z][\\w-]+\\.|\\(\\)|\\.com\\b|\\b\\w+\\.ai|\\bbw/|\\bdlc\\b|\\bort/|\\bperl\\b|\\btime/|\\||^[<\\(;]|^[\\w \\.\\-\\(?:\\):%]+(?:/v?\\d+(?:\\.\\d+)?(?:\\.\\d{1,10})*?)?(?:,|$)|^[\\w\\-]+/[\\w]+$|^[^ ]{50,}$|^\\d+\\b|^\\w*search\\b|^\\w+/[\\w\\(\\)]*$|^\\w+/\\d\\.\\d\\s\\([\\w@]+\\)$|^active|^ad muncher|^amaya|^apache/|^avsdevicesdk/|^azure|^biglotron|^blackbox exporter|^bot|^clamav[ /]|^claude-code/|^client/|^cobweb/|^custom|^ddg[_-]android|^discourse|^dispatch/\\d|^downcast/|^duckduckgo|^email|^exodusmovement|^facebook|^getright/|^gozilla/|^hobbit|^hotzonu|^hwcdn/|^igetter/|^jeode/|^jetty/|^jigsaw|^microsoft bits|^movabletype|^mozilla/\\d\\.\\d\\s[\\w\\.-]+$|^mozilla/\\d\\.\\d\\s\\((?:compatible;)?(?:\\s?[\\w\\d-.]+\\/\\d+\\.\\d+)?\\)$|^navermailapp|^netsurf|^offline|^openai/|^owler|^php|^postman|^ps_daily/|^python|^rank|^read|^reed|^remove\\.bg/|^rest|^rss|^snapchat|^sora |^space bison|^stape/|^svn|^swcd |^taringa|^thumbor/|^track|^w3c|^webbandit/|^webcopier|^wget|^whatsapp|^wordpress|^xenu link sleuth|^yahoo|^yandex|^zdm/\\d|^zoom marketplace/|abuse|advisor|agent\\b|analyzer|archive|ask jeeves/teoma|attracta|audit|bluecoat drtr|browsex|burpcollaborator|capture|catch|check\\b|checker|chrome-lighthouse|chromeframe|classifier|cloudflare|collapsify\\b|convertify|cookiehubverify/|crawl|cursor/|cypress/|dareboost|datanyze|dejaclick|detect|discovery|dmbrowser|download|exaleadcloudview|feed|fetcher|firephp|foregenix|functionize|grab|hardenize\\b|headless|hotjar|httrack|hubspot marketing grader|ibisbrowser|infrawatch|insight|inspect|iplabel|java(?!;)|library|linkcheck|linktiger|mail\\.ru/|manager|manus-user/|marketgoo/|measure|monitor\\b|neustar wpm|node\\b|nutch|offbyone|openvas|optimize|pageburst|pagespeed|parser|phantomjs|pingdom|playwright|powermarks|preview|productfinder|prospectingstudio|proxy|ptst[ /]\\d|radar|readable/|retriever|rexx;|rigor|rss\\b|scrape|securityheaders|selenium|server|silktide|sindup/|sogou|sparkler/|speedcurve|spider|splash|statuscake|supercleaner|synapse|synthetic|testlocally|tools|torrent|transcoder|upday/|url|validator|virtuoso|wappalyzer|watchtowr|webglance|webkit2png|whatcms/|xtate/";
 var naivePattern = /bot|crawl|http|lighthouse|scan|search|spider/i;
@@ -14480,7 +14593,7 @@ function isBot(userAgent) {
 }
 var isbot = isBot;
 //#endregion
-//#region node_modules/@tanstack/react-router/dist/esm/ssr/renderRouterToStream.js
+//#region node_modules/.pnpm/@tanstack+react-router@1.17_d9cdc91f937bd0a869aefaaf57a94c96/node_modules/@tanstack/react-router/dist/esm/ssr/renderRouterToStream.js
 var noop = () => {};
 async function waitForReadyOrAbort(ready, signal) {
 	let cleanup = noop;
@@ -14507,12 +14620,9 @@ var renderRouterToStream = async ({ request, router, responseHeaders, children }
 			}
 		});
 		if (isbot(request.headers.get("User-Agent"))) await waitForReadyOrAbort(stream.allReady, request.signal);
-		const responseStream = transformReadableStreamWithRouter(router, stream, {
-			signal: request.signal,
-			onAbort: () => stream.cancel().catch(() => {})
-		});
+		const responseStream = transformReadableStreamWithRouter(router, stream, { onAbort: () => stream.cancel().catch(() => {}) });
 		return createSsrStreamResponse(router, new Response(responseStream, {
-			status: router._serverResult?.type === "render" ? router._serverResult.status : 200,
+			status: router.stores.statusCode.get(),
 			headers: responseHeaders
 		}));
 	}
@@ -14568,21 +14678,18 @@ var renderRouterToStream = async ({ request, router, responseHeaders, children }
 			router.serverSsr?.cleanup();
 			throw e;
 		}
-		const responseStream = transformPipeableStreamWithRouter(router, reactAppPassthrough, {
-			signal: request.signal,
-			onAbort: abortPipeable
-		});
+		const responseStream = transformPipeableStreamWithRouter(router, reactAppPassthrough, { onAbort: abortPipeable });
 		responseAttached = true;
 		if (endedBeforeAttach) reactAppPassthrough.destroy(pendingDestroyError());
 		if (aborted && pipeable) try {
 			pipeable.abort(toError(pendingAbortReason));
 		} catch {}
 		return createSsrStreamResponse(router, new Response(responseStream, {
-			status: router._serverResult?.type === "render" ? router._serverResult.status : 200,
+			status: router.stores.statusCode.get(),
 			headers: responseHeaders
 		}));
 	}
 	throw new Error("No renderToReadableStream or renderToPipeableStream found in react-dom/server. Ensure you are using a version of react-dom that supports streaming.");
 };
 //#endregion
-export { executeRewriteInput as A, isNotFound as B, createInlineCssPlaceholderAsset as C, resolveManifestAssetLink as D, getStylesheetHref as E, isRedirect as F, isResolvedRedirect as I, parseRedirect as L, createLRUCache as M, decodePath as N, resolveManifestCssLink as O, dehydrateSsrMatchId as P, redirect as R, TSR_SCRIPT_BARRIER_ID as S, getScriptPreloadAttrs as T, createRootRouteWithContext as _, isSsrResponse as a, useRouter as b, stripSsrResponseBody as c, useRouterState as d, RouterProvider as f, createFileRoute as g, lazyRouteComponent as h, disposeSsrResponseDetached as i, invariant as j, _getRenderedMatches as k, Scripts as l, Outlet as m, bindSsrResponseToRequest as n, normalizeSsrResponse as o, createRouter as p, defineHandlerCallback as r, replaceSsrResponse as s, renderRouterToStream as t, HeadContent as u, Link as v, createInlineCssStyleAsset as w, GLOBAL_TSR as x, useNavigate as y, rootRouteId as z };
+export { useRouterState as a, Outlet as c, createRootRouteWithContext as d, Link as f, redirect as g, isRedirect as h, HeadContent as i, lazyRouteComponent as l, useRouter as m, defineHandlerCallback as n, RouterProvider as o, useNavigate as p, Scripts as r, createRouter as s, renderRouterToStream as t, createFileRoute as u };

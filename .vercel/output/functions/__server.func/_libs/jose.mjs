@@ -1,4 +1,4 @@
-//#region node_modules/jose/dist/webapi/lib/buffer_utils.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/buffer_utils.js
 var encoder = new TextEncoder();
 var decoder = new TextDecoder();
 var strictDecoder = new TextDecoder("utf-8", { fatal: true });
@@ -22,7 +22,7 @@ function encode$1(string) {
 	return bytes;
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/crypto_key.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/crypto_key.js
 var unusable = (name, prop = "algorithm.name") => /* @__PURE__ */ new TypeError(`CryptoKey does not support this operation, its ${prop} must be ${name}`);
 function checkUsage(key, usage) {
 	if (usage && !key.usages.includes(usage)) throw new TypeError(`CryptoKey does not support this operation, its usages must include ${usage}.`);
@@ -40,7 +40,7 @@ function checkCryptoKey(key, expected, usage) {
 	checkUsage(key, usage);
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/invalid_key_input.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/invalid_key_input.js
 function message(msg, actual, ...types) {
 	if (types.length > 2) {
 		const last = types.pop();
@@ -56,7 +56,7 @@ function message(msg, actual, ...types) {
 }
 var withAlg = (alg, actual, ...types) => message(`Key for the ${alg} algorithm must be `, actual, ...types);
 //#endregion
-//#region node_modules/jose/dist/webapi/util/errors.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/util/errors.js
 var JOSEError = class extends Error {
 	static code = "ERR_JOSE_GENERIC";
 	code = "ERR_JOSE_GENERIC";
@@ -124,7 +124,7 @@ var JWSSignatureVerificationFailed = class extends JOSEError {
 	}
 };
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/is_key_like.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/is_key_like.js
 var isCryptoKey = (key) => {
 	if (key?.[Symbol.toStringTag] === "CryptoKey") return true;
 	try {
@@ -136,7 +136,7 @@ var isCryptoKey = (key) => {
 var isKeyObject = (key) => key?.[Symbol.toStringTag] === "KeyObject";
 var isKeyLike = (key) => isCryptoKey(key) || isKeyObject(key);
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/base64.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/base64.js
 function encodeBase64(input) {
 	if (Uint8Array.prototype.toBase64) return input.toBase64();
 	const CHUNK_SIZE = 32768;
@@ -152,7 +152,7 @@ function decodeBase64(encoded) {
 	return bytes;
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/util/base64url.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/util/base64url.js
 var invalid = "The input to be decoded is not correctly encoded.";
 function decode(input) {
 	if (Uint8Array.fromBase64) try {
@@ -180,7 +180,7 @@ function encode(input) {
 	return encodeBase64(unencoded).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/type_checks.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/type_checks.js
 function isObject(input) {
 	if (typeof input !== "object" || input === null || Object.prototype.toString.call(input) !== "[object Object]") return false;
 	const prototype = Object.getPrototypeOf(input);
@@ -205,7 +205,7 @@ var isPrivateJWK = (key) => key.kty !== "oct" && (key.kty === "AKP" && typeof ke
 var isPublicJWK = (key) => key.kty !== "oct" && key.d === void 0 && key.priv === void 0;
 var isSecretJWK = (key) => key.kty === "oct" && typeof key.k === "string";
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/helpers.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/helpers.js
 function assertNotSet(value, name) {
 	if (value) throw new TypeError(`${name} can only be called once`);
 }
@@ -234,7 +234,7 @@ function parseJoseHeader(b64, ErrorClass, message) {
 	return parsed;
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/jwk_to_key.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/jwk_to_key.js
 async function jwkToKey(entry, jwk) {
 	if (jwk.kty === "RSA" && "oth" in jwk && jwk.oth !== void 0) throw new JOSENotSupported("RSA JWK \"oth\" (Other Primes Info) Parameter value is not supported");
 	if (!entry.kty.includes(jwk.kty)) throw new JOSENotSupported("Invalid or unsupported JWK \"alg\" (Algorithm) Parameter value");
@@ -249,7 +249,7 @@ async function jwkToKey(entry, jwk) {
 	return crypto.subtle.importKey("jwk", keyData, algorithm, jwk.ext ?? !isPrivate, jwk.key_ops ?? entry.usages[isPrivate ? 1 : 0]);
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/key.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/key.js
 var tag = (key) => key[Symbol.toStringTag];
 var jwkMatchesOp = (entry, key, usage) => {
 	const { alg } = entry;
@@ -299,13 +299,11 @@ var nist = {
 function cached(key, alg, value) {
 	cache ||= /* @__PURE__ */ new WeakMap();
 	const entry = cache.get(key);
-	if (value) {
-		if (entry) entry[alg] = value;
-		else cache.set(key, {
-			__proto__: null,
-			[alg]: value
-		});
-	}
+	if (value) if (entry) entry[alg] = value;
+	else cache.set(key, {
+		__proto__: null,
+		[alg]: value
+	});
 	return value ?? entry?.[alg];
 }
 var handleJWK = async (key, jwk, entry) => cached(key, entry.alg) ?? cached(key, entry.alg, await jwkToKey(entry, {
@@ -349,7 +347,7 @@ async function prepareKey(entry, key, usage) {
 	}
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/key_descriptor.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/key_descriptor.js
 function table(entries) {
 	const out = { __proto__: null };
 	for (const alg in entries) out[alg] = {
@@ -359,7 +357,7 @@ function table(entries) {
 	return out;
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/options.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/options.js
 var JWS_RECOGNIZED = {
 	__proto__: null,
 	b64: true
@@ -390,7 +388,7 @@ function validateCrit(Err, recognizedDefault, recognizedOption, protectedHeader,
 	return protectedHeader.crit;
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/signing.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/signing.js
 async function getSigKey(entry, key, usage) {
 	if (key instanceof Uint8Array) return crypto.subtle.importKey("raw", key, entry.subtle, false, [usage]);
 	checkCryptoKey(key, entry.subtle, usage);
@@ -411,7 +409,7 @@ async function verify(entry, key, signature, data) {
 	}
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/jws_algorithms.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/jws_algorithms.js
 var sig = [["verify"], ["sign"]];
 function hmac(bits) {
 	const subtle = {
@@ -501,7 +499,7 @@ function jwsAlgorithm(alg) {
 	return entry;
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/jws_verify.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/jws_verify.js
 function prepareVerify(options) {
 	return [options && validateAlgorithms("algorithms", options.algorithms), options?.crit];
 }
@@ -563,7 +561,7 @@ async function verifyCompact(jws, shared, key) {
 	}, shared, key);
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/jwt_claims_set.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/jwt_claims_set.js
 var epoch = (date) => Math.floor(date.getTime() / 1e3);
 var multipliers = {
 	s: 1,
@@ -698,7 +696,7 @@ var JWTClaimsBuilder = class {
 	}
 };
 //#endregion
-//#region node_modules/jose/dist/webapi/jwt/verify.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/jwt/verify.js
 async function jwtVerify(jwt, key, options) {
 	const verified = await verifyCompact(jwt, prepareVerify(options), key);
 	if (!verified[2]) throw new JWTInvalid("JWTs MUST NOT use unencoded payload");
@@ -713,7 +711,7 @@ async function jwtVerify(jwt, key, options) {
 	return result;
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/lib/jws_sign.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/lib/jws_sign.js
 function unencodedPayload(protectedHeader) {
 	return protectedHeader?.b64 === false && Array.isArray(protectedHeader.crit) && protectedHeader.crit.includes("b64");
 }
@@ -766,7 +764,7 @@ async function createSignature(input, key) {
 	return jws;
 }
 //#endregion
-//#region node_modules/jose/dist/webapi/jws/flattened/sign.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/jws/flattened/sign.js
 var FlattenedSign = class {
 	#payload;
 	#protectedHeader;
@@ -795,7 +793,7 @@ var FlattenedSign = class {
 	}
 };
 //#endregion
-//#region node_modules/jose/dist/webapi/jws/compact/sign.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/jws/compact/sign.js
 var CompactSign = class {
 	#flattened;
 	#protectedHeader;
@@ -814,7 +812,7 @@ var CompactSign = class {
 	}
 };
 //#endregion
-//#region node_modules/jose/dist/webapi/jwt/sign.js
+//#region node_modules/.pnpm/jose@6.2.9/node_modules/jose/dist/webapi/jwt/sign.js
 var SignJWT = class {
 	#protectedHeader;
 	#jwt;

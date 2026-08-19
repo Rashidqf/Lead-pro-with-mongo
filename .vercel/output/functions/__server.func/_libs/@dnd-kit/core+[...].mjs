@@ -1,6 +1,6 @@
 import { o as __toESM, t as __commonJSMin } from "../../_runtime.mjs";
 import { i as require_react, n as LiveRegion, r as useAnnouncement, t as HiddenText } from "../dnd-kit__accessibility+react.mjs";
-//#region node_modules/react-dom/cjs/react-dom.production.js
+//#region node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom.production.js
 /**
 * @license React
 * react-dom.production.js
@@ -142,7 +142,7 @@ var require_react_dom_production = /* @__PURE__ */ __commonJSMin(((exports) => {
 	exports.version = "19.2.8";
 }));
 //#endregion
-//#region node_modules/react-dom/index.js
+//#region node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/index.js
 var require_react_dom = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function checkDCE() {
 		if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined" || typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE !== "function") return;
@@ -156,7 +156,7 @@ var require_react_dom = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = require_react_dom_production();
 }));
 //#endregion
-//#region node_modules/@dnd-kit/utilities/dist/utilities.esm.js
+//#region node_modules/.pnpm/@dnd-kit+utilities@3.2.2_react@19.2.8/node_modules/@dnd-kit/utilities/dist/utilities.esm.js
 var import_react_dom = /* @__PURE__ */ __toESM(require_react_dom());
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var canUseDOM = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined";
@@ -338,7 +338,7 @@ function findFirstFocusableNode(element) {
 	return element.querySelector(SELECTOR);
 }
 //#endregion
-//#region node_modules/@dnd-kit/core/dist/core.esm.js
+//#region node_modules/.pnpm/@dnd-kit+core@6.3.1_react-d_c57882b72f5a4a1aeacc75d207edcc6c/node_modules/@dnd-kit/core/dist/core.esm.js
 var DndMonitorContext = /*#__PURE__*/ (0, import_react.createContext)(null);
 function useDndMonitor(listener) {
 	const registerListener = (0, import_react.useContext)(DndMonitorContext);

@@ -1,4 +1,4 @@
-//#region node_modules/date-fns/constants.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/constants.js
 /**
 * @constant
 * @name daysInYear
@@ -31,7 +31,7 @@ var millisecondsInDay = 864e5;
 * @name secondsInDay
 * @summary Seconds in 1 day.
 */
-var secondsInDay = 86400;
+var secondsInDay = 3600 * 24;
 secondsInDay * 7;
 secondsInDay * daysInYear / 12 * 3;
 /**
@@ -47,7 +47,7 @@ secondsInDay * daysInYear / 12 * 3;
 */
 var constructFromSymbol = Symbol.for("constructDateFrom");
 //#endregion
-//#region node_modules/date-fns/constructFrom.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/constructFrom.js
 /**
 * @name constructFrom
 * @category Generic Helpers
@@ -90,7 +90,7 @@ function constructFrom(date, value) {
 	return new Date(value);
 }
 //#endregion
-//#region node_modules/date-fns/toDate.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/toDate.js
 /**
 * @name toDate
 * @category Common Helpers
@@ -133,7 +133,7 @@ function toDate(argument, context) {
 	return constructFrom(context || argument, argument);
 }
 //#endregion
-//#region node_modules/date-fns/addDays.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/addDays.js
 /**
 * The {@link addDays} function options.
 */
@@ -186,7 +186,7 @@ function addDays(date, amount, options) {
 	return _date;
 }
 //#endregion
-//#region node_modules/date-fns/addMonths.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/addMonths.js
 /**
 * The {@link addMonths} function options.
 */
@@ -230,13 +230,13 @@ function addMonths(date, amount, options) {
 	}
 }
 //#endregion
-//#region node_modules/date-fns/_lib/defaultOptions.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/_lib/defaultOptions.js
 var defaultOptions = {};
 function getDefaultOptions() {
 	return defaultOptions;
 }
 //#endregion
-//#region node_modules/date-fns/startOfWeek.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/startOfWeek.js
 /**
 * The {@link startOfWeek} function options.
 */
@@ -278,7 +278,7 @@ function startOfWeek(date, options) {
 	return _date;
 }
 //#endregion
-//#region node_modules/date-fns/startOfISOWeek.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/startOfISOWeek.js
 /**
 * The {@link startOfISOWeek} function options.
 */
@@ -313,7 +313,7 @@ function startOfISOWeek(date, options) {
 	});
 }
 //#endregion
-//#region node_modules/date-fns/getISOWeekYear.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/getISOWeekYear.js
 /**
 * The {@link getISOWeekYear} function options.
 */
@@ -353,7 +353,7 @@ function getISOWeekYear(date, options) {
 	else return year - 1;
 }
 //#endregion
-//#region node_modules/date-fns/_lib/getTimezoneOffsetInMilliseconds.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/_lib/getTimezoneOffsetInMilliseconds.js
 /**
 * Google Chrome as of 67.0.3396.87 introduced timezones with offset that includes seconds.
 * They usually appear for dates that denote time before the timezones were introduced
@@ -372,13 +372,13 @@ function getTimezoneOffsetInMilliseconds(date) {
 	return +date - +utcDate;
 }
 //#endregion
-//#region node_modules/date-fns/_lib/normalizeDates.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/_lib/normalizeDates.js
 function normalizeDates(context, ...dates) {
 	const normalize = constructFrom.bind(null, context || dates.find((date) => typeof date === "object"));
 	return dates.map(normalize);
 }
 //#endregion
-//#region node_modules/date-fns/startOfDay.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/startOfDay.js
 /**
 * The {@link startOfDay} function options.
 */
@@ -410,7 +410,7 @@ function startOfDay(date, options) {
 	return _date;
 }
 //#endregion
-//#region node_modules/date-fns/differenceInCalendarDays.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/differenceInCalendarDays.js
 /**
 * The {@link differenceInCalendarDays} function options.
 */
@@ -454,7 +454,7 @@ function differenceInCalendarDays(laterDate, earlierDate, options) {
 	return Math.round((laterTimestamp - earlierTimestamp) / millisecondsInDay);
 }
 //#endregion
-//#region node_modules/date-fns/startOfISOWeekYear.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/startOfISOWeekYear.js
 /**
 * The {@link startOfISOWeekYear} function options.
 */
@@ -491,7 +491,7 @@ function startOfISOWeekYear(date, options) {
 	return startOfISOWeek(fourthOfJanuary);
 }
 //#endregion
-//#region node_modules/date-fns/addWeeks.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/addWeeks.js
 /**
 * The {@link addWeeks} function options.
 */
@@ -521,7 +521,7 @@ function addWeeks(date, amount, options) {
 	return addDays(date, amount * 7, options);
 }
 //#endregion
-//#region node_modules/date-fns/isDate.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/isDate.js
 /**
 * @name isDate
 * @category Common Helpers
@@ -558,7 +558,7 @@ function isDate(value) {
 	return value instanceof Date || typeof value === "object" && Object.prototype.toString.call(value) === "[object Date]";
 }
 //#endregion
-//#region node_modules/date-fns/isValid.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/isValid.js
 /**
 * @name isValid
 * @category Common Helpers
@@ -594,7 +594,7 @@ function isValid(date) {
 	return !(!isDate(date) && typeof date !== "number" || isNaN(+toDate(date)));
 }
 //#endregion
-//#region node_modules/date-fns/endOfDay.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/endOfDay.js
 /**
 * The {@link endOfDay} function options.
 */
@@ -626,7 +626,7 @@ function endOfDay(date, options) {
 	return _date;
 }
 //#endregion
-//#region node_modules/date-fns/endOfMonth.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/endOfMonth.js
 /**
 * The {@link endOfMonth} function options.
 */
@@ -660,7 +660,7 @@ function endOfMonth(date, options) {
 	return _date;
 }
 //#endregion
-//#region node_modules/date-fns/_lib/normalizeInterval.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/_lib/normalizeInterval.js
 function normalizeInterval(context, interval) {
 	const [start, end] = normalizeDates(context, interval.start, interval.end);
 	return {
@@ -669,7 +669,7 @@ function normalizeInterval(context, interval) {
 	};
 }
 //#endregion
-//#region node_modules/date-fns/eachDayOfInterval.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/eachDayOfInterval.js
 /**
 * The {@link eachDayOfInterval} function options.
 */
@@ -730,7 +730,7 @@ function eachDayOfInterval(interval, options) {
 	return reversed ? dates.reverse() : dates;
 }
 //#endregion
-//#region node_modules/date-fns/eachWeekOfInterval.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/eachWeekOfInterval.js
 /**
 * The {@link eachWeekOfInterval} function options.
 */
@@ -794,7 +794,7 @@ function eachWeekOfInterval(interval, options) {
 	return reversed ? dates.reverse() : dates;
 }
 //#endregion
-//#region node_modules/date-fns/startOfMonth.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/startOfMonth.js
 /**
 * The {@link startOfMonth} function options.
 */
@@ -828,7 +828,7 @@ function startOfMonth(date, options) {
 	return _date;
 }
 //#endregion
-//#region node_modules/date-fns/startOfYear.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/startOfYear.js
 /**
 * The {@link startOfYear} function options.
 */
@@ -861,7 +861,7 @@ function startOfYear(date, options) {
 	return date_;
 }
 //#endregion
-//#region node_modules/date-fns/endOfWeek.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/endOfWeek.js
 /**
 * The {@link endOfWeek} function options.
 */
@@ -903,7 +903,7 @@ function endOfWeek(date, options) {
 	return _date;
 }
 //#endregion
-//#region node_modules/date-fns/locale/en-US/_lib/formatDistance.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/locale/en-US/_lib/formatDistance.js
 var formatDistanceLocale = {
 	lessThanXSeconds: {
 		one: "less than a second",
@@ -973,14 +973,12 @@ var formatDistance = (token, count, options) => {
 	if (typeof tokenValue === "string") result = tokenValue;
 	else if (count === 1) result = tokenValue.one;
 	else result = tokenValue.other.replace("{{count}}", count.toString());
-	if (options?.addSuffix) {
-		if (options.comparison && options.comparison > 0) return "in " + result;
-		else return result + " ago";
-	}
+	if (options?.addSuffix) if (options.comparison && options.comparison > 0) return "in " + result;
+	else return result + " ago";
 	return result;
 };
 //#endregion
-//#region node_modules/date-fns/locale/_lib/buildFormatLongFn.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/locale/_lib/buildFormatLongFn.js
 function buildFormatLongFn(args) {
 	return (options = {}) => {
 		const width = options.width ? String(options.width) : args.defaultWidth;
@@ -1017,7 +1015,7 @@ var formatLong = {
 	})
 };
 //#endregion
-//#region node_modules/date-fns/locale/en-US/_lib/formatRelative.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/locale/en-US/_lib/formatRelative.js
 var formatRelativeLocale = {
 	lastWeek: "'last' eeee 'at' p",
 	yesterday: "'yesterday at' p",
@@ -1028,7 +1026,7 @@ var formatRelativeLocale = {
 };
 var formatRelative = (token, _date, _baseDate, _options) => formatRelativeLocale[token];
 //#endregion
-//#region node_modules/date-fns/locale/_lib/buildLocalizeFn.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/locale/_lib/buildLocalizeFn.js
 /**
 * The localize function argument callback which allows to convert raw value to
 * the actual type.
@@ -1078,7 +1076,7 @@ function buildLocalizeFn(args) {
 	};
 }
 //#endregion
-//#region node_modules/date-fns/locale/en-US/_lib/localize.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/locale/en-US/_lib/localize.js
 var eraValues = {
 	narrow: ["B", "A"],
 	abbreviated: ["BC", "AD"],
@@ -1287,7 +1285,7 @@ var localize = {
 	})
 };
 //#endregion
-//#region node_modules/date-fns/locale/_lib/buildMatchFn.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/locale/_lib/buildMatchFn.js
 function buildMatchFn(args) {
 	return (string, options = {}) => {
 		const width = options.width;
@@ -1314,7 +1312,7 @@ function findIndex(array, predicate) {
 	for (let key = 0; key < array.length; key++) if (predicate(array[key])) return key;
 }
 //#endregion
-//#region node_modules/date-fns/locale/_lib/buildMatchPatternFn.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/locale/_lib/buildMatchPatternFn.js
 function buildMatchPatternFn(args) {
 	return (string, options = {}) => {
 		const matchResult = string.match(args.matchPattern);
@@ -1332,7 +1330,7 @@ function buildMatchPatternFn(args) {
 	};
 }
 //#endregion
-//#region node_modules/date-fns/locale/en-US.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/locale/en-US.js
 /**
 * @category Locales
 * @summary English locale (United States).
@@ -1473,7 +1471,7 @@ var enUS = {
 	}
 };
 //#endregion
-//#region node_modules/date-fns/getDayOfYear.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/getDayOfYear.js
 /**
 * The {@link getDayOfYear} function options.
 */
@@ -1500,7 +1498,7 @@ function getDayOfYear(date, options) {
 	return differenceInCalendarDays(_date, startOfYear(_date)) + 1;
 }
 //#endregion
-//#region node_modules/date-fns/getISOWeek.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/getISOWeek.js
 /**
 * The {@link getISOWeek} function options.
 */
@@ -1530,7 +1528,7 @@ function getISOWeek(date, options) {
 	return Math.round(diff / millisecondsInWeek) + 1;
 }
 //#endregion
-//#region node_modules/date-fns/getWeekYear.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/getWeekYear.js
 /**
 * The {@link getWeekYear} function options.
 */
@@ -1586,7 +1584,7 @@ function getWeekYear(date, options) {
 	else return year - 1;
 }
 //#endregion
-//#region node_modules/date-fns/startOfWeekYear.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/startOfWeekYear.js
 /**
 * The {@link startOfWeekYear} function options.
 */
@@ -1637,7 +1635,7 @@ function startOfWeekYear(date, options) {
 	return startOfWeek(firstWeek, options);
 }
 //#endregion
-//#region node_modules/date-fns/getWeek.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/getWeek.js
 /**
 * The {@link getWeek} function options.
 */
@@ -1681,12 +1679,12 @@ function getWeek(date, options) {
 	return Math.round(diff / millisecondsInWeek) + 1;
 }
 //#endregion
-//#region node_modules/date-fns/_lib/addLeadingZeros.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/_lib/addLeadingZeros.js
 function addLeadingZeros(number, targetLength) {
 	return (number < 0 ? "-" : "") + Math.abs(number).toString().padStart(targetLength, "0");
 }
 //#endregion
-//#region node_modules/date-fns/_lib/format/lightFormatters.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/_lib/format/lightFormatters.js
 var lightFormatters = {
 	y(date, token) {
 		const signedYear = date.getFullYear();
@@ -1729,7 +1727,7 @@ var lightFormatters = {
 	}
 };
 //#endregion
-//#region node_modules/date-fns/_lib/format/formatters.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/_lib/format/formatters.js
 var dayPeriodEnum = {
 	am: "am",
 	pm: "pm",
@@ -2139,7 +2137,7 @@ function formatTimezone(offset, delimiter = "") {
 	return sign + hours + delimiter + minutes;
 }
 //#endregion
-//#region node_modules/date-fns/_lib/format/longFormatters.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/_lib/format/longFormatters.js
 var dateLongFormatter = (pattern, formatLong) => {
 	switch (pattern) {
 		case "P": return formatLong.date({ width: "short" });
@@ -2172,7 +2170,9 @@ var dateTimeLongFormatter = (pattern, formatLong) => {
 		case "PPP":
 			dateTimeFormat = formatLong.dateTime({ width: "long" });
 			break;
-		default: dateTimeFormat = formatLong.dateTime({ width: "full" });
+		default:
+			dateTimeFormat = formatLong.dateTime({ width: "full" });
+			break;
 	}
 	return dateTimeFormat.replace("{{date}}", dateLongFormatter(datePattern, formatLong)).replace("{{time}}", timeLongFormatter(timePattern, formatLong));
 };
@@ -2181,7 +2181,7 @@ var longFormatters = {
 	P: dateTimeLongFormatter
 };
 //#endregion
-//#region node_modules/date-fns/_lib/protectedTokens.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/_lib/protectedTokens.js
 var dayOfYearTokenRE = /^D+$/;
 var weekYearTokenRE = /^Y+$/;
 var throwTokens = [
@@ -2206,7 +2206,7 @@ function message(token, format, input) {
 	return `Use \`${token.toLowerCase()}\` instead of \`${token}\` (in \`${format}\`) for formatting ${subject} to the input \`${input}\`; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md`;
 }
 //#endregion
-//#region node_modules/date-fns/format.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/format.js
 var formattingTokensRegExp = /[yYQqMLwIdDecihHKkms]o|(\w)\1*|''|'(''|[^'])+('|$)|./g;
 var longFormattingTokensRegExp = /P+p+|P+|p+|''|'(''|[^'])+('|$)|./g;
 var escapedStringRegExp = /^'([^]*?)'?$/;
@@ -2553,7 +2553,7 @@ function cleanEscapedString(input) {
 	return matched[1].replace(doubleQuoteRegExp, "'");
 }
 //#endregion
-//#region node_modules/date-fns/isWithinInterval.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/isWithinInterval.js
 /**
 * The {@link isWithinInterval} function options.
 */
@@ -2603,7 +2603,7 @@ function isWithinInterval(date, interval, options) {
 	return time >= startTime && time <= endTime;
 }
 //#endregion
-//#region node_modules/date-fns/subDays.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/subDays.js
 /**
 * The {@link subDays} function options.
 */
@@ -2630,7 +2630,7 @@ function subDays(date, amount, options) {
 	return addDays(date, -amount, options);
 }
 //#endregion
-//#region node_modules/date-fns/subMonths.js
+//#region node_modules/.pnpm/date-fns@4.4.0/node_modules/date-fns/subMonths.js
 /**
 * The subMonths function options.
 */

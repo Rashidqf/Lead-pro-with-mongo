@@ -4,7 +4,7 @@ import { n as createContextScope, o as useComposedRefs, s as require_jsx_runtime
 import { b as Primitive, g as useControllableState } from "./@radix-ui/react-dialog+[...].mjs";
 import { t as composeEventHandlers } from "./radix-ui__primitive.mjs";
 import { l as useSize } from "./@radix-ui/react-popover+[...].mjs";
-//#region node_modules/@radix-ui/react-switch/dist/index.mjs
+//#region node_modules/.pnpm/@radix-ui+react-switch@1.3._e96baf15833549650471eefa4ffd78d0/node_modules/@radix-ui/react-switch/dist/index.mjs
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_jsx_runtime = require_jsx_runtime();
 var __defProp = Object.defineProperty;

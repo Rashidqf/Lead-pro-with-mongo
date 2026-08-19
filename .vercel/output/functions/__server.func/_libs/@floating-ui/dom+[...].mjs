@@ -1,5 +1,5 @@
 import { a as limitShift$1, c as size$1, d as max, f as min, i as hide$1, l as createCoords, m as round, n as computePosition$1, o as offset$1, p as rectToClientRect, r as flip$1, s as shift$1, t as arrow$1, u as floor } from "./core+[...].mjs";
-//#region node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
+//#region node_modules/.pnpm/@floating-ui+utils@0.2.12/node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
 function hasWindow() {
 	return typeof window !== "undefined";
 }
@@ -112,7 +112,7 @@ function getFrameElement(win) {
 	return win.parent && Object.getPrototypeOf(win.parent) ? win.frameElement : null;
 }
 //#endregion
-//#region node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs
+//#region node_modules/.pnpm/@floating-ui+dom@1.8.0/node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs
 function getCssDimensions(element) {
 	const css = getComputedStyle$1(element);
 	let width = parseFloat(css.width) || 0;
@@ -167,11 +167,9 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
 	const clientRect = element.getBoundingClientRect();
 	const domElement = unwrapElement(element);
 	let scale = createCoords(1);
-	if (includeScale) {
-		if (offsetParent) {
-			if (isElement(offsetParent)) scale = getScale(offsetParent);
-		} else scale = getScale(element);
-	}
+	if (includeScale) if (offsetParent) {
+		if (isElement(offsetParent)) scale = getScale(offsetParent);
+	} else scale = getScale(element);
 	const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : createCoords(0);
 	let x = (clientRect.left + visualOffsets.x) / scale.x;
 	let y = (clientRect.top + visualOffsets.y) / scale.y;

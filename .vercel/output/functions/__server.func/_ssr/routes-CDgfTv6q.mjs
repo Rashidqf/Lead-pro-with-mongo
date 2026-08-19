@@ -1,6 +1,6 @@
-import { v as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { s as require_jsx_runtime } from "../_libs/@radix-ui/react-collection+[...].mjs";
 import { t as Button } from "./button-BpE9Czok.mjs";
+import { f as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { d as ShieldCheck, l as SquareKanban, n as Users } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/routes-CDgfTv6q.js
 var import_jsx_runtime = require_jsx_runtime();

@@ -1,5 +1,5 @@
 import { t as __commonJSMin } from "../_runtime.mjs";
-//#region node_modules/bson/lib/bson.cjs
+//#region node_modules/.pnpm/bson@7.3.2/node_modules/bson/lib/bson.cjs
 var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 	var TypedArrayPrototypeGetSymbolToStringTag = (() => {
 		const g = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Uint8Array.prototype), Symbol.toStringTag).get;
@@ -384,8 +384,7 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 				const byte0 = buffer[i];
 				const byte1 = buffer[i + 1];
 				const byte2 = buffer[i + 2];
-				const byte3 = buffer[i + 3];
-				buffer[i] = byte3;
+				buffer[i] = buffer[i + 3];
 				buffer[i + 1] = byte2;
 				buffer[i + 2] = byte1;
 				buffer[i + 3] = byte0;
@@ -676,8 +675,7 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 			const bits = new Int8Array(bitCount);
 			for (let bitOffset = 0; bitOffset < bits.length; bitOffset++) {
 				const byteOffset = bitOffset / 8 | 0;
-				const bit = this.buffer[byteOffset + 2] >> 7 - bitOffset % 8 & 1;
-				bits[bitOffset] = bit;
+				bits[bitOffset] = this.buffer[byteOffset + 2] >> 7 - bitOffset % 8 & 1;
 			}
 			return bits;
 		}
@@ -1423,19 +1421,18 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 			if (this.isZero()) return this.unsigned ? Long.UZERO : Long.ZERO;
 			let approx, rem, res;
 			if (!this.unsigned) {
-				if (this.eq(Long.MIN_VALUE)) {
-					if (divisor.eq(Long.ONE) || divisor.eq(Long.NEG_ONE)) return Long.MIN_VALUE;
-					else if (divisor.eq(Long.MIN_VALUE)) return Long.ONE;
+				if (this.eq(Long.MIN_VALUE)) if (divisor.eq(Long.ONE) || divisor.eq(Long.NEG_ONE)) return Long.MIN_VALUE;
+				else if (divisor.eq(Long.MIN_VALUE)) return Long.ONE;
+				else {
+					approx = this.shr(1).div(divisor).shl(1);
+					if (approx.eq(Long.ZERO)) return divisor.isNegative() ? Long.ONE : Long.NEG_ONE;
 					else {
-						approx = this.shr(1).div(divisor).shl(1);
-						if (approx.eq(Long.ZERO)) return divisor.isNegative() ? Long.ONE : Long.NEG_ONE;
-						else {
-							rem = this.sub(divisor.mul(approx));
-							res = approx.add(rem.div(divisor));
-							return res;
-						}
+						rem = this.sub(divisor.mul(approx));
+						res = approx.add(rem.div(divisor));
+						return res;
 					}
-				} else if (divisor.eq(Long.MIN_VALUE)) return this.unsigned ? Long.UZERO : Long.ZERO;
+				}
+				else if (divisor.eq(Long.MIN_VALUE)) return this.unsigned ? Long.UZERO : Long.ZERO;
 				if (this.isNegative()) {
 					if (divisor.isNegative()) return this.neg().div(divisor.neg());
 					return this.neg().div(divisor).neg();
@@ -1561,10 +1558,9 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 			if (multiplier.isZero()) return Long.ZERO;
 			if (this.eq(Long.MIN_VALUE)) return multiplier.isOdd() ? Long.MIN_VALUE : Long.ZERO;
 			if (multiplier.eq(Long.MIN_VALUE)) return this.isOdd() ? Long.MIN_VALUE : Long.ZERO;
-			if (this.isNegative()) {
-				if (multiplier.isNegative()) return this.neg().mul(multiplier.neg());
-				else return this.neg().mul(multiplier).neg();
-			} else if (multiplier.isNegative()) return this.mul(multiplier.neg()).neg();
+			if (this.isNegative()) if (multiplier.isNegative()) return this.neg().mul(multiplier.neg());
+			else return this.neg().mul(multiplier).neg();
+			else if (multiplier.isNegative()) return this.mul(multiplier.neg()).neg();
 			if (this.lt(Long.TWO_PWR_24) && multiplier.lt(Long.TWO_PWR_24)) return Long.fromNumber(this.toNumber() * multiplier.toNumber(), this.unsigned);
 			const a48 = this.high >>> 16;
 			const a32 = this.high & 65535;
@@ -1714,12 +1710,10 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 			radix = radix || 10;
 			if (radix < 2 || 36 < radix) throw new BSONError("radix");
 			if (this.isZero()) return "0";
-			if (this.isNegative()) {
-				if (this.eq(Long.MIN_VALUE)) {
-					const radixLong = Long.fromNumber(radix), div = this.div(radixLong), rem1 = div.mul(radixLong).sub(this);
-					return div.toString(radix) + rem1.toInt().toString(radix);
-				} else return "-" + this.neg().toString(radix);
-			}
+			if (this.isNegative()) if (this.eq(Long.MIN_VALUE)) {
+				const radixLong = Long.fromNumber(radix), div = this.div(radixLong), rem1 = div.mul(radixLong).sub(this);
+				return div.toString(radix) + rem1.toInt().toString(radix);
+			} else return "-" + this.neg().toString(radix);
 			const radixToPower = Long.fromNumber(Math.pow(radix, 6), this.unsigned);
 			let rem = this;
 			let result = "";
@@ -1839,7 +1833,7 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 		return !isNaN(parseInt(value, 10));
 	}
 	function divideu128(value) {
-		const DIVISOR = Long.fromNumber(1e9);
+		const DIVISOR = Long.fromNumber(1e3 * 1e3 * 1e3);
 		let _rem = Long.fromNumber(0);
 		if (!value.parts[0] && !value.parts[1] && !value.parts[2] && !value.parts[3]) return {
 			quotient: value,
@@ -2045,12 +2039,10 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 						let dIdx = lastDigit;
 						for (; dIdx >= 0; dIdx--) if (++digits[dIdx] > 9) {
 							digits[dIdx] = 0;
-							if (dIdx === 0) {
-								if (exponent < EXPONENT_MAX) {
-									exponent = exponent + 1;
-									digits[dIdx] = 1;
-								} else return new Decimal128(isNegative ? INF_NEGATIVE_BUFFER : INF_POSITIVE_BUFFER);
-							}
+							if (dIdx === 0) if (exponent < EXPONENT_MAX) {
+								exponent = exponent + 1;
+								digits[dIdx] = 1;
+							} else return new Decimal128(isNegative ? INF_NEGATIVE_BUFFER : INF_POSITIVE_BUFFER);
 						} else break;
 					}
 				}
@@ -2171,14 +2163,13 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 				high: new Long(midh, high)
 			}.high.lessThan(Long.ZERO)) string.push("-");
 			const combination = high >> 26 & COMBINATION_MASK;
-			if (combination >> 3 === 3) {
-				if (combination === COMBINATION_INFINITY) return string.join("") + "Infinity";
-				else if (combination === COMBINATION_NAN) return "NaN";
-				else {
-					biased_exponent = high >> 15 & EXPONENT_MASK;
-					significand_msb = 8 + (high >> 14 & 1);
-				}
-			} else {
+			if (combination >> 3 === 3) if (combination === COMBINATION_INFINITY) return string.join("") + "Infinity";
+			else if (combination === COMBINATION_NAN) return "NaN";
+			else {
+				biased_exponent = high >> 15 & EXPONENT_MASK;
+				significand_msb = 8 + (high >> 14 & 1);
+			}
+			else {
 				significand_msb = high >> 14 & 7;
 				biased_exponent = high >> 17 & EXPONENT_MASK;
 			}
@@ -2429,12 +2420,11 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 				this.i2 = pu[2] << 16 | pu[3] << 8 | pu[4];
 				this.i3 = inc & 16777215;
 			} else if (ArrayBuffer.isView(workingId) && workingId.byteLength === 12) this.setFromBytes(workingId instanceof Uint8Array ? workingId : ByteUtils.toLocalBufferType(workingId));
-			else if (typeof workingId === "string") {
-				if (ObjectId.validateHexString(workingId)) {
-					this.setFromHex(workingId);
-					if (ObjectId.cacheHexString) __idCache.set(this, workingId);
-				} else throw new BSONError("input must be a 24 character hex string, 12 byte Uint8Array, or an integer");
-			} else throw new BSONError("Argument passed in does not match the accepted types");
+			else if (typeof workingId === "string") if (ObjectId.validateHexString(workingId)) {
+				this.setFromHex(workingId);
+				if (ObjectId.cacheHexString) __idCache.set(this, workingId);
+			} else throw new BSONError("input must be a 24 character hex string, 12 byte Uint8Array, or an integer");
+			else throw new BSONError("Argument passed in does not match the accepted types");
 		}
 		get id() {
 			const b = ByteUtils.allocateUnsafe(12);
@@ -2608,10 +2598,9 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 		if (typeof value?.toBSON === "function") value = value.toBSON();
 		switch (typeof value) {
 			case "string": return 1 + ByteUtils.utf8ByteLength(name) + 1 + 4 + ByteUtils.utf8ByteLength(value) + 1;
-			case "number": if (Math.floor(value) === value && value >= JS_INT_MIN && value <= JS_INT_MAX) {
-				if (value >= BSON_INT32_MIN && value <= BSON_INT32_MAX) return ByteUtils.utf8ByteLength(name) + 1 + 5;
-				else return ByteUtils.utf8ByteLength(name) + 1 + 9;
-			} else return ByteUtils.utf8ByteLength(name) + 1 + 9;
+			case "number": if (Math.floor(value) === value && value >= JS_INT_MIN && value <= JS_INT_MAX) if (value >= BSON_INT32_MIN && value <= BSON_INT32_MAX) return ByteUtils.utf8ByteLength(name) + 1 + 5;
+			else return ByteUtils.utf8ByteLength(name) + 1 + 9;
+			else return ByteUtils.utf8ByteLength(name) + 1 + 9;
 			case "undefined":
 				if (isArray || !ignoreUndefined) return ByteUtils.utf8ByteLength(name) + 1 + 1;
 				return 0;
@@ -2624,15 +2613,14 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 			else if (value._bsontype === "Long" || value._bsontype === "Double" || value._bsontype === "Timestamp") return ByteUtils.utf8ByteLength(name) + 1 + 9;
 			else if (value._bsontype === "Decimal128") return ByteUtils.utf8ByteLength(name) + 1 + 17;
 			else if (value._bsontype === "Int32") return ByteUtils.utf8ByteLength(name) + 1 + 5;
-			else if (value._bsontype === "Code") {
-				if (value.scope != null && Object.keys(value.scope).length > 0) {
-					objectStack.push({
-						obj: value.scope,
-						ignoreUndefined
-					});
-					return ByteUtils.utf8ByteLength(name) + 1 + 1 + 4 + 4 + ByteUtils.utf8ByteLength(value.code.toString()) + 1;
-				} else return ByteUtils.utf8ByteLength(name) + 1 + 1 + 4 + ByteUtils.utf8ByteLength(value.code.toString()) + 1;
-			} else if (value._bsontype === "Binary") {
+			else if (value._bsontype === "Code") if (value.scope != null && Object.keys(value.scope).length > 0) {
+				objectStack.push({
+					obj: value.scope,
+					ignoreUndefined
+				});
+				return ByteUtils.utf8ByteLength(name) + 1 + 1 + 4 + 4 + ByteUtils.utf8ByteLength(value.code.toString()) + 1;
+			} else return ByteUtils.utf8ByteLength(name) + 1 + 1 + 4 + ByteUtils.utf8ByteLength(value.code.toString()) + 1;
+			else if (value._bsontype === "Binary") {
 				const binary = value;
 				if (binary.sub_type === Binary.SUBTYPE_BYTE_ARRAY) return ByteUtils.utf8ByteLength(name) + 1 + (binary.position + 1 + 4 + 1 + 4);
 				else return ByteUtils.utf8ByteLength(name) + 1 + (binary.position + 1 + 4 + 1);
@@ -2697,11 +2685,9 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 			} };
 		}
 		static fromExtendedJSON(doc) {
-			if ("$regex" in doc) {
-				if (typeof doc.$regex !== "string") {
-					if (doc.$regex._bsontype === "BSONRegExp") return doc;
-				} else return new BSONRegExp(doc.$regex, BSONRegExp.parseOptions(doc.$options));
-			}
+			if ("$regex" in doc) if (typeof doc.$regex !== "string") {
+				if (doc.$regex._bsontype === "BSONRegExp") return doc;
+			} else return new BSONRegExp(doc.$regex, BSONRegExp.parseOptions(doc.$options));
 			if ("$regularExpression" in doc) return new BSONRegExp(doc.$regularExpression.pattern, BSONRegExp.parseOptions(doc.$regularExpression.options));
 			throw new BSONError(`Unexpected BSONRegExp EJSON object form: ${JSON.stringify(doc)}`);
 		}
@@ -2882,37 +2868,34 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 		let currentIsArray = isArray;
 		while (true) {
 			const elementType = buffer[index++];
-			if (elementType === 0) {
-				if (currentFrame) {
-					if (index === currentFrame.lastIndex) {
-						const completedFrame = currentFrame;
-						currentFrame = completedFrame.prev;
-						if (currentFrame === null) {
-							currentDest = rootObject;
-							currentIsArray = isArray;
-						} else {
-							currentDest = currentFrame.holdingDocument;
-							currentIsArray = currentFrame.isArray;
-						}
-						let result = completedFrame.holdingDocument;
-						switch (completedFrame.elementType) {
-							case BSON_DATA_OBJECT:
-								if (completedFrame.isPossibleDBRef) result = toPotentialDbRef(result);
-								break;
-							case BSON_DATA_ARRAY: break;
-							case BSON_DATA_CODE_W_SCOPE:
-								result = new Code(completedFrame.functionString, completedFrame.holdingDocument);
-								break;
-							default: throw new BSONError("Unexpected element type in frame stack");
-						}
-						assignValue(currentDest, completedFrame.propertyName, result);
-						continue;
-					} else {
-						if (currentFrame.elementType === BSON_DATA_ARRAY) throw new BSONError("corrupted array bson");
-						throw new BSONError("Bad BSON Document: object not properly terminated");
-					}
-				} else break;
+			if (elementType === 0) if (currentFrame) if (index === currentFrame.lastIndex) {
+				const completedFrame = currentFrame;
+				currentFrame = completedFrame.prev;
+				if (currentFrame === null) {
+					currentDest = rootObject;
+					currentIsArray = isArray;
+				} else {
+					currentDest = currentFrame.holdingDocument;
+					currentIsArray = currentFrame.isArray;
+				}
+				let result = completedFrame.holdingDocument;
+				switch (completedFrame.elementType) {
+					case BSON_DATA_OBJECT:
+						if (completedFrame.isPossibleDBRef) result = toPotentialDbRef(result);
+						break;
+					case BSON_DATA_ARRAY: break;
+					case BSON_DATA_CODE_W_SCOPE:
+						result = new Code(completedFrame.functionString, completedFrame.holdingDocument);
+						break;
+					default: throw new BSONError("Unexpected element type in frame stack");
+				}
+				assignValue(currentDest, completedFrame.propertyName, result);
+				continue;
+			} else {
+				if (currentFrame.elementType === BSON_DATA_ARRAY) throw new BSONError("corrupted array bson");
+				throw new BSONError("Bad BSON Document: object not properly terminated");
 			}
+			else break;
 			let i = index;
 			while (buffer[i] !== 0 && i < buffer.length) i++;
 			if (i >= buffer.byteLength) throw new BSONError("Bad BSON Document: illegal CString");
@@ -3005,19 +2988,18 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 				index = index + 4;
 			} else if (elementType === BSON_DATA_UNDEFINED) value = void 0;
 			else if (elementType === BSON_DATA_NULL) value = null;
-			else if (elementType === BSON_DATA_LONG) {
-				if (useBigInt64) {
-					value = NumberUtils.getBigInt64LE(buffer, index);
-					index += 8;
-				} else {
-					const lowBits = NumberUtils.getInt32LE(buffer, index);
-					const highBits = NumberUtils.getInt32LE(buffer, index + 4);
-					index += 8;
-					const long = new Long(lowBits, highBits);
-					if (promoteLongs && promoteValues === true) value = long.lessThanOrEqual(JS_INT_MAX_LONG) && long.greaterThanOrEqual(JS_INT_MIN_LONG) ? long.toNumber() : long;
-					else value = long;
-				}
-			} else if (elementType === BSON_DATA_DECIMAL128) {
+			else if (elementType === BSON_DATA_LONG) if (useBigInt64) {
+				value = NumberUtils.getBigInt64LE(buffer, index);
+				index += 8;
+			} else {
+				const lowBits = NumberUtils.getInt32LE(buffer, index);
+				const highBits = NumberUtils.getInt32LE(buffer, index + 4);
+				index += 8;
+				const long = new Long(lowBits, highBits);
+				if (promoteLongs && promoteValues === true) value = long.lessThanOrEqual(JS_INT_MAX_LONG) && long.greaterThanOrEqual(JS_INT_MIN_LONG) ? long.toNumber() : long;
+				else value = long;
+			}
+			else if (elementType === BSON_DATA_DECIMAL128) {
 				const bytes = ByteUtils.allocateUnsafe(16);
 				for (let i = 0; i < 16; i++) bytes[i] = buffer[index + i];
 				index = index + 16;
@@ -3061,7 +3043,9 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 					case "s":
 						optionsArray[i] = "g";
 						break;
-					case "i": optionsArray[i] = "i";
+					case "i":
+						optionsArray[i] = "i";
+						break;
 				}
 				value = new RegExp(source, optionsArray.join(""));
 			} else if (elementType === BSON_DATA_REGEXP && bsonRegExp === true) {
@@ -3473,22 +3457,21 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 			else if (type === "number") index = serializeNumber(buffer, key, value, index);
 			else if (type === "bigint") index = serializeBigInt(buffer, key, value, index);
 			else if (type === "boolean") index = serializeBoolean(buffer, key, value, index);
-			else if (type === "object" && value._bsontype == null) {
-				if (value instanceof Date || isDate(value)) index = serializeDate(buffer, key, value, index);
-				else if (value instanceof Uint8Array || isUint8Array(value)) index = serializeBuffer(buffer, key, value, index);
-				else if (value instanceof RegExp || isRegExp(value)) index = serializeRegExp(buffer, key, value, index);
-				else {
-					if (path.has(value)) throw new BSONError("Cannot convert circular structure to BSON");
-					const nestedIsArray = Array.isArray(value);
-					buffer[index++] = nestedIsArray ? BSON_DATA_ARRAY : BSON_DATA_OBJECT;
-					index += ByteUtils.encodeUTF8Into(buffer, key, index);
-					buffer[index++] = 0;
-					const nestedStartIndex = index;
-					path.add(value);
-					currentFrame = makeFrame(value, nestedStartIndex, null, frame, frame.checkKeys, frame.ignoreUndefined);
-					index += 4;
-				}
-			} else if (type === "object") {
+			else if (type === "object" && value._bsontype == null) if (value instanceof Date || isDate(value)) index = serializeDate(buffer, key, value, index);
+			else if (value instanceof Uint8Array || isUint8Array(value)) index = serializeBuffer(buffer, key, value, index);
+			else if (value instanceof RegExp || isRegExp(value)) index = serializeRegExp(buffer, key, value, index);
+			else {
+				if (path.has(value)) throw new BSONError("Cannot convert circular structure to BSON");
+				const nestedIsArray = Array.isArray(value);
+				buffer[index++] = nestedIsArray ? BSON_DATA_ARRAY : BSON_DATA_OBJECT;
+				index += ByteUtils.encodeUTF8Into(buffer, key, index);
+				buffer[index++] = 0;
+				const nestedStartIndex = index;
+				path.add(value);
+				currentFrame = makeFrame(value, nestedStartIndex, null, frame, frame.checkKeys, frame.ignoreUndefined);
+				index += 4;
+			}
+			else if (type === "object") {
 				if (value[BSON_VERSION_SYMBOL] !== BSON_MAJOR_VERSION) throw new BSONVersionError();
 				const tag = value[bsonType];
 				if (tag === "ObjectId") index = serializeObjectId(buffer, key, value, index);
@@ -3587,12 +3570,11 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 		if (value.$date != null) {
 			const d = value.$date;
 			const date = /* @__PURE__ */ new Date();
-			if (options.legacy) {
-				if (typeof d === "number") date.setTime(d);
-				else if (typeof d === "string") date.setTime(Date.parse(d));
-				else if (typeof d === "bigint") date.setTime(Number(d));
-				else throw new BSONRuntimeError(`Unrecognized type for EJSON date: ${typeof d}`);
-			} else if (typeof d === "string") date.setTime(Date.parse(d));
+			if (options.legacy) if (typeof d === "number") date.setTime(d);
+			else if (typeof d === "string") date.setTime(Date.parse(d));
+			else if (typeof d === "bigint") date.setTime(Number(d));
+			else throw new BSONRuntimeError(`Unrecognized type for EJSON date: ${typeof d}`);
+			else if (typeof d === "string") date.setTime(Date.parse(d));
 			else if (Long.isLong(d)) date.setTime(d.toNumber());
 			else if (typeof d === "number" && options.relaxed) date.setTime(d);
 			else if (typeof d === "bigint") date.setTime(Number(d));
@@ -3868,7 +3850,7 @@ var require_bson = /* @__PURE__ */ __commonJSMin(((exports) => {
 	onDemand.ByteUtils = ByteUtils;
 	onDemand.NumberUtils = NumberUtils;
 	Object.freeze(onDemand);
-	var MAXSIZE = 17825792;
+	var MAXSIZE = 1024 * 1024 * 17;
 	var buffer = ByteUtils.allocate(MAXSIZE);
 	function setInternalBufferSize(size) {
 		if (buffer.length < size) buffer = ByteUtils.allocate(size);

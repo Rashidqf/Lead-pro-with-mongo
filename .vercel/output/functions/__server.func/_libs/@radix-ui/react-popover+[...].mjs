@@ -5,7 +5,7 @@ import { _ as useCallbackRef, b as Primitive, d as Portal$1, f as FocusScope, g 
 import { t as composeEventHandlers } from "../radix-ui__primitive.mjs";
 import { n as autoUpdate } from "../@floating-ui/dom+[...].mjs";
 import { a as offset, c as useFloating, i as limitShift, n as flip, o as shift, r as hide, s as size, t as arrow } from "../floating-ui__react-dom.mjs";
-//#region node_modules/@radix-ui/react-use-size/dist/index.mjs
+//#region node_modules/.pnpm/@radix-ui+react-use-size@1._f6fba6080aa4b34556ffaacded10db65/node_modules/@radix-ui/react-use-size/dist/index.mjs
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var __defProp$2 = Object.defineProperty;
 var __name$2 = (target, value) => __defProp$2(target, "name", {
@@ -48,7 +48,7 @@ function useSize(element) {
 }
 __name$2(useSize, "useSize");
 //#endregion
-//#region node_modules/@radix-ui/react-popper/dist/index.mjs
+//#region node_modules/.pnpm/@radix-ui+react-popper@1.3._4e5bda27561956783247cbf95bf4739f/node_modules/@radix-ui/react-popper/dist/index.mjs
 var import_jsx_runtime = require_jsx_runtime();
 var __defProp$1 = Object.defineProperty;
 var __name$1 = (target, value) => __defProp$1(target, "name", {
@@ -77,11 +77,10 @@ var PopperAnchor = /* @__PURE__ */ import_react.forwardRef(/* @__PURE__ */ __nam
 	const context = usePopperContext(ANCHOR_NAME, __scopePopper);
 	const ref = import_react.useRef(null);
 	const onAnchorChange = context.onAnchorChange;
-	const callbackRef = import_react.useCallback((node) => {
+	const composedRefs = useComposedRefs(forwardedRef, import_react.useCallback((node) => {
 		ref.current = node;
 		if (node) onAnchorChange(node);
-	}, [onAnchorChange]);
-	const composedRefs = useComposedRefs(forwardedRef, callbackRef);
+	}, [onAnchorChange]));
 	const anchorRef = import_react.useRef(null);
 	import_react.useEffect(() => {
 		if (!virtualRef) return;
@@ -275,7 +274,7 @@ var Root2$1 = Popper;
 var Anchor = PopperAnchor;
 var Content = PopperContent;
 //#endregion
-//#region node_modules/@radix-ui/react-popover/dist/index.mjs
+//#region node_modules/.pnpm/@radix-ui+react-popover@1.1_bd28d99ba664df7858bf435248864de3/node_modules/@radix-ui/react-popover/dist/index.mjs
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", {
 	value,
