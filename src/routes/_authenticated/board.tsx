@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ContactDialog } from "@/components/crm/ContactDialog";
+import { ImportContactsButton } from "@/components/crm/ImportContactsButton";
 import { KanbanBoard } from "@/components/crm/KanbanBoard";
 import { columnsQuery, contactsQuery, displayName, profilesQuery, type Contact } from "@/lib/crm";
 import { useCrmAuth } from "@/hooks/use-crm-auth";
@@ -99,6 +100,7 @@ function BoardPage() {
           </SelectContent>
         </Select>
         <span className="text-xs text-muted-foreground">{filtered.length} cards</span>
+        <ImportContactsButton />
       </div>
 
       {isLoading ? (

@@ -25,6 +25,7 @@ import {
 import { useCrmAuth } from "@/hooks/use-crm-auth";
 import { deleteContact, updateContact } from "@/lib/crm.functions";
 import { type BoardColumn, type Contact, type Profile } from "@/lib/crm";
+import { normalizePhone } from "@/lib/phone";
 import { AssignUserSelect } from "./AssignUserSelect";
 
 type Form = {
@@ -77,7 +78,7 @@ export function ContactDialog({
       const payload = {
         name: form.name.trim().slice(0, 200) || "Untitled",
         company: form.company.trim() || null,
-        phone: form.phone.trim() || null,
+        phone: normalizePhone(form.phone),
         email: form.email.trim() || null,
         address: form.address.trim() || null,
         notes: form.notes.trim() || null,

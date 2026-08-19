@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+// import { ImportContactsButton } from "@/components/crm/ImportContactsButton";
 import {
   Dialog,
   DialogContent,
@@ -32,7 +33,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useCrmAuth } from "@/hooks/use-crm-auth";
+import { AppShell } from "@/components/crm/AppShell";
+import { ImportContactsButton } from "@/components/crm/ImportContactsButton";
 import { contactsQuery, displayName, profilesQuery, rolesQuery } from "@/lib/crm";
 import { adminCreateUser, adminDeleteUser, adminUpdateUser } from "@/lib/admin.functions";
 
@@ -132,13 +134,15 @@ function UsersPage() {
           <h1 className="text-2xl font-semibold tracking-tight">Team</h1>
           <p className="mt-1 text-sm text-muted-foreground">{profiles.length} members</p>
         </div>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <UserPlus className="mr-1.5 h-4 w-4" />
-              New user
-            </Button>
-          </DialogTrigger>
+        <div className="flex gap-2">
+          <ImportContactsButton />
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <UserPlus className="mr-1.5 h-4 w-4" />
+                New user
+              </Button>
+            </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Create user</DialogTitle>
@@ -189,6 +193,7 @@ function UsersPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       <div className="surface-panel shadow-card mt-6 overflow-x-auto">

@@ -1,4 +1,11 @@
 import { MongoClient, type Collection, type Db, type Document } from "mongodb";
+import dns from "node:dns";
+
+import { normalizePhone } from "@/lib/phone";
+import { encodeMongoUri } from "@/lib/mongo-uri";
+
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
+dns.setDefaultResultOrder("ipv4first");
 
 export type MongoDoc = Document & { _id: string };
 
@@ -14,7 +21,7 @@ export function col(db: Db, name: string): Collection<MongoDoc> {
 }
 
 async function connect(): Promise<Db> {
-  const uri = process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017";
+  const uri = encodeMongoUri(process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017");
   const dbName = process.env.MONGODB_DB ?? "lead-flow-pro";
   const client = new MongoClient(uri);
   await client.connect();
@@ -25,8 +32,51 @@ async function connect(): Promise<Db> {
     col(db, "contacts").createIndex({ assigned_to: 1 }),
     col(db, "contacts").createIndex({ column_id: 1 }),
     col(db, "activities").createIndex({ created_at: -1 }),
+    ensureUniqueContactPhones(db),
   ]);
   return db;
+}
+
+export async function ensureUniqueContactPhones(db: Db) {
+  const contacts = col(db, "contacts");
+  const dirty = contacts.find({ phone: { $regex: /\s/ } });
+  for await (const doc of dirty) {
+    const phone = normalizePhone(String(doc.phone));
+    const taken =
+      phone &&
+      (await contacts.findOne({ phone, _id: { $ne: doc._id } }));
+    await contacts.updateOne(
+      { _id: doc._id },
+      { $set: { phone: taken ? null : phone } },
+    );
+  }
+
+  const dupGroups = await contacts
+    .aggregate<{ _id: string; ids: string[] }>([
+      { $match: { phone: { $type: "string" } } },
+      { $group: { _id: "$phone", ids: { $push: "$_id" }, n: { $sum: 1 } } },
+      { $match: { n: { $gt: 1 } } },
+    ])
+    .toArray();
+  for (const group of dupGroups) {
+    const extras = group.ids.slice(1);
+    if (extras.length) {
+      await contacts.updateMany({ _id: { $in: extras } }, { $set: { phone: null } });
+    }
+  }
+
+  try {
+    await contacts.createIndex(
+      { phone: 1 },
+      {
+        unique: true,
+        name: "contacts_phone_unique",
+        partialFilterExpression: { phone: { $type: "string" } },
+      },
+    );
+  } catch (err) {
+    console.warn("Could not create unique phone index (duplicate numbers may already exist):", err);
+  }
 }
 
 export function toIso(value: unknown): string {

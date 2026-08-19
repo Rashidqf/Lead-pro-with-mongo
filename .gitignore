@@ -33,3 +33,5 @@ mongo-export/
 *.njsproj
 *.sln
 *.sw?
+
+*.env

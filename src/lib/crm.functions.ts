@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { requireAuth } from "@/integrations/mongo/auth-middleware";
 import type { Activity, BoardColumn, Contact, Profile } from "@/lib/crm";
+import { normalizePhone } from "@/lib/phone";
 
 type Actor = { userId: string; isAdmin: boolean };
 
@@ -45,7 +46,7 @@ function asContact(doc: Record<string, unknown>): Contact {
     id: String(doc._id ?? doc.id),
     name: String(doc.name),
     company: (doc.company as string | null) ?? null,
-    phone: (doc.phone as string | null) ?? null,
+    phone: normalizePhone((doc.phone as string | null) ?? null),
     email: (doc.email as string | null) ?? null,
     address: (doc.address as string | null) ?? null,
     notes: (doc.notes as string | null) ?? null,
@@ -74,6 +75,26 @@ function asActivity(doc: Record<string, unknown>): Activity {
 
 function contactFilter(actor: Actor) {
   return actor.isAdmin ? {} : { assigned_to: actor.userId };
+}
+
+const DUPLICATE_PHONE_MESSAGE = "A contact with this phone number already exists";
+
+function isDuplicateKeyError(err: unknown) {
+  return Boolean(err && typeof err === "object" && "code" in err && (err as { code: number }).code === 11000);
+}
+
+async function assertPhoneUnique(
+  db: import("mongodb").Db,
+  phone: string | null,
+  excludeId?: string,
+) {
+  if (!phone) return;
+  const { col } = await import("@/integrations/mongo/client.server");
+  const existing = await col(db, "contacts").findOne({
+    phone,
+    ...(excludeId ? { _id: { $ne: excludeId } } : {}),
+  });
+  if (existing) throw new Error(DUPLICATE_PHONE_MESSAGE);
 }
 
 async function writeActivity(
@@ -108,8 +129,9 @@ export const listColumns = createServerFn({ method: "GET" })
 export const listContacts = createServerFn({ method: "GET" })
   .middleware([requireAuth])
   .handler(async ({ context }) => {
-    const { getDb, col } = await import("@/integrations/mongo/client.server");
+    const { getDb, col, ensureUniqueContactPhones } = await import("@/integrations/mongo/client.server");
     const db = await getDb();
+    await ensureUniqueContactPhones(db);
     const rows = await col(db, "contacts")
       .find(contactFilter(context))
       .sort({ created_at: -1 })
@@ -223,6 +245,10 @@ export const updateContact = createServerFn({ method: "POST" })
     for (const [key, value] of Object.entries(rest)) {
       if (value !== undefined) patch[key] = value;
     }
+    if (patch.phone !== undefined) {
+      patch.phone = normalizePhone(patch.phone as string | null);
+      await assertPhoneUnique(db, patch.phone as string | null, id);
+    }
     if (!context.isAdmin) delete patch.assigned_to;
     let action = "updated";
     if (patch.column_id !== undefined && patch.column_id !== existing.column_id) action = "moved";
@@ -235,6 +261,12 @@ export const updateContact = createServerFn({ method: "POST" })
         const profile = await col(db,"profiles").findOne({ _id: assigneeId });
         detail = String(profile?.full_name || profile?.email || "Unknown user");
       }
+    }
+    try {
+      await col(db, "contacts").updateOne({ _id: id }, { $set: patch });
+    } catch (err) {
+      if (isDuplicateKeyError(err)) throw new Error(DUPLICATE_PHONE_MESSAGE);
+      throw err;
     }
     await writeActivity(db, context, id, action, detail);
     const next = await col(db,"contacts").findOne({ _id: id });
@@ -287,7 +319,7 @@ export const importContacts = createServerFn({ method: "POST" })
         _id: id,
         id,
         name: row.name,
-        phone: row.phone ?? null,
+        phone: normalizePhone(row.phone),
         email: row.email ?? null,
         company: row.company ?? null,
         address: row.address ?? null,
@@ -303,9 +335,35 @@ export const importContacts = createServerFn({ method: "POST" })
         updated_at: now,
       };
     });
-    if (docs.length) await col(db,"contacts").insertMany(docs);
-    await writeActivity(db, context, null, "imported", `${docs.length} contacts`);
-    return { count: docs.length };
+    const phones = [...new Set(docs.map((d) => d.phone).filter((p): p is string => Boolean(p)))];
+    const existing = phones.length
+      ? await col(db, "contacts")
+          .find({ phone: { $in: phones } })
+          .project({ phone: 1 })
+          .toArray()
+      : [];
+    const taken = new Set(existing.map((row) => String(row.phone)));
+    const seen = new Set<string>();
+    const uniqueDocs: typeof docs = [];
+    let skipped = 0;
+    for (const doc of docs) {
+      if (doc.phone) {
+        if (taken.has(doc.phone) || seen.has(doc.phone)) {
+          skipped += 1;
+          continue;
+        }
+        seen.add(doc.phone);
+      }
+      uniqueDocs.push(doc);
+    }
+    try {
+      if (uniqueDocs.length) await col(db, "contacts").insertMany(uniqueDocs);
+    } catch (err) {
+      if (isDuplicateKeyError(err)) throw new Error(DUPLICATE_PHONE_MESSAGE);
+      throw err;
+    }
+    await writeActivity(db, context, null, "imported", `${uniqueDocs.length} contacts`);
+    return { count: uniqueDocs.length, skipped };
   });
 
 export const logContactActivity = createServerFn({ method: "POST" })

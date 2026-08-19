@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Search, Upload } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { Plus, Search } from "lucide-react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/table";
 import { ContactDialog } from "@/components/crm/ContactDialog";
 import { AssignUserSelect } from "@/components/crm/AssignUserSelect";
+import { ImportContactsButton } from "@/components/crm/ImportContactsButton";
 import { useCrmAuth } from "@/hooks/use-crm-auth";
 import {
   columnsQuery,
@@ -31,8 +32,7 @@ import {
   profilesQuery,
   type Contact,
 } from "@/lib/crm";
-import { createContact as createContactFn, importContacts, updateContact } from "@/lib/crm.functions";
-import { parseCsv } from "@/lib/csv";
+import { createContact as createContactFn, updateContact } from "@/lib/crm.functions";
 
 export const Route = createFileRoute("/_authenticated/contacts")({
   head: () => ({
@@ -49,7 +49,6 @@ export const Route = createFileRoute("/_authenticated/contacts")({
 function ContactsPage() {
   const { isAdmin } = useCrmAuth();
   const queryClient = useQueryClient();
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const { data: contacts = [] } = useQuery(contactsQuery);
   const { data: columns = [] } = useQuery(columnsQuery);
@@ -110,46 +109,6 @@ function ContactsPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const importCsv = useMutation({
-    mutationFn: async (file: File) => {
-      const rows = parseCsv(await file.text());
-      const leads = columns.find((c) => c.name === "Leads") ?? columns[0];
-      const pick = (row: Record<string, string>, keys: string[]) => {
-        for (const key of keys) {
-          const found = Object.keys(row).find((k) => k.toLowerCase().trim() === key);
-          if (found && row[found]?.trim()) return row[found].trim();
-        }
-        return null;
-      };
-      const payload = rows
-        .map((row) => ({
-          name:
-            pick(row, ["name", "name_or_number", "full_name", "contact"]) ??
-            pick(row, ["phone", "phone_number"]) ??
-            "Unnamed",
-          phone: pick(row, ["phone", "phone_number", "mobile"]),
-          email: pick(row, ["email", "email_address"]),
-          company: pick(row, ["company", "organization", "business"]),
-          address: pick(row, ["address", "location", "city"]),
-          notes: pick(row, ["notes", "note", "comment"]),
-          last_activity_date: pick(row, ["last_activity_date", "last_activity"]),
-          last_message: pick(row, ["last_message", "message"]),
-          column_id: leads?.id ?? null,
-        }))
-        .filter((r) => r.name);
-      if (!payload.length) throw new Error("No rows found in that CSV");
-      const result = await importContacts({
-        data: { column_id: leads?.id ?? null, rows: payload },
-      });
-      return result.count;
-    },
-    onSuccess: (count) => {
-      queryClient.invalidateQueries({ queryKey: ["contacts"] });
-      toast.success(`Imported ${count} contacts`);
-    },
-    onError: (e: Error) => toast.error(e.message),
-  });
-
   const live = selected ? (contacts.find((c) => c.id === selected.id) ?? selected) : null;
 
   return (
@@ -161,25 +120,7 @@ function ContactsPage() {
         </div>
         {isAdmin && (
           <div className="flex gap-2">
-            <input
-              ref={fileRef}
-              type="file"
-              accept=".csv,text/csv"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) importCsv.mutate(file);
-                e.target.value = "";
-              }}
-            />
-            <Button
-              variant="outline"
-              onClick={() => fileRef.current?.click()}
-              disabled={importCsv.isPending}
-            >
-              <Upload className="mr-1.5 h-4 w-4" />
-              {importCsv.isPending ? "Importing…" : "Import CSV"}
-            </Button>
+            <ImportContactsButton />
             <Button onClick={() => createContact.mutate()}>
               <Plus className="mr-1.5 h-4 w-4" />
               New contact

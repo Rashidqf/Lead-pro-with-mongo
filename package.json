@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "export:mongo": "node scripts/export-supabase-to-mongo.mjs",
-    "import:mongo": "node scripts/import-mongo.mjs"
+    "import:mongo": "node scripts/import-mongo.mjs",
+    "import:contacts": "node scripts/import-contacts.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
