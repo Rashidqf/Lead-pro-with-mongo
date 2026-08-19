@@ -1,16 +1,21 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { format } from "date-fns";
+import { Check, ChevronsUpDown, Contact as ContactIcon, FolderKanban } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { DATE_RANGE_LABELS, type DateRange, type DateRangePreset } from "@/lib/finance";
+import { formatPhone } from "@/lib/phone";
 import { cn } from "@/lib/utils";
 
 const PRESETS: DateRangePreset[] = [
@@ -166,27 +171,77 @@ export function CustomerSelect({
   contacts,
   value,
   onChange,
-  placeholder = "Select customer",
+  placeholder = "Search customer…",
+  disabled,
 }: {
-  contacts: { id: string; name: string; phone: string | null }[];
+  contacts: { id: string; name: string; phone: string | null; company?: string | null }[];
   value: string;
   onChange: (id: string) => void;
   placeholder?: string;
+  disabled?: boolean;
 }) {
+  const [open, setOpen] = useState(false);
+  const current = contacts.find((c) => c.id === value) ?? null;
+
   return (
-    <Select value={value || undefined} onValueChange={onChange}>
-      <SelectTrigger>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {contacts.map((c) => (
-          <SelectItem key={c.id} value={c.id}>
-            {c.name}
-            {c.phone ? ` · ${c.phone}` : ""}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          disabled={disabled}
+          className="h-9 w-full justify-between text-sm font-normal"
+        >
+          <span className="flex min-w-0 items-center gap-2 truncate">
+            <ContactIcon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            {current ? (
+              <span className="truncate">
+                {current.name}
+                {current.phone ? (
+                  <span className="text-muted-foreground"> · {formatPhone(current.phone)}</span>
+                ) : null}
+              </span>
+            ) : (
+              <span className="text-muted-foreground">{placeholder}</span>
+            )}
+          </span>
+          <ChevronsUpDown className="h-3.5 w-3.5 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+        <Command>
+          <CommandInput placeholder="Search by name, phone, company…" />
+          <CommandList>
+            <CommandEmpty>No customers found.</CommandEmpty>
+            <CommandGroup>
+              {contacts.map((c) => (
+                <CommandItem
+                  key={c.id}
+                  value={[c.name, c.phone, c.company, formatPhone(c.phone)].filter(Boolean).join(" ")}
+                  onSelect={() => {
+                    onChange(c.id);
+                    setOpen(false);
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4 shrink-0",
+                      value === c.id ? "opacity-100" : "opacity-0",
+                    )}
+                  />
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{c.name}</p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {[formatPhone(c.phone), c.company].filter(Boolean).join(" · ") || "No phone"}
+                    </p>
+                  </div>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }
 
@@ -196,27 +251,89 @@ export function ProjectSelect({
   value,
   onChange,
   allowNone,
+  disabled,
 }: {
   projects: { id: string; contact_id: string; name: string }[];
   contactId?: string;
   value: string;
   onChange: (id: string) => void;
   allowNone?: boolean;
+  disabled?: boolean;
 }) {
+  const [open, setOpen] = useState(false);
   const filtered = contactId ? projects.filter((p) => p.contact_id === contactId) : projects;
+  const current =
+    value && value !== "none" ? (filtered.find((p) => p.id === value) ?? null) : null;
+
   return (
-    <Select value={value || (allowNone ? "none" : undefined)} onValueChange={onChange}>
-      <SelectTrigger>
-        <SelectValue placeholder="Select project" />
-      </SelectTrigger>
-      <SelectContent>
-        {allowNone && <SelectItem value="none">No project</SelectItem>}
-        {filtered.map((p) => (
-          <SelectItem key={p.id} value={p.id}>
-            {p.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          disabled={disabled || (!allowNone && filtered.length === 0)}
+          className="h-9 w-full justify-between text-sm font-normal"
+        >
+          <span className="flex min-w-0 items-center gap-2 truncate">
+            <FolderKanban className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            {current ? (
+              <span className="truncate">{current.name}</span>
+            ) : value === "none" ? (
+              <span className="text-muted-foreground">No project</span>
+            ) : (
+              <span className="text-muted-foreground">Search project…</span>
+            )}
+          </span>
+          <ChevronsUpDown className="h-3.5 w-3.5 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+        <Command>
+          <CommandInput placeholder="Search project…" />
+          <CommandList>
+            <CommandEmpty>
+              {contactId ? "No projects for this customer." : "No projects found."}
+            </CommandEmpty>
+            <CommandGroup>
+              {allowNone && (
+                <CommandItem
+                  value="no project none"
+                  onSelect={() => {
+                    onChange("none");
+                    setOpen(false);
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4 shrink-0",
+                      value === "none" ? "opacity-100" : "opacity-0",
+                    )}
+                  />
+                  No project
+                </CommandItem>
+              )}
+              {filtered.map((p) => (
+                <CommandItem
+                  key={p.id}
+                  value={p.name}
+                  onSelect={() => {
+                    onChange(p.id);
+                    setOpen(false);
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4 shrink-0",
+                      value === p.id ? "opacity-100" : "opacity-0",
+                    )}
+                  />
+                  <span className="truncate">{p.name}</span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }

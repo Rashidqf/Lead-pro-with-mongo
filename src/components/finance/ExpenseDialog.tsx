@@ -137,7 +137,14 @@ export function ExpenseDialog({
             <>
               <div>
                 <Label className="mb-1.5 block text-xs">Customer</Label>
-                <CustomerSelect contacts={contacts} value={contactId} onChange={setContactId} />
+                <CustomerSelect
+                  contacts={contacts}
+                  value={contactId}
+                  onChange={(id) => {
+                    setContactId(id);
+                    setProjectId("");
+                  }}
+                />
               </div>
               <div>
                 <Label className="mb-1.5 block text-xs">Project</Label>
@@ -146,6 +153,7 @@ export function ExpenseDialog({
                   contactId={contactId}
                   value={projectId}
                   onChange={setProjectId}
+                  disabled={!contactId}
                 />
               </div>
             </>

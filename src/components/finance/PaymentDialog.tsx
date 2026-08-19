@@ -107,7 +107,10 @@ export function PaymentDialog({
             <CustomerSelect
               contacts={contacts}
               value={contactId}
-              onChange={setContactId}
+              onChange={(id) => {
+                setContactId(id);
+                setProjectId("none");
+              }}
             />
           </div>
           <div>
@@ -118,6 +121,7 @@ export function PaymentDialog({
               value={projectId}
               onChange={setProjectId}
               allowNone
+              disabled={!contactId}
             />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
