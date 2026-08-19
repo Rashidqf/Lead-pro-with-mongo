@@ -16,6 +16,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { updateContact } from "@/lib/crm.functions";
+import { CallLeadButton } from "@/components/crm/CallLeadButton";
 import {
   displayName,
   initials,
@@ -231,9 +232,12 @@ function CardBody({
           </p>
         )}
         {contact.phone && (
-          <p className="flex items-center gap-1.5 truncate">
-            <Phone className="h-3 w-3" />
-            {contact.phone}
+          <p className="flex items-center justify-between gap-1.5">
+            <span className="flex min-w-0 items-center gap-1.5 truncate">
+              <Phone className="h-3 w-3 shrink-0" />
+              <span className="truncate">{contact.phone}</span>
+            </span>
+            <CallLeadButton contact={contact} compact />
           </p>
         )}
         {contact.email && (

@@ -17,6 +17,9 @@ import { Route as AuthenticatedBoardRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedContactsRouteImport } from './routes/_authenticated/contacts'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
+import { Route as ApiCompanionCallStatusRouteImport } from './routes/api/companion/call-status'
+import { Route as ApiCompanionLoginRouteImport } from './routes/api/companion/login'
+import { Route as ApiCompanionNextCallRouteImport } from './routes/api/companion/next-call'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -57,6 +60,21 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiCompanionCallStatusRoute = ApiCompanionCallStatusRouteImport.update({
+  id: '/api/companion/call-status',
+  path: '/api/companion/call-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCompanionLoginRoute = ApiCompanionLoginRouteImport.update({
+  id: '/api/companion/login',
+  path: '/api/companion/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCompanionNextCallRoute = ApiCompanionNextCallRouteImport.update({
+  id: '/api/companion/next-call',
+  path: '/api/companion/next-call',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,6 +84,9 @@ export interface FileRoutesByFullPath {
   '/contacts': typeof AuthenticatedContactsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/api/companion/call-status': typeof ApiCompanionCallStatusRoute
+  '/api/companion/login': typeof ApiCompanionLoginRoute
+  '/api/companion/next-call': typeof ApiCompanionNextCallRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,6 +96,9 @@ export interface FileRoutesByTo {
   '/contacts': typeof AuthenticatedContactsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/api/companion/call-status': typeof ApiCompanionCallStatusRoute
+  '/api/companion/login': typeof ApiCompanionLoginRoute
+  '/api/companion/next-call': typeof ApiCompanionNextCallRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,6 +110,9 @@ export interface FileRoutesById {
   '/_authenticated/contacts': typeof AuthenticatedContactsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
+  '/api/companion/call-status': typeof ApiCompanionCallStatusRoute
+  '/api/companion/login': typeof ApiCompanionLoginRoute
+  '/api/companion/next-call': typeof ApiCompanionNextCallRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +124,9 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/dashboard'
     | '/users'
+    | '/api/companion/call-status'
+    | '/api/companion/login'
+    | '/api/companion/next-call'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,6 +136,9 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/dashboard'
     | '/users'
+    | '/api/companion/call-status'
+    | '/api/companion/login'
+    | '/api/companion/next-call'
   id:
     | '__root__'
     | '/'
@@ -116,6 +149,9 @@ export interface FileRouteTypes {
     | '/_authenticated/contacts'
     | '/_authenticated/dashboard'
     | '/_authenticated/users'
+    | '/api/companion/call-status'
+    | '/api/companion/login'
+    | '/api/companion/next-call'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -123,6 +159,9 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiCompanionCallStatusRoute: typeof ApiCompanionCallStatusRoute
+  ApiCompanionLoginRoute: typeof ApiCompanionLoginRoute
+  ApiCompanionNextCallRoute: typeof ApiCompanionNextCallRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -183,6 +222,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/companion/call-status': {
+      id: '/api/companion/call-status'
+      path: '/api/companion/call-status'
+      fullPath: '/api/companion/call-status'
+      preLoaderRoute: typeof ApiCompanionCallStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/companion/login': {
+      id: '/api/companion/login'
+      path: '/api/companion/login'
+      fullPath: '/api/companion/login'
+      preLoaderRoute: typeof ApiCompanionLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/companion/next-call': {
+      id: '/api/companion/next-call'
+      path: '/api/companion/next-call'
+      fullPath: '/api/companion/next-call'
+      preLoaderRoute: typeof ApiCompanionNextCallRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -208,6 +268,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiCompanionCallStatusRoute: ApiCompanionCallStatusRoute,
+  ApiCompanionLoginRoute: ApiCompanionLoginRoute,
+  ApiCompanionNextCallRoute: ApiCompanionNextCallRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

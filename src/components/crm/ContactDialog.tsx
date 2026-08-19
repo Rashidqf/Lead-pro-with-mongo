@@ -27,6 +27,7 @@ import { deleteContact, updateContact } from "@/lib/crm.functions";
 import { type BoardColumn, type Contact, type Profile } from "@/lib/crm";
 import { normalizePhone } from "@/lib/phone";
 import { AssignUserSelect } from "./AssignUserSelect";
+import { CallLeadButton } from "./CallLeadButton";
 
 type Form = {
   name: string;
@@ -141,10 +142,13 @@ export function ContactDialog({
             />
           </Field>
           <Field label="Phone">
-            <Input
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
-            />
+            <div className="flex gap-2">
+              <Input
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              />
+              <CallLeadButton contact={{ ...contact, phone: form.phone || contact.phone }} />
+            </div>
           </Field>
           <Field label="Email">
             <Input

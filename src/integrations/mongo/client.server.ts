@@ -4,15 +4,22 @@ import dns from "node:dns";
 import { normalizePhone } from "@/lib/phone";
 import { encodeMongoUri } from "@/lib/mongo-uri";
 
-dns.setServers(["1.1.1.1", "8.8.8.8"]);
 dns.setDefaultResultOrder("ipv4first");
+if (!process.env.VERCEL) {
+  dns.setServers(["1.1.1.1", "8.8.8.8"]);
+}
 
 export type MongoDoc = Document & { _id: string };
 
 let connecting: Promise<Db> | undefined;
 
 export async function getDb(): Promise<Db> {
-  if (!connecting) connecting = connect();
+  if (!connecting) {
+    connecting = connect().catch((err) => {
+      connecting = undefined;
+      throw err;
+    });
+  }
   return connecting;
 }
 
@@ -32,6 +39,8 @@ async function connect(): Promise<Db> {
     col(db, "contacts").createIndex({ assigned_to: 1 }),
     col(db, "contacts").createIndex({ column_id: 1 }),
     col(db, "activities").createIndex({ created_at: -1 }),
+    col(db, "call_jobs").createIndex({ user_id: 1, status: 1, created_at: 1 }),
+    col(db, "call_devices").createIndex({ user_id: 1, last_seen: -1 }),
     ensureUniqueContactPhones(db),
   ]);
   return db;

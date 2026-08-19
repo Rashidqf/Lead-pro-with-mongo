@@ -24,6 +24,7 @@ import {
 import { ContactDialog } from "@/components/crm/ContactDialog";
 import { AssignUserSelect } from "@/components/crm/AssignUserSelect";
 import { ImportContactsButton } from "@/components/crm/ImportContactsButton";
+import { CallLeadButton } from "@/components/crm/CallLeadButton";
 import { useCrmAuth } from "@/hooks/use-crm-auth";
 import {
   columnsQuery,
@@ -199,7 +200,12 @@ function ContactsPage() {
                   {c.name}
                 </TableCell>
                 <TableCell onClick={() => setSelected(c)}>{c.company ?? "—"}</TableCell>
-                <TableCell onClick={() => setSelected(c)}>{c.phone ?? "—"}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <span onClick={() => setSelected(c)}>{c.phone ?? "—"}</span>
+                    {c.phone ? <CallLeadButton contact={c} compact /> : null}
+                  </div>
+                </TableCell>
                 <TableCell onClick={() => setSelected(c)}>{c.email ?? "—"}</TableCell>
                 <TableCell onClick={() => setSelected(c)}>
                   <span className="rounded-full bg-secondary px-2 py-0.5 text-xs text-secondary-foreground">
