@@ -118,6 +118,7 @@ export type Transaction = {
 };
 
 export type DateRangePreset =
+  | "allTime"
   | "today"
   | "last7"
   | "last30"
@@ -130,6 +131,8 @@ export type DateRange = {
   from: string;
   to: string;
 };
+
+export const PAGE_SIZE_DEFAULT = 20;
 
 export type FinanceMetrics = {
   revenue: number;
@@ -191,6 +194,8 @@ export function resolveDateRange(
 ): { from: Date; to: Date } {
   const now = new Date();
   switch (preset) {
+    case "allTime":
+      return { from: new Date(0), to: endOfDay(now) };
     case "today":
       return { from: startOfDay(now), to: endOfDay(now) };
     case "last7":
@@ -213,6 +218,22 @@ export function resolveDateRange(
   }
 }
 
+export function paginateItems<T>(items: T[], page: number, pageSize = PAGE_SIZE_DEFAULT) {
+  const total = items.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const current = Math.min(Math.max(1, page), totalPages);
+  const start = (current - 1) * pageSize;
+  return {
+    items: items.slice(start, start + pageSize),
+    page: current,
+    pageSize,
+    total,
+    totalPages,
+    from: total === 0 ? 0 : start + 1,
+    to: Math.min(start + pageSize, total),
+  };
+}
+
 export function formatCurrency(amount: number) {
   return `Rs. ${amount.toLocaleString("en-PK", { maximumFractionDigits: 0 })}`;
 }
@@ -222,6 +243,7 @@ export function formatDateLabel(iso: string) {
 }
 
 export const DATE_RANGE_LABELS: Record<DateRangePreset, string> = {
+  allTime: "All time",
   today: "Today",
   last7: "Last 7 days",
   last30: "Last 30 days",

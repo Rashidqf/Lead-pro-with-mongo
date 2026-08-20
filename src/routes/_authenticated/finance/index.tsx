@@ -46,7 +46,15 @@ function FinanceOverviewPage() {
 
   return (
     <div className="space-y-6">
-      <DateRangeSelector value={range} onChange={setRange} />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-sm font-semibold tracking-tight">Analytics period</h2>
+          <p className="text-xs text-muted-foreground">
+            Metrics and chart follow the selected range. Outstanding is always current.
+          </p>
+        </div>
+        <DateRangeSelector value={range} onChange={setRange} />
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard

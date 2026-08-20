@@ -1,11 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Plus, Search } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { ProjectDialog } from "@/components/finance/ProjectDialog";
+import {
+  FilterSelect,
+  ListPagination,
+  SearchField,
+  useResetPage,
+} from "@/components/finance/FinanceShared";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -18,6 +23,7 @@ import { contactsQuery } from "@/lib/crm";
 import {
   formatCurrency,
   formatDateLabel,
+  paginateItems,
   paymentsQuery,
   projectsQuery,
   type Project,
@@ -33,8 +39,11 @@ export const Route = createFileRoute("/_authenticated/projects")({
 
 function ProjectsPage() {
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("all");
+  const [balance, setBalance] = useState("all");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Project | null>(null);
+  const [page, setPage] = useResetPage(search, status, balance);
 
   const { data: projects = [] } = useQuery(projectsQuery);
   const { data: contacts = [] } = useQuery(contactsQuery);
@@ -42,22 +51,33 @@ function ProjectsPage() {
 
   const contactMap = Object.fromEntries(contacts.map((c) => [c.id, c]));
 
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return projects.filter((p) => {
-      const contact = contactMap[p.contact_id];
-      if (!q) return true;
-      return [p.name, contact?.name, contact?.phone]
-        .filter(Boolean)
-        .some((v) => v!.toLowerCase().includes(q));
-    });
-  }, [projects, contactMap, search]);
-
   function receivedForProject(projectId: string) {
     return payments
       .filter((p) => p.project_id === projectId)
       .reduce((s, p) => s + p.amount, 0);
   }
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return projects.filter((p) => {
+      if (status !== "all" && p.status !== status) return false;
+      const received = receivedForProject(p.id);
+      const outstanding = Math.max(0, p.value - received);
+      if (balance === "outstanding" && outstanding <= 0) return false;
+      if (balance === "paid" && outstanding > 0) return false;
+      if (!q) return true;
+      const contact = contactMap[p.contact_id];
+      return [p.name, contact?.name, contact?.phone, p.contact_phone, p.status]
+        .filter(Boolean)
+        .some((v) => String(v).toLowerCase().includes(q));
+    });
+  }, [projects, contactMap, search, status, balance, payments]);
+
+  const paged = paginateItems(filtered, page);
+  const totalValue = filtered.reduce((s, p) => s + p.value, 0);
+  const totalOutstanding = filtered.reduce((s, p) => {
+    return s + Math.max(0, p.value - receivedForProject(p.id));
+  }, 0);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
@@ -79,14 +99,49 @@ function ProjectsPage() {
         </Button>
       </div>
 
-      <div className="relative mt-6 max-w-sm">
-        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
-          className="pl-9"
-          placeholder="Search projects or customers…"
+      <div className="mt-6 flex flex-wrap items-center gap-2">
+        <SearchField
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={setSearch}
+          placeholder="Search projects or customers…"
         />
+        <FilterSelect
+          value={status}
+          onChange={setStatus}
+          allLabel="All statuses"
+          options={[
+            { value: "active", label: "Active" },
+            { value: "completed", label: "Completed" },
+            { value: "on_hold", label: "On hold" },
+            { value: "cancelled", label: "Cancelled" },
+          ]}
+        />
+        <FilterSelect
+          value={balance}
+          onChange={setBalance}
+          allLabel="All balances"
+          options={[
+            { value: "outstanding", label: "Has outstanding" },
+            { value: "paid", label: "Fully paid" },
+          ]}
+        />
+      </div>
+
+      <div className="mt-4 grid gap-4 sm:grid-cols-3">
+        <div className="surface-panel shadow-card p-4">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">Projects</p>
+          <p className="mt-1 text-2xl font-semibold">{filtered.length}</p>
+        </div>
+        <div className="surface-panel shadow-card p-4">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">Total value</p>
+          <p className="mt-1 text-2xl font-semibold">{formatCurrency(totalValue)}</p>
+        </div>
+        <div className="surface-panel shadow-card p-4">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">Outstanding</p>
+          <p className="mt-1 text-2xl font-semibold text-destructive">
+            {formatCurrency(totalOutstanding)}
+          </p>
+        </div>
       </div>
 
       <div className="surface-panel shadow-card mt-6 overflow-x-auto">
@@ -103,14 +158,14 @@ function ProjectsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.length === 0 ? (
+            {paged.total === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-muted-foreground">
-                  No projects yet. Create one for a converted customer.
+                  No projects match these filters.
                 </TableCell>
               </TableRow>
             ) : (
-              filtered.map((p) => {
+              paged.items.map((p) => {
                 const contact = contactMap[p.contact_id];
                 const received = receivedForProject(p.id);
                 const outstanding = Math.max(0, p.value - received);
@@ -145,6 +200,14 @@ function ProjectsPage() {
             )}
           </TableBody>
         </Table>
+        <ListPagination
+          page={paged.page}
+          totalPages={paged.totalPages}
+          total={paged.total}
+          from={paged.from}
+          to={paged.to}
+          onPageChange={setPage}
+        />
       </div>
 
       <ProjectDialog

@@ -2,7 +2,9 @@ import { createServerFn } from "@tanstack/react-start";
 import {
   addDays,
   eachDayOfInterval,
+  eachMonthOfInterval,
   eachWeekOfInterval,
+  endOfMonth,
   endOfWeek,
   format,
   isWithinInterval,
@@ -31,7 +33,7 @@ import { normalizePhone } from "@/lib/phone";
 type Actor = { userId: string; isAdmin: boolean };
 
 const dateRangeInput = z.object({
-  preset: z.enum(["today", "last7", "last30", "thisMonth", "prevMonth", "custom"]),
+  preset: z.enum(["allTime", "today", "last7", "last30", "thisMonth", "prevMonth", "custom"]),
   from: z.string().optional(),
   to: z.string().optional(),
 });
@@ -125,7 +127,31 @@ function buildChart(
   payments: Payment[],
   businessExpenses: Expense[],
 ): ChartPoint[] {
+  const useMonthly = preset === "allTime";
   const useWeekly = preset === "last30" || preset === "thisMonth" || preset === "prevMonth";
+
+  if (useMonthly) {
+    const dated = [...payments, ...businessExpenses].map((x) => new Date(x.date).getTime());
+    const earliest = dated.length ? Math.min(...dated) : to.getTime();
+    const chartFrom = new Date(earliest);
+    const months = eachMonthOfInterval({ start: chartFrom, end: to });
+    return months.slice(-24).map((monthStart) => {
+      const monthEnd = endOfMonth(monthStart);
+      const interval = { start: monthStart, end: monthEnd > to ? to : monthEnd };
+      const revenue = sumAmounts(
+        payments.filter((p) => isWithinInterval(new Date(p.date), interval)),
+      );
+      const expenses = sumAmounts(
+        businessExpenses.filter((e) => isWithinInterval(new Date(e.date), interval)),
+      );
+      return {
+        label: format(monthStart, "MMM yyyy"),
+        revenue,
+        expenses,
+        profit: revenue - expenses,
+      };
+    });
+  }
 
   if (useWeekly) {
     const weeks = eachWeekOfInterval({ start: from, end: to }, { weekStartsOn: 1 });

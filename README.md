@@ -1,46 +1,78 @@
-# Welcome to your Lovable project
+# LeadPilot CRM
 
-This project was built with [Lovable](https://lovable.dev).
+LeadPilot is a simple CRM for managing leads, customers, projects, and money — from first contact to payment.
 
-## Build with Lovable
+## What it does
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+- **Leads & contacts** — Import WhatsApp/CSV contacts, assign them to your team, and track every lead.
+- **Pipeline board** — Drag-and-drop Kanban: move deals from lead → closed.
+- **Projects** — Link customer work to a value, status, and payment balance.
+- **Finance** — Record income and expenses, see outstanding balances, and view analytics by period.
+- **Team roles** — Admins manage everything; users only see contacts assigned to them.
+- **Call from phone** — Optional Android companion dials a lead on your SIM when you tap Call in the CRM.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+## Main pages
 
-## Development
+| Page | Purpose |
+| --- | --- |
+| Dashboard | Overview of contacts, assignments, and activity |
+| Board | Kanban pipeline |
+| Contacts | Search, import CSV, assign, edit |
+| Projects | Project list with status and outstanding filters |
+| Finance | Overview, transactions, income, expenses, outstanding |
+| Team | Create users, set roles (admin only) |
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Who it’s for
 
+Small teams that get leads (for example from WhatsApp), assign follow-ups, run projects for customers, and need a clear view of what was paid and what is still owed.
+
+## Tech stack
+
+- React + TypeScript
+- TanStack Start (router + server functions)
+- MongoDB
+- Tailwind CSS
+- Deployable on Vercel
+
+## Quick start
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+npm install
 npm run dev
 ```
 
-## Deploy on Vercel
+Create a `.env` file:
 
-This is a TanStack Start app with Nitro. Import the GitHub repo at [vercel.com/new](https://vercel.com/new) (framework preset: **TanStack Start**).
+```env
+MONGODB_URI=mongodb://127.0.0.1:27017
+MONGODB_DB=lead-flow-pro
+AUTH_SECRET=your-long-random-secret
+```
 
-Set these environment variables for Production, Preview, and Development:
+Open the app, sign up (first user becomes admin), then import contacts or create projects.
 
-| Name | Example |
+## Useful scripts
+
+| Command | What it does |
 | --- | --- |
-| `MONGODB_URI` | Atlas SRV URI (encode `@` in the password as `%40`) |
-| `MONGODB_DB` | `lead-flow-pro` |
-| `AUTH_SECRET` | long random string (same as local `.env`) |
+| `npm run dev` | Run locally |
+| `npm run build` | Production build |
+| `npm run import:mongo` | Load a previous Mongo dump |
+| `npm run import:contacts -- file.csv` | Import contacts from CSV (skips existing phones) |
 
-In MongoDB Atlas → Network Access, allow `0.0.0.0/0` so Vercel functions can connect.
+## Deploy (Vercel)
 
-Then deploy. Each push to the connected branch updates the site.
+1. Push the repo to GitHub and import it on [vercel.com/new](https://vercel.com/new).
+2. Set env vars: `MONGODB_URI`, `MONGODB_DB`, `AUTH_SECRET`.
+3. In MongoDB Atlas, allow network access for Vercel (`0.0.0.0/0` is fine for a first deploy).
 
-## Built with
+## Android companion (optional)
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+Folder: `android-companion/`
+
+Install on an Android phone, sign in with the same CRM account, and leave it listening. In the CRM, **Call from phone** places the call on that phone’s SIM. If the companion is offline, Call opens the normal dialer instead.
+
+## Notes
+
+- Phone numbers are stored without spaces and must be unique.
+- Finance “All time” is the default analytics period; lists paginate at 20 rows with search and filters.

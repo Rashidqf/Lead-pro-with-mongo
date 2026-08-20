@@ -4,7 +4,14 @@ import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { ExpenseDialog } from "@/components/finance/ExpenseDialog";
-import { DateRangeSelector, useDefaultDateRange } from "@/components/finance/FinanceShared";
+import {
+  DateRangeSelector,
+  FilterSelect,
+  ListPagination,
+  SearchField,
+  useDefaultDateRange,
+  useResetPage,
+} from "@/components/finance/FinanceShared";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -16,9 +23,11 @@ import {
 } from "@/components/ui/table";
 import { contactsQuery } from "@/lib/crm";
 import {
+  EXPENSE_CATEGORIES,
   expensesQuery,
   formatCurrency,
   formatDateLabel,
+  paginateItems,
   projectsQuery,
   resolveDateRange,
   type DateRange,
@@ -34,8 +43,13 @@ export const Route = createFileRoute("/_authenticated/finance/expenses")({
 
 function ExpensesPage() {
   const [range, setRange] = useState<DateRange>(() => useDefaultDateRange());
+  const [search, setSearch] = useState("");
+  const [projectId, setProjectId] = useState("all");
+  const [expenseType, setExpenseType] = useState("all");
+  const [category, setCategory] = useState("all");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Expense | null>(null);
+  const [page, setPage] = useResetPage(range, search, projectId, expenseType, category);
 
   const { data: expenses = [] } = useQuery(expensesQuery);
   const { data: contacts = [] } = useQuery(contactsQuery);
@@ -45,11 +59,19 @@ function ExpensesPage() {
 
   const filtered = useMemo(() => {
     const { from, to } = resolveDateRange(range.preset, range.from, range.to);
+    const q = search.trim().toLowerCase();
     return expenses.filter((e) => {
       const d = new Date(e.date);
-      return d >= from && d <= to;
+      if (d < from || d > to) return false;
+      if (projectId !== "all" && e.project_id !== projectId) return false;
+      if (expenseType !== "all" && e.type !== expenseType) return false;
+      if (category !== "all" && e.category !== category) return false;
+      if (!q) return true;
+      return [e.category, e.type, e.description, projectMap[e.project_id ?? ""]?.name]
+        .filter(Boolean)
+        .some((v) => String(v).toLowerCase().includes(q));
     });
-  }, [expenses, range]);
+  }, [expenses, range, search, projectId, expenseType, category, projectMap]);
 
   const businessTotal = filtered
     .filter((e) => e.type === "business")
@@ -60,11 +82,42 @@ function ExpensesPage() {
   const personalTotal = filtered
     .filter((e) => e.type === "personal")
     .reduce((s, e) => s + e.amount, 0);
+  const paged = paginateItems(filtered, page);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <DateRangeSelector value={range} onChange={setRange} />
+        <div className="flex flex-1 flex-wrap items-center gap-2">
+          <SearchField
+            value={search}
+            onChange={setSearch}
+            placeholder="Search category, project, notes…"
+          />
+          <DateRangeSelector value={range} onChange={setRange} />
+          <FilterSelect
+            value={projectId}
+            onChange={setProjectId}
+            allLabel="All projects"
+            options={projects.map((p) => ({ value: p.id, label: p.name }))}
+          />
+          <FilterSelect
+            value={expenseType}
+            onChange={setExpenseType}
+            allLabel="All types"
+            options={[
+              { value: "business", label: "Business" },
+              { value: "project", label: "Project" },
+              { value: "personal", label: "Personal" },
+            ]}
+          />
+          <FilterSelect
+            value={category}
+            onChange={setCategory}
+            allLabel="All categories"
+            className="w-[190px]"
+            options={EXPENSE_CATEGORIES.map((c) => ({ value: c, label: c }))}
+          />
+        </div>
         <Button
           onClick={() => {
             setEditing(null);
@@ -113,14 +166,14 @@ function ExpensesPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.length === 0 ? (
+            {paged.total === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-muted-foreground">
-                  No expenses in this period.
+                  No expenses match these filters.
                 </TableCell>
               </TableRow>
             ) : (
-              filtered.map((e) => (
+              paged.items.map((e) => (
                 <TableRow
                   key={e.id}
                   className="cursor-pointer"
@@ -144,6 +197,14 @@ function ExpensesPage() {
             )}
           </TableBody>
         </Table>
+        <ListPagination
+          page={paged.page}
+          totalPages={paged.totalPages}
+          total={paged.total}
+          from={paged.from}
+          to={paged.to}
+          onPageChange={setPage}
+        />
       </div>
 
       <ExpenseDialog

@@ -4,7 +4,14 @@ import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { PaymentDialog } from "@/components/finance/PaymentDialog";
-import { DateRangeSelector, useDefaultDateRange } from "@/components/finance/FinanceShared";
+import {
+  DateRangeSelector,
+  FilterSelect,
+  ListPagination,
+  SearchField,
+  useDefaultDateRange,
+  useResetPage,
+} from "@/components/finance/FinanceShared";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -18,6 +25,7 @@ import { contactsQuery } from "@/lib/crm";
 import {
   formatCurrency,
   formatDateLabel,
+  paginateItems,
   paymentsQuery,
   projectsQuery,
   resolveDateRange,
@@ -35,8 +43,12 @@ export const Route = createFileRoute("/_authenticated/finance/income")({
 
 function IncomePage() {
   const [range, setRange] = useState<DateRange>(() => useDefaultDateRange());
+  const [search, setSearch] = useState("");
+  const [projectId, setProjectId] = useState("all");
+  const [method, setMethod] = useState("all");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Payment | null>(null);
+  const [page, setPage] = useResetPage(range, search, projectId, method);
 
   const { data: payments = [] } = useQuery(paymentsQuery);
   const { data: contacts = [] } = useQuery(contactsQuery);
@@ -47,18 +59,47 @@ function IncomePage() {
 
   const filtered = useMemo(() => {
     const { from, to } = resolveDateRange(range.preset, range.from, range.to);
+    const q = search.trim().toLowerCase();
     return payments.filter((p) => {
       const d = new Date(p.date);
-      return d >= from && d <= to;
+      if (d < from || d > to) return false;
+      if (projectId !== "all" && p.project_id !== projectId) return false;
+      if (method !== "all" && p.payment_method !== method) return false;
+      if (!q) return true;
+      const contact = contactMap[p.contact_id];
+      return [contact?.name, contact?.phone, p.contact_phone, projectMap[p.project_id ?? ""]?.name, p.description, p.payment_method]
+        .filter(Boolean)
+        .some((v) => String(v).toLowerCase().includes(q));
     });
-  }, [payments, range]);
+  }, [payments, range, search, projectId, method, contactMap, projectMap]);
 
   const total = filtered.reduce((s, p) => s + p.amount, 0);
+  const paged = paginateItems(filtered, page);
+  const methods = [...new Set(payments.map((p) => p.payment_method).filter(Boolean))];
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <DateRangeSelector value={range} onChange={setRange} />
+        <div className="flex flex-1 flex-wrap items-center gap-2">
+          <SearchField
+            value={search}
+            onChange={setSearch}
+            placeholder="Search customer, project, notes…"
+          />
+          <DateRangeSelector value={range} onChange={setRange} />
+          <FilterSelect
+            value={projectId}
+            onChange={setProjectId}
+            allLabel="All projects"
+            options={projects.map((p) => ({ value: p.id, label: p.name }))}
+          />
+          <FilterSelect
+            value={method}
+            onChange={setMethod}
+            allLabel="All methods"
+            options={methods.map((m) => ({ value: m, label: m }))}
+          />
+        </div>
         <Button
           onClick={() => {
             setEditing(null);
@@ -75,6 +116,7 @@ function IncomePage() {
           Total income
         </span>
         <p className="mt-2 text-3xl font-semibold">{formatCurrency(total)}</p>
+        <p className="mt-1 text-xs text-muted-foreground">{filtered.length} payments in filter</p>
       </div>
 
       <div className="surface-panel shadow-card overflow-x-auto">
@@ -90,14 +132,14 @@ function IncomePage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.length === 0 ? (
+            {paged.total === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-muted-foreground">
-                  No payments in this period.
+                  No payments match these filters.
                 </TableCell>
               </TableRow>
             ) : (
-              filtered.map((p) => (
+              paged.items.map((p) => (
                 <TableRow
                   key={p.id}
                   className="cursor-pointer"
@@ -124,6 +166,14 @@ function IncomePage() {
             )}
           </TableBody>
         </Table>
+        <ListPagination
+          page={paged.page}
+          totalPages={paged.totalPages}
+          total={paged.total}
+          from={paged.from}
+          to={paged.to}
+          onPageChange={setPage}
+        />
       </div>
 
       <PaymentDialog

@@ -1,7 +1,15 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { format } from "date-fns";
-import { Check, ChevronsUpDown, Contact as ContactIcon, FolderKanban } from "lucide-react";
-import { useState } from "react";
+import {
+  Check,
+  ChevronsUpDown,
+  ChevronLeft,
+  ChevronRight,
+  Contact as ContactIcon,
+  FolderKanban,
+  Search,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,11 +22,24 @@ import {
 } from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { DATE_RANGE_LABELS, type DateRange, type DateRangePreset } from "@/lib/finance";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  DATE_RANGE_LABELS,
+  PAGE_SIZE_DEFAULT,
+  type DateRange,
+  type DateRangePreset,
+} from "@/lib/finance";
 import { formatPhone } from "@/lib/phone";
 import { cn } from "@/lib/utils";
 
 const PRESETS: DateRangePreset[] = [
+  "allTime",
   "today",
   "last7",
   "last30",
@@ -50,19 +71,18 @@ export function DateRangeSelector({
 
   return (
     <div className={cn("flex flex-wrap items-center gap-2", className)}>
-      <div className="flex flex-wrap gap-1">
-        {PRESETS.map((preset) => (
-          <Button
-            key={preset}
-            type="button"
-            size="sm"
-            variant={value.preset === preset ? "default" : "outline"}
-            onClick={() => setPreset(preset)}
-          >
-            {DATE_RANGE_LABELS[preset]}
-          </Button>
-        ))}
-      </div>
+      <Select value={value.preset} onValueChange={(v) => setPreset(v as DateRangePreset)}>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Period" />
+        </SelectTrigger>
+        <SelectContent>
+          {PRESETS.map((preset) => (
+            <SelectItem key={preset} value={preset}>
+              {DATE_RANGE_LABELS[preset]}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       {value.preset === "custom" && (
         <div className="flex items-center gap-2">
           <Input
@@ -86,10 +106,129 @@ export function DateRangeSelector({
 
 export function useDefaultDateRange(): DateRange {
   return {
-    preset: "last30",
+    preset: "allTime",
     from: format(new Date(), "yyyy-MM-dd"),
     to: format(new Date(), "yyyy-MM-dd"),
   };
+}
+
+export function SearchField({
+  value,
+  onChange,
+  placeholder = "Search…",
+  className,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  className?: string;
+}) {
+  return (
+    <div className={cn("relative min-w-[200px] flex-1", className)}>
+      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+      <Input
+        className="pl-9"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+      />
+    </div>
+  );
+}
+
+export function FilterSelect({
+  value,
+  onChange,
+  options,
+  placeholder,
+  className,
+  allLabel = "All",
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  options: { value: string; label: string }[];
+  placeholder?: string;
+  className?: string;
+  allLabel?: string;
+}) {
+  return (
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger className={cn("w-[180px]", className)}>
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">{allLabel}</SelectItem>
+        {options.map((o) => (
+          <SelectItem key={o.value} value={o.value}>
+            {o.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
+
+export function ListPagination({
+  page,
+  totalPages,
+  total,
+  from,
+  to,
+  onPageChange,
+  pageSize = PAGE_SIZE_DEFAULT,
+}: {
+  page: number;
+  totalPages: number;
+  total: number;
+  from: number;
+  to: number;
+  onPageChange: (page: number) => void;
+  pageSize?: number;
+}) {
+  if (total === 0) return null;
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3">
+      <p className="text-xs text-muted-foreground">
+        Showing {from}–{to} of {total}
+        <span className="text-muted-foreground/80"> · {pageSize} per page</span>
+      </p>
+      <div className="flex items-center gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          disabled={page <= 1}
+          onClick={() => onPageChange(page - 1)}
+        >
+          <ChevronLeft className="mr-1 h-4 w-4" />
+          Prev
+        </Button>
+        <span className="text-xs text-muted-foreground">
+          Page {page} / {totalPages}
+        </span>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          disabled={page >= totalPages}
+          onClick={() => onPageChange(page + 1)}
+        >
+          Next
+          <ChevronRight className="ml-1 h-4 w-4" />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+/** Reset to page 1 whenever filter inputs change. */
+export function useResetPage(...deps: unknown[]) {
+  const [page, setPage] = useState(1);
+  useEffect(() => {
+    setPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+  return [page, setPage] as const;
 }
 
 export function MetricCard({

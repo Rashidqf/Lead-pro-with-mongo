@@ -1,8 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
-import { useDefaultDateRange } from "@/components/finance/FinanceShared";
+import {
+  FilterSelect,
+  ListPagination,
+  SearchField,
+  useDefaultDateRange,
+  useResetPage,
+} from "@/components/finance/FinanceShared";
 import {
   Table,
   TableBody,
@@ -11,7 +17,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { financeDashboardQuery, formatCurrency, type DateRange } from "@/lib/finance";
+import {
+  financeDashboardQuery,
+  formatCurrency,
+  paginateItems,
+  projectsQuery,
+  type DateRange,
+} from "@/lib/finance";
 import { formatPhone } from "@/lib/phone";
 
 export const Route = createFileRoute("/_authenticated/finance/outstanding")({
@@ -23,12 +35,44 @@ export const Route = createFileRoute("/_authenticated/finance/outstanding")({
 
 function OutstandingPage() {
   const [range] = useState<DateRange>(() => useDefaultDateRange());
-  const { data, isLoading } = useQuery(financeDashboardQuery(range));
+  const [search, setSearch] = useState("");
+  const [projectId, setProjectId] = useState("all");
+  const [page, setPage] = useResetPage(search, projectId);
 
-  const total = data?.outstanding.reduce((s, r) => s + r.amount_remaining, 0) ?? 0;
+  const { data, isLoading } = useQuery(financeDashboardQuery(range));
+  const { data: projects = [] } = useQuery(projectsQuery);
+
+  const filtered = useMemo(() => {
+    const rows = data?.outstanding ?? [];
+    const q = search.trim().toLowerCase();
+    return rows.filter((row) => {
+      if (projectId !== "all" && row.project_id !== projectId) return false;
+      if (!q) return true;
+      return [row.contact_name, row.contact_phone, row.project_name]
+        .filter(Boolean)
+        .some((v) => String(v).toLowerCase().includes(q));
+    });
+  }, [data?.outstanding, search, projectId]);
+
+  const total = filtered.reduce((s, r) => s + r.amount_remaining, 0);
+  const paged = paginateItems(filtered, page);
 
   return (
     <div className="space-y-6">
+      <div className="flex flex-wrap items-center gap-2">
+        <SearchField
+          value={search}
+          onChange={setSearch}
+          placeholder="Search customer or project…"
+        />
+        <FilterSelect
+          value={projectId}
+          onChange={setProjectId}
+          allLabel="All projects"
+          options={projects.map((p) => ({ value: p.id, label: p.name }))}
+        />
+      </div>
+
       <div className="surface-panel shadow-card p-5">
         <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
           Total outstanding
@@ -37,7 +81,7 @@ function OutstandingPage() {
           {isLoading ? "…" : formatCurrency(total)}
         </p>
         <p className="mt-1 text-xs text-muted-foreground">
-          Amount customers still owe across all projects
+          {filtered.length} projects with unpaid balance
         </p>
       </div>
 
@@ -59,14 +103,14 @@ function OutstandingPage() {
                   Loading…
                 </TableCell>
               </TableRow>
-            ) : !data?.outstanding.length ? (
+            ) : paged.total === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-muted-foreground">
-                  All projects are fully paid.
+                  No outstanding balances match these filters.
                 </TableCell>
               </TableRow>
             ) : (
-              data.outstanding.map((row) => (
+              paged.items.map((row) => (
                 <TableRow key={row.project_id}>
                   <TableCell>
                     <div>{row.contact_name}</div>
@@ -85,6 +129,14 @@ function OutstandingPage() {
             )}
           </TableBody>
         </Table>
+        <ListPagination
+          page={paged.page}
+          totalPages={paged.totalPages}
+          total={paged.total}
+          from={paged.from}
+          to={paged.to}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );
