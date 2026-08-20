@@ -8,6 +8,20 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
   nitro: { preset: process.env.VERCEL ? "vercel" : "node-server" },
+  vite: {
+    ssr: {
+      // Keep heavy CJS SDKs out of the SSR graph — reduces Rolldown circular
+      // runtime-helper chunks (__exportAll is not a function on preview).
+      external: [
+        "firebase-admin",
+        "firebase-admin/app",
+        "firebase-admin/messaging",
+        "firebase",
+        "firebase/app",
+        "firebase/messaging",
+      ],
+    },
+  },
   tanstackStart: {
     server: { entry: "server" },
   },

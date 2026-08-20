@@ -64,9 +64,26 @@ Open the app, sign up (first user becomes admin), then import contacts or create
 
 ## Deploy (Vercel)
 
-1. Push the repo to GitHub and import it on [vercel.com/new](https://vercel.com/new).
-2. Set env vars: `MONGODB_URI`, `MONGODB_DB`, `AUTH_SECRET`.
-3. In MongoDB Atlas, allow network access for Vercel (`0.0.0.0/0` is fine for a first deploy).
+Yes — this app is ready for Vercel (TanStack Start + Nitro `vercel` preset).
+
+1. Push your latest code to GitHub.
+2. Import the repo at [vercel.com/new](https://vercel.com/new) (Framework Preset: **TanStack Start**).
+3. Set these **Environment Variables** (Production + Preview):
+
+| Variable | Required | Notes |
+| --- | --- | --- |
+| `MONGODB_URI` | Yes | Atlas connection string (`@` in password → `%40`) |
+| `MONGODB_DB` | Yes | e.g. `lead-flow-pro` |
+| `AUTH_SECRET` | Yes | Long random string |
+| `APP_URL` | Recommended | Your Vercel URL, e.g. `https://your-app.vercel.app` |
+| `CRON_SECRET` | Recommended | Protects hourly `/api/cron/reminders` |
+
+Optional later: `GOOGLE_*`, `VITE_FIREBASE_*`, `FIREBASE_*`, `TOKEN_ENCRYPTION_KEY`.
+
+4. In MongoDB Atlas → Network Access, allow `0.0.0.0/0` (or Vercel’s IPs).
+5. Deploy. After deploy, set `APP_URL` / `GOOGLE_REDIRECT_URI` to the real HTTPS URL if you use Google Calendar.
+
+Hourly reminder cron is already in `vercel.json`.
 
 ## Android companion (optional)
 
