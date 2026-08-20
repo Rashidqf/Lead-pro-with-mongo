@@ -10,6 +10,7 @@ import {
   Sun,
   Users,
   Contact as ContactIcon,
+  Bell,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -22,6 +23,7 @@ import { cn } from "@/lib/utils";
 
 const links = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, adminOnly: false },
+  { to: "/reminders", label: "Reminders", icon: Bell, adminOnly: false },
   { to: "/board", label: "Board", icon: KanbanSquare, adminOnly: false },
   { to: "/contacts", label: "Contacts", icon: ContactIcon, adminOnly: false },
   { to: "/projects", label: "Projects", icon: Briefcase, adminOnly: false },

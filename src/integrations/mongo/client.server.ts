@@ -50,6 +50,10 @@ async function connect(): Promise<Db> {
     col(db, "expenses").createIndex({ type: 1, date: -1 }),
     col(db, "expenses").createIndex({ project_id: 1 }),
     col(db, "contacts").createIndex({ converted_at: -1 }),
+    col(db, "reminders").createIndex({ assigned_to: 1, status: 1, due_at: 1 }),
+    col(db, "reminders").createIndex({ contact_id: 1, status: 1, due_at: 1 }),
+    col(db, "reminders").createIndex({ project_id: 1, status: 1 }),
+    col(db, "reminders").createIndex({ status: 1, due_at: 1, notification_sent_at: 1 }),
     ensureUniqueContactPhones(db),
   ]);
   return db;

@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
@@ -29,6 +29,11 @@ import { normalizePhone } from "@/lib/phone";
 import { AssignUserSelect } from "./AssignUserSelect";
 import { CallLeadButton } from "./CallLeadButton";
 import { ContactFinancePanel } from "@/components/finance/ContactFinancePanel";
+import { NextActionBar } from "@/components/reminders/NextActionBar";
+import { ReminderDialog, type ReminderDialogDefaults } from "@/components/reminders/ReminderDialog";
+import { ReminderList } from "@/components/reminders/ReminderList";
+import { remindersQuery, type Reminder } from "@/lib/reminders";
+import { projectsQuery } from "@/lib/finance";
 
 type Form = {
   name: string;
@@ -58,6 +63,32 @@ export function ContactDialog({
   const { isAdmin } = useCrmAuth();
   const queryClient = useQueryClient();
   const [form, setForm] = useState<Form | null>(null);
+  const [reminderOpen, setReminderOpen] = useState(false);
+  const [editingReminder, setEditingReminder] = useState<Reminder | null>(null);
+  const [reminderDefaults, setReminderDefaults] = useState<ReminderDialogDefaults | undefined>();
+
+  const { data: allReminders = [] } = useQuery({
+    ...remindersQuery,
+    enabled: open && Boolean(contact),
+  });
+  const { data: projects = [] } = useQuery({
+    ...projectsQuery,
+    enabled: open && Boolean(contact),
+  });
+
+  const contactReminders = useMemo(
+    () =>
+      allReminders.filter(
+        (r) => contact && r.contact_id === contact.id && r.status === "pending",
+      ),
+    [allReminders, contact],
+  );
+
+  const defaultProjectId = useMemo(() => {
+    if (!contact) return null;
+    const mine = projects.filter((p) => p.contact_id === contact.id && p.status === "active");
+    return mine.length === 1 ? mine[0].id : null;
+  }, [projects, contact]);
 
   useEffect(() => {
     if (!contact) return setForm(null);
@@ -120,119 +151,161 @@ export function ContactDialog({
     onError: (e: Error) => toast.error(e.message),
   });
 
+  function openReminder(partial?: ReminderDialogDefaults) {
+    if (!contact) return;
+    setEditingReminder(null);
+    setReminderDefaults({
+      contactId: contact.id,
+      projectId: defaultProjectId,
+      lockContact: true,
+      source: "contact",
+      ...partial,
+    });
+    setReminderOpen(true);
+  }
+
   if (!contact || !form) return null;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-lg">{contact.name}</DialogTitle>
-          <DialogDescription>
-            Created {new Date(contact.created_at).toLocaleString()}
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-lg">{contact.name}</DialogTitle>
+            <DialogDescription>
+              Created {new Date(contact.created_at).toLocaleString()}
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Name">
-            <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-          </Field>
-          <Field label="Company">
-            <Input
-              value={form.company}
-              onChange={(e) => setForm({ ...form, company: e.target.value })}
+          <div className="surface-panel mb-2 space-y-3 p-4">
+            <NextActionBar
+              onSchedule={() => openReminder()}
+              onQuick={(type) => openReminder({ type })}
             />
-          </Field>
-          <Field label="Phone">
-            <div className="flex gap-2">
-              <Input
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              />
-              <CallLeadButton contact={{ ...contact, phone: form.phone || contact.phone }} />
-            </div>
-          </Field>
-          <Field label="Email">
-            <Input
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
+            <ReminderList
+              reminders={contactReminders.slice(0, 8)}
+              empty="No pending reminders for this contact."
+              onEdit={(r) => {
+                setEditingReminder(r);
+                setReminderDefaults(undefined);
+                setReminderOpen(true);
+              }}
+              onScheduleNext={(r) =>
+                openReminder({ contactId: r.contact_id, projectId: r.project_id })
+              }
+              compact
             />
-          </Field>
-          <Field label="Address" className="sm:col-span-2">
-            <Input
-              value={form.address}
-              onChange={(e) => setForm({ ...form, address: e.target.value })}
-            />
-          </Field>
-          <Field label="Status">
-            <Select
-              value={form.column_id}
-              onValueChange={(v) => setForm({ ...form, column_id: v })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select status" />
-              </SelectTrigger>
-              <SelectContent>
-                {columns.map((c) => (
-                  <SelectItem key={c.id} value={c.id}>
-                    {c.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </Field>
-          <Field label="Assigned user">
-            <AssignUserSelect
-              profiles={profiles}
-              value={form.assigned_to}
-              disabled={!isAdmin}
-              onChange={(v) => setForm({ ...form, assigned_to: v })}
-            />
-          </Field>
-          <Field label="Tags (comma separated)" className="sm:col-span-2">
-            <Input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} />
-          </Field>
-          <Field label="Notes" className="sm:col-span-2">
-            <Textarea
-              rows={4}
-              value={form.notes}
-              onChange={(e) => setForm({ ...form, notes: e.target.value })}
-            />
-          </Field>
-          {contact.last_message && (
-            <Field label="Last imported message" className="sm:col-span-2">
-              <p className="surface-panel max-h-40 overflow-y-auto whitespace-pre-wrap p-3 text-xs text-muted-foreground">
-                {contact.last_message}
-              </p>
-            </Field>
-          )}
-        </div>
-
-        <ContactFinancePanel contact={contact} />
-
-        <DialogFooter className="gap-2 sm:justify-between">
-          {isAdmin ? (
-            <Button
-              variant="destructive"
-              onClick={() => remove.mutate()}
-              disabled={remove.isPending}
-            >
-              <Trash2 className="mr-1.5 h-4 w-4" />
-              Delete
-            </Button>
-          ) : (
-            <span />
-          )}
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button onClick={() => save.mutate()} disabled={save.isPending}>
-              Save changes
-            </Button>
           </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Name">
+              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            </Field>
+            <Field label="Company">
+              <Input
+                value={form.company}
+                onChange={(e) => setForm({ ...form, company: e.target.value })}
+              />
+            </Field>
+            <Field label="Phone">
+              <div className="flex gap-2">
+                <Input
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                />
+                <CallLeadButton contact={{ ...contact, phone: form.phone || contact.phone }} />
+              </div>
+            </Field>
+            <Field label="Email">
+              <Input
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
+            </Field>
+            <Field label="Address" className="sm:col-span-2">
+              <Input
+                value={form.address}
+                onChange={(e) => setForm({ ...form, address: e.target.value })}
+              />
+            </Field>
+            <Field label="Status">
+              <Select
+                value={form.column_id}
+                onValueChange={(v) => setForm({ ...form, column_id: v })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  {columns.map((c) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
+            <Field label="Assigned user">
+              <AssignUserSelect
+                profiles={profiles}
+                value={form.assigned_to}
+                disabled={!isAdmin}
+                onChange={(v) => setForm({ ...form, assigned_to: v })}
+              />
+            </Field>
+            <Field label="Tags (comma separated)" className="sm:col-span-2">
+              <Input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} />
+            </Field>
+            <Field label="Notes" className="sm:col-span-2">
+              <Textarea
+                rows={4}
+                value={form.notes}
+                onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              />
+            </Field>
+            {contact.last_message && (
+              <Field label="Last imported message" className="sm:col-span-2">
+                <p className="surface-panel max-h-40 overflow-y-auto whitespace-pre-wrap p-3 text-xs text-muted-foreground">
+                  {contact.last_message}
+                </p>
+              </Field>
+            )}
+          </div>
+
+          <ContactFinancePanel contact={contact} />
+
+          <DialogFooter className="gap-2 sm:justify-between">
+            {isAdmin ? (
+              <Button
+                variant="destructive"
+                onClick={() => remove.mutate()}
+                disabled={remove.isPending}
+              >
+                <Trash2 className="mr-1.5 h-4 w-4" />
+                Delete
+              </Button>
+            ) : (
+              <span />
+            )}
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => onOpenChange(false)}>
+                Cancel
+              </Button>
+              <Button onClick={() => save.mutate()} disabled={save.isPending}>
+                Save changes
+              </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <ReminderDialog
+        open={reminderOpen}
+        onOpenChange={setReminderOpen}
+        reminder={editingReminder}
+        defaults={reminderDefaults}
+      />
+    </>
   );
 }
 

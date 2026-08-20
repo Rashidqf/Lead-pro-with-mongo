@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/table";
 import { AppShell } from "@/components/crm/AppShell";
 import { ImportContactsButton } from "@/components/crm/ImportContactsButton";
+import { useCrmAuth } from "@/hooks/use-crm-auth";
 import { contactsQuery, displayName, profilesQuery, rolesQuery } from "@/lib/crm";
 import { adminCreateUser, adminDeleteUser, adminUpdateUser } from "@/lib/admin.functions";
 

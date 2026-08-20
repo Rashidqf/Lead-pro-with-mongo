@@ -18,6 +18,7 @@ import { Route as AuthenticatedContactsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedFinanceRouteRouteImport } from './routes/_authenticated/finance/route'
 import { Route as AuthenticatedProjectsRouteImport } from './routes/_authenticated/projects'
+import { Route as AuthenticatedRemindersRouteImport } from './routes/_authenticated/reminders'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedFinanceIndexRouteImport } from './routes/_authenticated/finance/index'
 import { Route as AuthenticatedFinanceExpensesRouteImport } from './routes/_authenticated/finance/expenses'
@@ -27,6 +28,9 @@ import { Route as AuthenticatedFinanceTransactionsRouteImport } from './routes/_
 import { Route as ApiCompanionCallStatusRouteImport } from './routes/api/companion/call-status'
 import { Route as ApiCompanionLoginRouteImport } from './routes/api/companion/login'
 import { Route as ApiCompanionNextCallRouteImport } from './routes/api/companion/next-call'
+import { Route as ApiCronRemindersRouteImport } from './routes/api/cron/reminders'
+import { Route as ApiIntegrationsGoogleCallbackRouteImport } from './routes/api/integrations/google/callback'
+import { Route as ApiIntegrationsGoogleStartRouteImport } from './routes/api/integrations/google/start'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -71,6 +75,11 @@ const AuthenticatedFinanceRouteRoute =
 const AuthenticatedProjectsRoute = AuthenticatedProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRemindersRoute = AuthenticatedRemindersRouteImport.update({
+  id: '/reminders',
+  path: '/reminders',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
@@ -123,6 +132,23 @@ const ApiCompanionNextCallRoute = ApiCompanionNextCallRouteImport.update({
   path: '/api/companion/next-call',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCronRemindersRoute = ApiCronRemindersRouteImport.update({
+  id: '/api/cron/reminders',
+  path: '/api/cron/reminders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiIntegrationsGoogleCallbackRoute =
+  ApiIntegrationsGoogleCallbackRouteImport.update({
+    id: '/api/integrations/google/callback',
+    path: '/api/integrations/google/callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiIntegrationsGoogleStartRoute =
+  ApiIntegrationsGoogleStartRouteImport.update({
+    id: '/api/integrations/google/start',
+    path: '/api/integrations/google/start',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -133,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/contacts': typeof AuthenticatedContactsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/projects': typeof AuthenticatedProjectsRoute
+  '/reminders': typeof AuthenticatedRemindersRoute
   '/users': typeof AuthenticatedUsersRoute
   '/finance/expenses': typeof AuthenticatedFinanceExpensesRoute
   '/finance/income': typeof AuthenticatedFinanceIncomeRoute
@@ -141,7 +168,10 @@ export interface FileRoutesByFullPath {
   '/api/companion/call-status': typeof ApiCompanionCallStatusRoute
   '/api/companion/login': typeof ApiCompanionLoginRoute
   '/api/companion/next-call': typeof ApiCompanionNextCallRoute
+  '/api/cron/reminders': typeof ApiCronRemindersRoute
   '/finance/': typeof AuthenticatedFinanceIndexRoute
+  '/api/integrations/google/callback': typeof ApiIntegrationsGoogleCallbackRoute
+  '/api/integrations/google/start': typeof ApiIntegrationsGoogleStartRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -151,6 +181,7 @@ export interface FileRoutesByTo {
   '/contacts': typeof AuthenticatedContactsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/projects': typeof AuthenticatedProjectsRoute
+  '/reminders': typeof AuthenticatedRemindersRoute
   '/users': typeof AuthenticatedUsersRoute
   '/finance/expenses': typeof AuthenticatedFinanceExpensesRoute
   '/finance/income': typeof AuthenticatedFinanceIncomeRoute
@@ -159,7 +190,10 @@ export interface FileRoutesByTo {
   '/api/companion/call-status': typeof ApiCompanionCallStatusRoute
   '/api/companion/login': typeof ApiCompanionLoginRoute
   '/api/companion/next-call': typeof ApiCompanionNextCallRoute
+  '/api/cron/reminders': typeof ApiCronRemindersRoute
   '/finance': typeof AuthenticatedFinanceIndexRoute
+  '/api/integrations/google/callback': typeof ApiIntegrationsGoogleCallbackRoute
+  '/api/integrations/google/start': typeof ApiIntegrationsGoogleStartRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -172,6 +206,7 @@ export interface FileRoutesById {
   '/_authenticated/contacts': typeof AuthenticatedContactsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/projects': typeof AuthenticatedProjectsRoute
+  '/_authenticated/reminders': typeof AuthenticatedRemindersRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/_authenticated/finance/expenses': typeof AuthenticatedFinanceExpensesRoute
   '/_authenticated/finance/income': typeof AuthenticatedFinanceIncomeRoute
@@ -180,7 +215,10 @@ export interface FileRoutesById {
   '/api/companion/call-status': typeof ApiCompanionCallStatusRoute
   '/api/companion/login': typeof ApiCompanionLoginRoute
   '/api/companion/next-call': typeof ApiCompanionNextCallRoute
+  '/api/cron/reminders': typeof ApiCronRemindersRoute
   '/_authenticated/finance/': typeof AuthenticatedFinanceIndexRoute
+  '/api/integrations/google/callback': typeof ApiIntegrationsGoogleCallbackRoute
+  '/api/integrations/google/start': typeof ApiIntegrationsGoogleStartRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -193,6 +231,7 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/dashboard'
     | '/projects'
+    | '/reminders'
     | '/users'
     | '/finance/expenses'
     | '/finance/income'
@@ -201,7 +240,10 @@ export interface FileRouteTypes {
     | '/api/companion/call-status'
     | '/api/companion/login'
     | '/api/companion/next-call'
+    | '/api/cron/reminders'
     | '/finance/'
+    | '/api/integrations/google/callback'
+    | '/api/integrations/google/start'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -211,6 +253,7 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/dashboard'
     | '/projects'
+    | '/reminders'
     | '/users'
     | '/finance/expenses'
     | '/finance/income'
@@ -219,7 +262,10 @@ export interface FileRouteTypes {
     | '/api/companion/call-status'
     | '/api/companion/login'
     | '/api/companion/next-call'
+    | '/api/cron/reminders'
     | '/finance'
+    | '/api/integrations/google/callback'
+    | '/api/integrations/google/start'
   id:
     | '__root__'
     | '/'
@@ -231,6 +277,7 @@ export interface FileRouteTypes {
     | '/_authenticated/contacts'
     | '/_authenticated/dashboard'
     | '/_authenticated/projects'
+    | '/_authenticated/reminders'
     | '/_authenticated/users'
     | '/_authenticated/finance/expenses'
     | '/_authenticated/finance/income'
@@ -239,7 +286,10 @@ export interface FileRouteTypes {
     | '/api/companion/call-status'
     | '/api/companion/login'
     | '/api/companion/next-call'
+    | '/api/cron/reminders'
     | '/_authenticated/finance/'
+    | '/api/integrations/google/callback'
+    | '/api/integrations/google/start'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -250,6 +300,9 @@ export interface RootRouteChildren {
   ApiCompanionCallStatusRoute: typeof ApiCompanionCallStatusRoute
   ApiCompanionLoginRoute: typeof ApiCompanionLoginRoute
   ApiCompanionNextCallRoute: typeof ApiCompanionNextCallRoute
+  ApiCronRemindersRoute: typeof ApiCronRemindersRoute
+  ApiIntegrationsGoogleCallbackRoute: typeof ApiIntegrationsGoogleCallbackRoute
+  ApiIntegrationsGoogleStartRoute: typeof ApiIntegrationsGoogleStartRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -317,6 +370,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProjectsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reminders': {
+      id: '/_authenticated/reminders'
+      path: '/reminders'
+      fullPath: '/reminders'
+      preLoaderRoute: typeof AuthenticatedRemindersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/users': {
       id: '/_authenticated/users'
       path: '/users'
@@ -380,6 +440,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCompanionNextCallRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/cron/reminders': {
+      id: '/api/cron/reminders'
+      path: '/api/cron/reminders'
+      fullPath: '/api/cron/reminders'
+      preLoaderRoute: typeof ApiCronRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/integrations/google/callback': {
+      id: '/api/integrations/google/callback'
+      path: '/api/integrations/google/callback'
+      fullPath: '/api/integrations/google/callback'
+      preLoaderRoute: typeof ApiIntegrationsGoogleCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/integrations/google/start': {
+      id: '/api/integrations/google/start'
+      path: '/api/integrations/google/start'
+      fullPath: '/api/integrations/google/start'
+      preLoaderRoute: typeof ApiIntegrationsGoogleStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -412,6 +493,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedContactsRoute: typeof AuthenticatedContactsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProjectsRoute: typeof AuthenticatedProjectsRoute
+  AuthenticatedRemindersRoute: typeof AuthenticatedRemindersRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
 }
 
@@ -421,6 +503,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedContactsRoute: AuthenticatedContactsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProjectsRoute: AuthenticatedProjectsRoute,
+  AuthenticatedRemindersRoute: AuthenticatedRemindersRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,
 }
 
@@ -435,17 +518,10 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCompanionCallStatusRoute: ApiCompanionCallStatusRoute,
   ApiCompanionLoginRoute: ApiCompanionLoginRoute,
   ApiCompanionNextCallRoute: ApiCompanionNextCallRoute,
+  ApiCronRemindersRoute: ApiCronRemindersRoute,
+  ApiIntegrationsGoogleCallbackRoute: ApiIntegrationsGoogleCallbackRoute,
+  ApiIntegrationsGoogleStartRoute: ApiIntegrationsGoogleStartRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

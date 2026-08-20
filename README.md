@@ -8,6 +8,7 @@ LeadPilot is a simple CRM for managing leads, customers, projects, and money —
 - **Pipeline board** — Drag-and-drop Kanban: move deals from lead → closed.
 - **Projects** — Link customer work to a value, status, and payment balance.
 - **Finance** — Record income and expenses, see outstanding balances, and view analytics by period.
+- **Reminders** — Schedule the next call, meeting, or follow-up; optional Google Calendar + browser notifications.
 - **Team roles** — Admins manage everything; users only see contacts assigned to them.
 - **Call from phone** — Optional Android companion dials a lead on your SIM when you tap Call in the CRM.
 
@@ -15,9 +16,10 @@ LeadPilot is a simple CRM for managing leads, customers, projects, and money —
 
 | Page | Purpose |
 | --- | --- |
-| Dashboard | Overview of contacts, assignments, and activity |
+| Dashboard | Overview, overdue / due today / upcoming reminders |
+| Reminders | Full reminder list, Google Calendar + push prefs |
 | Board | Kanban pipeline |
-| Contacts | Search, import CSV, assign, edit |
+| Contacts | Search, import CSV, assign, edit, schedule next action |
 | Projects | Project list with status and outstanding filters |
 | Finance | Overview, transactions, income, expenses, outstanding |
 | Team | Create users, set roles (admin only) |

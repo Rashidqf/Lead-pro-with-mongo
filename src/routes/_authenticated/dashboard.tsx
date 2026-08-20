@@ -1,7 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CircleDashed, UserCheck, Users2, Contact2 } from "lucide-react";
+import { CircleDashed, Plus, UserCheck, Users2, Contact2 } from "lucide-react";
+import { useState } from "react";
 
+import { ReminderDialog, type ReminderDialogDefaults } from "@/components/reminders/ReminderDialog";
+import { ReminderList } from "@/components/reminders/ReminderList";
+import { Button } from "@/components/ui/button";
 import {
   activitiesQuery,
   columnsQuery,
@@ -10,6 +14,7 @@ import {
   profilesQuery,
 } from "@/lib/crm";
 import { useCrmAuth } from "@/hooks/use-crm-auth";
+import { reminderBucketsQuery, type Reminder } from "@/lib/reminders";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -29,6 +34,11 @@ function DashboardPage() {
   const { data: columns = [] } = useQuery(columnsQuery);
   const { data: profiles = [] } = useQuery(profilesQuery);
   const { data: activities = [] } = useQuery(activitiesQuery);
+  const { data: buckets } = useQuery(reminderBucketsQuery);
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<Reminder | null>(null);
+  const [defaults, setDefaults] = useState<ReminderDialogDefaults | undefined>();
 
   const assigned = contacts.filter((c) => c.assigned_to).length;
   const profileMap = Object.fromEntries(profiles.map((p) => [p.id, p]));
@@ -40,12 +50,36 @@ function DashboardPage() {
     { label: "Unassigned", value: contacts.length - assigned, icon: CircleDashed },
   ];
 
+  function openCreate() {
+    setEditing(null);
+    setDefaults({ source: "dashboard" });
+    setDialogOpen(true);
+  }
+
+  function openScheduleNext(from: Reminder) {
+    setEditing(null);
+    setDefaults({
+      contactId: from.contact_id,
+      projectId: from.project_id,
+      source: "dashboard",
+    });
+    setDialogOpen(true);
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        {isAdmin ? "Workspace overview across all leads." : "Overview of the leads assigned to you."}
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {isAdmin ? "Workspace overview across all leads." : "Overview of the leads assigned to you."}
+          </p>
+        </div>
+        <Button onClick={openCreate}>
+          <Plus className="mr-1.5 h-4 w-4" />
+          Add Next Activity
+        </Button>
+      </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((s) => (
@@ -59,6 +93,39 @@ function DashboardPage() {
             <p className="mt-3 text-3xl font-semibold tracking-tight">{s.value}</p>
           </div>
         ))}
+      </div>
+
+      <div className="mt-6 grid gap-4 lg:grid-cols-3">
+        <Bucket
+          title="Overdue"
+          accent="text-red-600 dark:text-red-400"
+          reminders={buckets?.overdue ?? []}
+          onEdit={(r) => {
+            setEditing(r);
+            setDialogOpen(true);
+          }}
+          onScheduleNext={openScheduleNext}
+        />
+        <Bucket
+          title="Due today"
+          accent="text-amber-600 dark:text-amber-400"
+          reminders={buckets?.dueToday ?? []}
+          onEdit={(r) => {
+            setEditing(r);
+            setDialogOpen(true);
+          }}
+          onScheduleNext={openScheduleNext}
+        />
+        <Bucket
+          title="Upcoming"
+          accent="text-sky-600 dark:text-sky-400"
+          reminders={buckets?.upcoming ?? []}
+          onEdit={(r) => {
+            setEditing(r);
+            setDialogOpen(true);
+          }}
+          onScheduleNext={openScheduleNext}
+        />
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
@@ -108,6 +175,45 @@ function DashboardPage() {
             </ul>
           )}
         </div>
+      </div>
+
+      <ReminderDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        reminder={editing}
+        defaults={defaults}
+      />
+    </div>
+  );
+}
+
+function Bucket({
+  title,
+  accent,
+  reminders,
+  onEdit,
+  onScheduleNext,
+}: {
+  title: string;
+  accent: string;
+  reminders: Reminder[];
+  onEdit: (r: Reminder) => void;
+  onScheduleNext: (r: Reminder) => void;
+}) {
+  return (
+    <div className="surface-panel shadow-card p-5">
+      <div className="flex items-center justify-between">
+        <h2 className={`text-sm font-semibold tracking-tight ${accent}`}>{title}</h2>
+        <span className="text-xs text-muted-foreground">{reminders.length}</span>
+      </div>
+      <div className="mt-2 max-h-56 overflow-y-auto">
+        <ReminderList
+          reminders={reminders.slice(0, 6)}
+          empty={`Nothing ${title.toLowerCase()}.`}
+          onEdit={onEdit}
+          onScheduleNext={onScheduleNext}
+          compact
+        />
       </div>
     </div>
   );
