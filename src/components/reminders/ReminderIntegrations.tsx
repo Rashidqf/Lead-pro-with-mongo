@@ -56,8 +56,8 @@ export function ReminderIntegrations() {
         </div>
       </div>
       <p className="text-xs text-muted-foreground">
-        Due reminders show on the Dashboard and Reminders page. Scheduled push alerts need a paid
-        scheduler later — not available on Vercel Hobby.
+        Due reminders show on the Dashboard and Reminders page. Push notification scheduling is not
+        enabled on the free Vercel plan.
       </p>
     </div>
   );

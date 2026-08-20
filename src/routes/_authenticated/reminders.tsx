@@ -181,10 +181,10 @@ function RemindersPage() {
         <div className="flex items-start gap-3">
           <Bell className="mt-0.5 h-4 w-4 text-primary" />
           <div className="text-sm text-muted-foreground">
-            <p className="font-medium text-foreground">Google Calendar &amp; browser notifications</p>
+            <p className="font-medium text-foreground">Google Calendar</p>
             <p className="mt-1">
-              Optional. Connect Google and enable browser push below when env keys are set. CRM
-              reminders always save even if Calendar or Firebase is down.
+              Optional. Connect Google to sync meetings. CRM reminders always save even if Calendar is
+              unavailable.
             </p>
           </div>
         </div>
