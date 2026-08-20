@@ -8,7 +8,7 @@ import {
   reminderIntegrationsQuery,
   updateNotificationPrefs,
 } from "@/lib/reminder-integrations";
-import { registerBrowserPush } from "@/lib/fcm.client";
+import { registerBrowserPush } from "@/lib/fcm-browser";
 
 export function ReminderIntegrations() {
   const queryClient = useQueryClient();

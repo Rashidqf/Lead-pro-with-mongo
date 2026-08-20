@@ -1,7 +1,9 @@
+import { createClientOnlyFn } from "@tanstack/react-start";
+
 import { registerFcmToken } from "@/lib/reminder-integrations";
 
 /** Best-effort browser FCM registration. Returns false if Firebase client env is missing. */
-export async function registerBrowserPush(): Promise<boolean> {
+export const registerBrowserPush = createClientOnlyFn(async (): Promise<boolean> => {
   const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
   const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
   const appId = import.meta.env.VITE_FIREBASE_APP_ID;
@@ -38,4 +40,4 @@ export async function registerBrowserPush(): Promise<boolean> {
     data: { token, user_agent: navigator.userAgent.slice(0, 200) },
   });
   return true;
-}
+});
