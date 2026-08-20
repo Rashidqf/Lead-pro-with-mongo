@@ -76,15 +76,13 @@ Yes — this app is ready for Vercel (TanStack Start + Nitro `vercel` preset).
 | `MONGODB_DB` | Yes | e.g. `lead-flow-pro` |
 | `AUTH_SECRET` | Yes | Long random string |
 | `APP_URL` | Recommended | Your Vercel URL, e.g. `https://your-app.vercel.app` |
-| `CRON_SECRET` | Recommended | Protects hourly `/api/cron/reminders` |
 
-Optional later: `GOOGLE_*`, `VITE_FIREBASE_*`, `FIREBASE_*`, `TOKEN_ENCRYPTION_KEY`.
+Optional later: `GOOGLE_*`, `VITE_FIREBASE_*`, `TOKEN_ENCRYPTION_KEY`.
 
 4. In MongoDB Atlas → Network Access, allow `0.0.0.0/0` (or Vercel’s IPs).
 5. Deploy. After deploy, set `APP_URL` / `GOOGLE_REDIRECT_URI` to the real HTTPS URL if you use Google Calendar.
 
-Hourly reminder cron is already in `vercel.json`.
-
+Reminders work in the CRM dashboard without a cron. Scheduled push notifications need a paid Vercel plan (or another scheduler) later — not included on Hobby.
 ## Android companion (optional)
 
 Folder: `android-companion/`

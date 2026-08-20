@@ -12,14 +12,7 @@ export default defineConfig({
     ssr: {
       // Keep heavy CJS SDKs out of the SSR graph — reduces Rolldown circular
       // runtime-helper chunks (__exportAll is not a function on preview).
-      external: [
-        "firebase-admin",
-        "firebase-admin/app",
-        "firebase-admin/messaging",
-        "firebase",
-        "firebase/app",
-        "firebase/messaging",
-      ],
+      external: ["firebase", "firebase/app", "firebase/messaging"],
     },
   },
   tanstackStart: {
